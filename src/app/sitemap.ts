@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next';
 
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://kirimkendaraan.co.id'; // Placeholder URL
 
@@ -11,7 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/artikel',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date().toISOString(),
+    lastModified: '2026-07-17',
     changeFrequency: 'weekly' as const,
     priority: route === '' ? 1 : 0.8,
   }));
