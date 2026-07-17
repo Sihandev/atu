@@ -34,3 +34,10 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## 3D Assets Budget
+
+For future additions to the `Scene.tsx`, ensure the 3D asset budget adheres to the following:
+- **Total Bundle Size**: < 2MB total for models and textures.
+- **Polycount**: Keep the scene under 50k polygons for optimal mobile performance.
+- Use primitive shapes whenever possible, or highly compressed `.glb` files with meshopt/draco.

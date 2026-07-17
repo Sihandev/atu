@@ -1,5 +1,8 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import React from "react";
+import { motion } from "framer-motion";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "default" | "outline" | "ghost" | "link";
@@ -24,15 +27,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     };
 
     return (
-      <button
-        ref={ref}
+      <motion.button
+        whileTap={{ scale: 0.98 }}
+        ref={ref as React.Ref<HTMLButtonElement>}
         className={cn(
           "inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
           variants[variant],
           sizes[size],
           className
         )}
-        {...props}
+        {...props as React.ComponentProps<typeof motion.button>}
       />
     );
   }

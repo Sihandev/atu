@@ -1,5 +1,9 @@
+"use client";
+
 import { ArrowRight, Clock, Truck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { fadeInUp } from "@/lib/motion";
 
 interface RouteCardProps {
   from: string;
@@ -11,7 +15,10 @@ interface RouteCardProps {
 
 export function RouteCard({ from, to, time, type, className }: RouteCardProps) {
   return (
-    <div className={cn("rounded-xl border border-slate-200 bg-white p-6 transition-all hover:border-slate-300 hover:shadow-md", className)}>
+    <motion.div
+      variants={fadeInUp}
+      className={cn("rounded-xl border border-slate-200 bg-white p-6 transition-all hover:border-slate-300 hover:shadow-md", className)}
+    >
       <div className="flex items-center justify-between mb-4">
         <div className="text-lg font-semibold text-slate-900">{from}</div>
         <ArrowRight className="h-5 w-5 text-slate-400 mx-2 flex-shrink-0" />
@@ -27,6 +34,6 @@ export function RouteCard({ from, to, time, type, className }: RouteCardProps) {
           Via: {type}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

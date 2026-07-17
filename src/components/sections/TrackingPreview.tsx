@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { Search, MapPin, CheckCircle2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export function TrackingPreview() {
   const [resi, setResi] = useState("DEMO-12345");
@@ -56,7 +57,12 @@ export function TrackingPreview() {
           </form>
 
           {showResult && (
-            <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 text-left max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              className="bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 text-left max-w-2xl mx-auto"
+            >
               <div className="flex items-center justify-between border-b border-slate-200 pb-4 mb-6">
                 <div>
                   <p className="text-sm text-slate-500 font-medium">Nomor Resi (DEMO)</p>
@@ -100,7 +106,7 @@ export function TrackingPreview() {
                   </div>
                 </div>
               </div>
-            </div>
+            </motion.div>
           )}
         </div>
       </Container>

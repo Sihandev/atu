@@ -1,8 +1,12 @@
+"use client";
+
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { RouteCard } from "@/components/ui/RouteCard";
 import { routes } from "@/config/data";
+import { motion } from "framer-motion";
+import { staggerContainer } from "@/lib/motion";
 
 export function PopularRoutesSection() {
   return (
@@ -13,7 +17,13 @@ export function PopularRoutesSection() {
           subtitle="Beberapa rute pengiriman kendaraan yang paling sering kami layani dengan jadwal yang rutin dan terstruktur."
           centered
         />
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
           {routes.map((route, idx) => (
             <RouteCard
               key={idx}
@@ -23,7 +33,7 @@ export function PopularRoutesSection() {
               type={route.type}
             />
           ))}
-        </div>
+        </motion.div>
       </Container>
     </Section>
   );
