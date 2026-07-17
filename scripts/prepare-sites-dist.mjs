@@ -1,4 +1,4 @@
-import { cpSync, existsSync, rmSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const source = resolve("out");
@@ -10,3 +10,17 @@ if (!existsSync(source)) {
 
 rmSync(destination, { recursive: true, force: true });
 cpSync(source, destination, { recursive: true });
+
+mkdirSync(resolve(destination, "server"), { recursive: true });
+writeFileSync(
+  resolve(destination, "server", "index.js"),
+  `export default {
+  async fetch(request, env) {
+    return env.ASSETS.fetch(request);
+  },
+};
+`,
+);
+
+mkdirSync(resolve(destination, ".openai"), { recursive: true });
+cpSync(resolve(".openai", "hosting.json"), resolve(destination, ".openai", "hosting.json"));
