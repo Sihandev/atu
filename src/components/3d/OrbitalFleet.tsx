@@ -180,7 +180,6 @@ function CameraRig() {
 function Scene() {
   return (
     <>
-      <color attach="background" args={["#f5f0e7"]} />
       <fog attach="fog" args={["#f5f0e7", 10, 18]} />
       <ambientLight intensity={1.35} />
       <directionalLight position={[4, 8, 6]} intensity={3.4} color="#fff2df" castShadow shadow-mapSize={[1024, 1024]} />
@@ -201,7 +200,8 @@ export function OrbitalFleet() {
         shadows
         dpr={[1, 1.6]}
         camera={{ position: [7.4, 3.3, 8.8], fov: 36 }}
-        gl={{ antialias: true, alpha: false, powerPreference: "high-performance" }}
+        gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
+        style={{ position: "relative", opacity: 0, pointerEvents: "none" }}
       >
         <Suspense fallback={null}>
           <Scene />

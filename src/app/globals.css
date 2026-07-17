@@ -43,6 +43,19 @@ body {
   background: #1557e8;
 }
 
+.orbital-poster {
+  animation: orbital-poster-drift 12s ease-in-out infinite alternate;
+}
+
+@keyframes orbital-poster-drift {
+  from {
+    transform: scale(1.02) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.07) translate3d(-1.25%, -0.5%, 0);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

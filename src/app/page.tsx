@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowDownRight,
   ArrowRight,
@@ -98,6 +99,18 @@ export default function Home() {
           </div>
 
           <div className="relative -mx-5 min-h-[520px] lg:-ml-[18%] lg:mr-[-8%] lg:min-h-[720px]">
+            <div className="absolute inset-0 overflow-hidden">
+              <Image
+                src="/og.png"
+                alt="Armada car carrier KirimKendaraan"
+                fill
+                priority
+                unoptimized
+                sizes="(max-width: 1024px) 100vw, 65vw"
+                className="orbital-poster object-cover object-right mix-blend-multiply"
+              />
+              <div className="absolute inset-y-0 left-0 w-[46%] bg-gradient-to-r from-[#f4efe6] via-[#f4efe6]/85 to-transparent" />
+            </div>
             <div className="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10" />
             <div className="pointer-events-none absolute left-1/2 top-1/2 h-[54%] w-[54%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#1557e8]/15" />
             <OrbitalFleet />
