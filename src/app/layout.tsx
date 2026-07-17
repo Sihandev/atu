@@ -22,20 +22,13 @@ export const metadata: Metadata = {
     title: `${brand.name} | Jasa Pengiriman Kendaraan Terpercaya`,
     description: "Layanan pengiriman mobil dan motor antar kota dan antar pulau di seluruh Indonesia. Proses transparan, aman, dan dapat diandalkan.",
     siteName: brand.name,
-    images: [
-      {
-        url: "/og-image.jpg", // Placeholder OG image
-        width: 1200,
-        height: 630,
-        alt: `${brand.name} - Jasa Pengiriman Kendaraan`,
-      },
-    ],
+    images: [{ url: "/og.png", width: 1536, height: 910, alt: `${brand.name} - Vehicle Logistics Across Indonesia` }],
   },
   twitter: {
     card: "summary_large_image",
     title: `${brand.name} | Jasa Pengiriman Kendaraan Terpercaya`,
     description: "Layanan pengiriman mobil dan motor antar kota dan antar pulau di seluruh Indonesia.",
-    images: ["/og-image.jpg"],
+    images: ["/og.png"],
   },
   robots: {
     index: true,
@@ -72,7 +65,7 @@ export default function RootLayout({
 
   return (
     <html lang="id" className={`${inter.variable} scroll-smooth`}>
-      <body className="font-sans antialiased bg-white text-slate-900 selection:bg-blue-200 selection:text-blue-900">
+      <body className="font-sans antialiased selection:bg-blue-200 selection:text-blue-950">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
