@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
   if (!route) return { title: "Rute Tidak Ditemukan" };
 
   return {
-    title: `Kirim Mobil \${route.origin} ke \${route.destination} | KirimKendaraan`,
-    description: `Layanan pengiriman kendaraan dari \${route.origin} ke \${route.destination}. Estimasi waktu \${route.duration}.`,
+    title: `Kirim Mobil ${route.origin} ke ${route.destination} | KirimKendaraan`,
+    description: `Layanan pengiriman kendaraan dari ${route.origin} ke ${route.destination}. Estimasi waktu ${route.duration}.`,
   };
 }
 
@@ -155,7 +155,7 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
                 <h3 className="font-bold text-slate-900 mb-2">Tertarik dengan Rute ini?</h3>
                 <p className="text-slate-600 text-sm mb-6">Dapatkan penawaran harga terbaik untuk pengiriman dari {route.origin} ke {route.destination}.</p>
                 <Button className="w-full" asChild>
-                  <Link href={`/cek-tarif?origin=\${route.origin}&destination=\${route.destination}`}>
+                  <Link href={`/cek-tarif?origin=${route.origin}&destination=${route.destination}`}>
                     Minta Penawaran Harga
                   </Link>
                 </Button>
@@ -166,7 +166,7 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
                   <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Rute Terkait</h3>
                   <div className="space-y-2">
                     {route.relatedRoutes.map((rr, idx) => (
-                      <Link key={idx} href={`/rute/kirim-mobil-\${rr}`} className="block text-blue-600 font-medium hover:underline text-sm">
+                      <Link key={idx} href={`/rute/kirim-mobil-${rr}`} className="block text-blue-600 font-medium hover:underline text-sm">
                         Kirim Mobil {rr.replace('-', ' ke ').replace(/\b\w/g, l => l.toUpperCase())}
                       </Link>
                     ))}

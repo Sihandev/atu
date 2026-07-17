@@ -37,7 +37,7 @@ export default function ArtikelIndexPage() {
                 title={article.title}
                 date={article.date}
                 image={article.image}
-                href={`/artikel/\${article.id}`}
+                href={`/artikel/${article.id}`}
               />
             ))}
           </div>

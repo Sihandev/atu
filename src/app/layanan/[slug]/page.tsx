@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   if (!service) return { title: "Layanan Tidak Ditemukan" };
 
   return {
-    title: `\${service.title} | KirimKendaraan`,
+    title: `${service.title} | KirimKendaraan`,
     description: service.description,
   };
 }

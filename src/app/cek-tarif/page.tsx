@@ -37,14 +37,15 @@ const initialData: QuoteData = {
 export default function QuotePage() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState<QuoteData>(initialData);
-  const [mounted, setMounted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     const saved = localStorage.getItem("quoteFormData");
     if (saved) {
-      try { setFormData(JSON.parse(saved)); } catch (e) { /* ignore */ }
+      const timer = window.setTimeout(() => {
+        try { setFormData(JSON.parse(saved)); } catch { /* ignore invalid saved data */ }
+      }, 0);
+      return () => window.clearTimeout(timer);
     }
   }, []);
 
@@ -76,29 +77,29 @@ export default function QuotePage() {
     // Simulate small delay for loading state
     setTimeout(() => {
       // Build WhatsApp message
-      const msg = `Halo \${brand.name},\n\nSaya ingin meminta penawaran harga (Cek Tarif) dengan detail berikut:\n\n` +
+      const msg = `Halo ${brand.name},\n\nSaya ingin meminta penawaran harga (Cek Tarif) dengan detail berikut:\n\n` +
         `*DATA PENGIRIM*\n` +
-        `- Nama: \${formData.name}\n` +
-        `- WhatsApp: \${formData.whatsapp}\n` +
-        (formData.email ? `- Email: \${formData.email}\n` : '') +
+        `- Nama: ${formData.name}\n` +
+        `- WhatsApp: ${formData.whatsapp}\n` +
+        (formData.email ? `- Email: ${formData.email}\n` : '') +
         `\n*RUTE PENGIRIMAN*\n` +
-        `- Kota Asal: \${formData.origin}\n` +
-        (formData.pickupLocation ? `- Detail Penjemputan: \${formData.pickupLocation}\n` : '') +
-        `- Kota Tujuan: \${formData.destination}\n` +
-        (formData.deliveryLocation ? `- Detail Pengantaran: \${formData.deliveryLocation}\n` : '') +
+        `- Kota Asal: ${formData.origin}\n` +
+        (formData.pickupLocation ? `- Detail Penjemputan: ${formData.pickupLocation}\n` : '') +
+        `- Kota Tujuan: ${formData.destination}\n` +
+        (formData.deliveryLocation ? `- Detail Pengantaran: ${formData.deliveryLocation}\n` : '') +
         `\n*DATA KENDARAAN*\n` +
-        `- Jenis: \${formData.vehicleType}\n` +
-        `- Merk & Model: \${formData.brand} \${formData.model}\n` +
-        (formData.year ? `- Tahun: \${formData.year}\n` : '') +
-        `- Kondisi: \${formData.runningCondition}\n` +
+        `- Jenis: ${formData.vehicleType}\n` +
+        `- Merk & Model: ${formData.brand} ${formData.model}\n` +
+        (formData.year ? `- Tahun: ${formData.year}\n` : '') +
+        `- Kondisi: ${formData.runningCondition}\n` +
         `\n*PREFERENSI PENGIRIMAN*\n` +
-        (formData.preferredMethod ? `- Metode: \${formData.preferredMethod}\n` : '') +
-        (formData.preferredDate ? `- Rencana Tanggal: \${formData.preferredDate}\n` : '') +
-        (formData.notes ? `\n*Catatan Tambahan:*\n\${formData.notes}\n` : '') +
+        (formData.preferredMethod ? `- Metode: ${formData.preferredMethod}\n` : '') +
+        (formData.preferredDate ? `- Rencana Tanggal: ${formData.preferredDate}\n` : '') +
+        (formData.notes ? `\n*Catatan Tambahan:*\n${formData.notes}\n` : '') +
         `\nMohon informasi estimasi harga dan jadwal terdekat. Terima kasih.`;
 
       const encodedMsg = encodeURIComponent(msg);
-      const url = `https://wa.me/\${brand.phone.replace(/[^0-9]/g, '')}?text=\${encodedMsg}`;
+      const url = `https://wa.me/${brand.phone.replace(/[^0-9]/g, '')}?text=${encodedMsg}`;
 
       setIsLoading(false);
       localStorage.removeItem("quoteFormData"); // Clear form after success
@@ -120,9 +121,9 @@ export default function QuotePage() {
 
             {/* Stepper */}
             <div className="flex items-center justify-center mb-10">
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full font-bold \${step >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>1</div>
-              <div className={`w-16 h-1 \${step >= 2 ? 'bg-blue-600' : 'bg-slate-200'}`}></div>
-              <div className={`flex items-center justify-center w-10 h-10 rounded-full font-bold \${step >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>2</div>
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${step >= 1 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>1</div>
+              <div className={`w-16 h-1 ${step >= 2 ? 'bg-blue-600' : 'bg-slate-200'}`}></div>
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full font-bold ${step >= 2 ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-500'}`}>2</div>
             </div>
 
             <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-10">

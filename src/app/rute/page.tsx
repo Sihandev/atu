@@ -39,7 +39,7 @@ export default function RuteIndexPage() {
                 to={route.destination}
                 time={route.duration}
                 type={route.methods.join(" / ")}
-                href={`/rute/\${route.id}`}
+                href={`/rute/${route.id}`}
               />
             ))}
           </div>

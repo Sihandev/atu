@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   if (!article) return { title: "Artikel Tidak Ditemukan" };
 
   return {
-    title: `\${article.title} | KirimKendaraan`,
+    title: `${article.title} | KirimKendaraan`,
     description: article.excerpt,
   };
 }
@@ -132,7 +132,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
                 <h3 className="font-bold text-slate-900 mb-4">Layanan Terkait</h3>
                 <div className="space-y-4">
                   {servicesList.slice(0, 3).map((svc, i) => (
-                    <Link key={i} href={`/layanan/\${svc.id}`} className="block group">
+                    <Link key={i} href={`/layanan/${svc.id}`} className="block group">
                       <div className="bg-white border border-slate-200 rounded-xl p-4 group-hover:border-blue-300 group-hover:shadow-sm transition-all">
                         <div className="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">{svc.title}</div>
                         <div className="text-sm text-slate-500 mt-1 line-clamp-2">{svc.description}</div>
@@ -147,7 +147,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
                 <h3 className="font-bold text-slate-900 mb-4">Artikel Lainnya</h3>
                 <div className="space-y-4">
                   {articlesList.filter(a => a.id !== article.id).slice(0, 3).map((a, i) => (
-                    <Link key={i} href={`/artikel/\${a.id}`} className="block group">
+                    <Link key={i} href={`/artikel/${a.id}`} className="block group">
                       <div className="text-sm font-medium text-slate-900 group-hover:text-blue-600 transition-colors mb-1">
                         {a.title}
                       </div>

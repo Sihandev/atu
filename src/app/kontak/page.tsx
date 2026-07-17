@@ -44,7 +44,7 @@ export default function KontakPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-slate-900 mb-1">Telepon / WhatsApp</h3>
                     <p className="text-slate-600 mb-2">CS & Booking melayani 24/7</p>
-                    <a href={`https://wa.me/\${brand.phone.replace(/[^0-9]/g, '')}`} className="text-xl font-medium text-blue-600 hover:underline">
+                    <a href={`https://wa.me/${brand.phone.replace(/[^0-9]/g, '')}`} className="text-xl font-medium text-blue-600 hover:underline">
                       {brand.phone}
                     </a>
                   </div>
@@ -57,7 +57,7 @@ export default function KontakPage() {
                   <div>
                     <h3 className="text-lg font-semibold text-slate-900 mb-1">Email</h3>
                     <p className="text-slate-600 mb-2">Untuk penawaran korporat atau kerjasama</p>
-                    <a href={`mailto:\${brand.email}`} className="text-xl font-medium text-blue-600 hover:underline">
+                    <a href={`mailto:${brand.email}`} className="text-xl font-medium text-blue-600 hover:underline">
                       {brand.email}
                     </a>
                   </div>
