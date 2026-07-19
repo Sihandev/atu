@@ -1,8 +1,12 @@
+"use client";
+
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { FAQAccordion } from "@/components/ui/FAQAccordion";
 import { faqs } from "@/config/data";
+import { motion } from "framer-motion";
+import { staggerContainer } from "@/lib/motion";
 
 export function FAQPreview() {
   return (
@@ -14,7 +18,13 @@ export function FAQPreview() {
             subtitle="Temukan jawaban cepat untuk pertanyaan umum seputar layanan pengiriman kendaraan kami."
             centered
           />
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8"
+          >
             {faqs.map((faq, idx) => (
               <FAQAccordion
                 key={idx}
@@ -23,7 +33,7 @@ export function FAQPreview() {
                 className={idx === faqs.length - 1 ? "border-b-0" : ""}
               />
             ))}
-          </div>
+          </motion.div>
         </div>
       </Container>
     </Section>

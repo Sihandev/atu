@@ -1,13 +1,12 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { Loader2 } from "lucide-react";
 
 // Dynamically import the 3D scene so it's not SSR'd and lazy-loaded
 const Scene = dynamic(() => import("./Scene"), {
   ssr: false,
-  loading: () => <SceneFallback />,
 });
 
 // A lightweight CSS/HTML fallback when JS is loading or reduced motion is preferred
@@ -67,7 +66,9 @@ export function ThreeHero() {
       {prefersReducedMotion ? (
         <StaticFallback />
       ) : (
-        <Scene />
+        <Suspense fallback={<SceneFallback />}>
+          <Scene />
+        </Suspense>
       )}
     </div>
   );
