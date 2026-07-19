@@ -30,13 +30,15 @@ export function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-6">Perusahaan</h4>
             <ul className="flex flex-col gap-4 text-sm">
-              {navigation.filter(item => ["Beranda", "Tentang", "Artikel", "Layanan"].includes(item.label)).map((item) => (
+              {navigation.filter(item => ["Beranda", "Tentang", "Artikel", "Layanan", "Kontak", "FAQ"].includes(item.label) || item.label === "Cara Pengiriman").map((item) => (
                 <li key={item.label}>
                   <Link href={item.href} className="hover:text-blue-400 transition-colors">
                     {item.label}
                   </Link>
                 </li>
               ))}
+              <li><Link href="/faq" className="hover:text-blue-400 transition-colors">FAQ</Link></li>
+              <li><Link href="/kontak" className="hover:text-blue-400 transition-colors">Kontak</Link></li>
             </ul>
           </div>
 
@@ -44,9 +46,9 @@ export function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-6">Layanan Kami</h4>
             <ul className="flex flex-col gap-4 text-sm">
-              {services.slice(0, 4).map((service) => (
-                <li key={service.title}>
-                  <Link href="#layanan" className="hover:text-blue-400 transition-colors">
+              {services.slice(0, 5).map((service) => (
+                <li key={service.id}>
+                  <Link href={`/layanan/${service.id}`} className="hover:text-blue-400 transition-colors">
                     {service.title}
                   </Link>
                 </li>
@@ -58,9 +60,9 @@ export function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-6">Rute Populer</h4>
             <ul className="flex flex-col gap-4 text-sm">
-              {routes.map((route, idx) => (
+              {routes.slice(0,5).map((route, idx) => (
                 <li key={idx}>
-                  <Link href="#rute" className="hover:text-blue-400 transition-colors">
+                  <Link href={`/rute/${route.id}`} className="hover:text-blue-400 transition-colors">
                     {route.from} - {route.to}
                   </Link>
                 </li>
@@ -72,9 +74,10 @@ export function Footer() {
         <div className="mt-16 pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
           <p>© {new Date().getFullYear()} {brand.name}. Hak Cipta Dilindungi.</p>
           <div className="flex items-center gap-6">
-            <Link href="#" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>
-            <Link href="#" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
-            <Link href="#" className="hover:text-white transition-colors">Disclaimer</Link>
+            <Link href="/syarat-ketentuan" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>
+            <Link href="/kebijakan-privasi" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
+            <Link href="/kebijakan-pembatalan" className="hover:text-white transition-colors">Pembatalan</Link>
+            <Link href="/kebijakan-klaim" className="hover:text-white transition-colors">Klaim</Link>
           </div>
         </div>
       </Container>

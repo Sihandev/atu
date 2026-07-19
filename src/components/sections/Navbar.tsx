@@ -54,7 +54,7 @@ export function Navbar() {
           </ul>
           <div className="h-5 w-px bg-slate-200" />
           <Button size="sm" asChild>
-            <Link href="#cek-tarif">Cek Tarif</Link>
+            <Link href="/cek-tarif">Cek Tarif</Link>
           </Button>
         </nav>
 
@@ -89,7 +89,7 @@ export function Navbar() {
           </ul>
           <div className="mt-8 pt-8 border-t border-slate-100 flex flex-col gap-4">
             <Button className="w-full" asChild onClick={() => setIsMobileMenuOpen(false)}>
-              <Link href="#cek-tarif">Cek Tarif Pengiriman</Link>
+              <Link href="/cek-tarif">Cek Tarif Pengiriman</Link>
             </Button>
           </div>
         </div>

@@ -251,7 +251,7 @@ export const shippingMethods = [
     description: "Metode paling umum untuk pengiriman dalam pulau Jawa dan Sumatera.",
   },
   {
-    title: "Jalur Laut (Kapal RoRo / Pelni)",
+    title: "Jalur Laut (Kapal RoRo / Pelni / Container)",
     description: "Solusi utama untuk pengiriman kendaraan antar pulau di seluruh Indonesia.",
   },
 ];
@@ -275,7 +275,7 @@ export const faqs = [
   },
   {
     question: "Berapa lama estimasi waktu pengiriman?",
-    answer: "Waktu pengiriman bervariasi tergantung rute dan metode yang dipilih. Rute Jawa-Bali umumnya memakan waktu 2-4 hari.",
+    answer: "Waktu pengiriman bervariasi tergantung rute dan metode yang dipilih. Silahkan cek halaman rute atau hubungi kami untuk rute spesifik.",
   },
   {
     question: "Bagaimana cara mengecek status pengiriman?",
