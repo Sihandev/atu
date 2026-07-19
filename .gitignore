@@ -15,6 +15,7 @@
 
 # next.js
 /.next/
+/.site-out/
 /out/
 
 # production
