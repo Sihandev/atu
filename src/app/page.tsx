@@ -14,7 +14,6 @@ import {
   Sparkles,
   Truck,
 } from "lucide-react";
-import { OrbitalFleet } from "@/components/3d/OrbitalFleet";
 import { QuoteForm } from "@/components/sections/QuoteForm";
 
 const services = [
@@ -50,7 +49,7 @@ const steps = [
 export default function Home() {
   return (
     <main className="overflow-hidden bg-[#f4efe6] text-[#111318]">
-      <section className="relative min-h-screen border-b border-black/10">
+      <section className="hero-shell relative min-h-screen border-b border-black/10">
         <div className="pointer-events-none absolute inset-0 orbital-grid opacity-70" />
 
         <header className="relative z-30 mx-auto flex h-24 max-w-[1500px] items-center justify-between px-5 md:px-10">
@@ -73,17 +72,17 @@ export default function Home() {
           </Link>
         </header>
 
-        <div className="relative z-10 mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1500px] items-center px-5 pb-10 md:px-10 lg:grid-cols-[0.78fr_1.22fr]">
-          <div className="relative z-20 pb-10 pt-12 lg:pb-24 lg:pt-8">
+        <div className="relative z-10 mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1500px] items-center gap-12 px-5 pb-14 md:px-10 lg:grid-cols-[0.86fr_1.14fr] lg:gap-0">
+          <div className="relative z-20 pb-4 pt-12 lg:pb-20 lg:pt-8">
             <div className="mb-8 flex items-center gap-3 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#1557e8]">
               <span className="h-px w-10 bg-[#1557e8]" />
-              Vehicle logistics / Indonesia
+              Vehicle logistics / Indonesia / 2026
             </div>
-            <h1 className="max-w-[780px] text-[clamp(4rem,8.2vw,9rem)] font-black uppercase leading-[0.78] tracking-[-0.085em]">
-              Move with
-              <span className="block font-serif font-normal italic tracking-[-0.07em]">precision.</span>
-              <span className="block text-[#1557e8]">Arrive</span>
-              ahead.
+            <h1 className="max-w-[760px] text-[clamp(3.8rem,6.7vw,7.25rem)] font-black uppercase leading-[0.82] tracking-[-0.075em]">
+              Kendaraan
+              <span className="block text-[#1557e8]">bergerak.</span>
+              <span className="block font-serif font-normal italic normal-case tracking-[-0.06em]">Kendali tetap</span>
+              di tangan.
             </h1>
             <p className="mt-9 max-w-lg text-base leading-7 text-black/60 md:text-lg">
               Pengiriman kendaraan premium antarpulau—dirancang untuk memberi visibilitas, keamanan, dan kepastian dari garasi hingga tujuan.
@@ -98,8 +97,16 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative -mx-5 min-h-[520px] lg:-ml-[18%] lg:mr-[-8%] lg:min-h-[720px]">
-            <div className="absolute inset-0 overflow-hidden">
+          <div className="fleet-stage relative -mx-2 min-h-[520px] lg:-ml-[8%] lg:mr-[-3%] lg:min-h-[700px]">
+            <div className="fleet-halo" />
+            <div className="fleet-orbit fleet-orbit-outer" />
+            <div className="fleet-orbit fleet-orbit-inner" />
+
+            <div className="fleet-card">
+              <div className="fleet-card-top">
+                <span>KK / NATIONAL NETWORK</span>
+                <span>LIVE OPERATIONS</span>
+              </div>
               <Image
                 src="/og.png"
                 alt="Armada car carrier KirimKendaraan"
@@ -107,13 +114,37 @@ export default function Home() {
                 priority
                 unoptimized
                 sizes="(max-width: 1024px) 100vw, 65vw"
-                className="orbital-poster object-cover object-right mix-blend-multiply"
+                className="fleet-image object-cover"
               />
-              <div className="absolute inset-y-0 left-0 w-[46%] bg-gradient-to-r from-[#f4efe6] via-[#f4efe6]/85 to-transparent" />
+              <div className="fleet-image-shade" />
+              <div className="fleet-scan" />
+              <div className="fleet-caption">
+                <span className="fleet-caption-index">01</span>
+                <div>
+                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/55">Flagship movement</p>
+                  <p className="mt-1 text-sm font-semibold text-white">Jakarta → Makassar</p>
+                </div>
+              </div>
             </div>
-            <div className="pointer-events-none absolute left-1/2 top-1/2 h-[70%] w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-black/10" />
-            <div className="pointer-events-none absolute left-1/2 top-1/2 h-[54%] w-[54%] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#1557e8]/15" />
-            <OrbitalFleet />
+
+            <div className="fleet-chip fleet-chip-top">
+              <span className="fleet-chip-dot" />
+              <div>
+                <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-black/45">Status armada</p>
+                <p className="mt-1 text-xs font-bold">Dalam perjalanan</p>
+              </div>
+            </div>
+
+            <div className="fleet-chip fleet-chip-bottom">
+              <div>
+                <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-black/45">ETA terverifikasi</p>
+                <p className="mt-1 text-2xl font-black tracking-[-0.05em]">02D : 14H</p>
+              </div>
+              <Radar className="h-5 w-5 text-[#1557e8]" />
+            </div>
+
+            <div className="fleet-route-label fleet-route-jkt">JKT</div>
+            <div className="fleet-route-label fleet-route-mks">MKS</div>
           </div>
         </div>
 

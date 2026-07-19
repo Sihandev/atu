@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { brand } from "@/config/data";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://kirimkendaraan.co.id"),
@@ -64,7 +61,7 @@ export default function RootLayout({
   };
 
   return (
-    <html lang="id" className={`${inter.variable} scroll-smooth`}>
+    <html lang="id" className="scroll-smooth">
       <body className="font-sans antialiased selection:bg-blue-200 selection:text-blue-950">
         <script
           type="application/ld+json"
