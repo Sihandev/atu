@@ -7,7 +7,9 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/api/'],
+      /* /admin is an internal tool. Keeping it out of the index is tidiness,
+         not security — access is enforced by Supabase auth and RLS. */
+      disallow: ['/api/', '/admin'],
     },
     sitemap: 'https://alyssalogistik.co.id/sitemap.xml',
   };
