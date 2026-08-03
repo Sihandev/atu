@@ -3,7 +3,9 @@ import { Car, Truck, Anchor, Plane, ArrowRightCircle, CheckCircle } from "lucide
 /* Sourced from alyssalogistik.co.id. Anything the live site does not publish
    is left empty rather than invented — see `email` below. */
 export const brand = {
-  name: "Alyssa Logistik",
+  /* Trading name shown across the UI. The legal entity below is the one
+     registered against the NPWP and stays as-is. */
+  name: "Alyssa Express",
   legalName: "PT Alyssa Auto Logistik",
   tagline: "Jasa Pengiriman Kendaraan & Alat Berat",
   phone: "+62818631135",

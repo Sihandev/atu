@@ -5,6 +5,7 @@ import { TrustSection } from "@/components/sections/TrustSection";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { brand } from "@/config/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -38,7 +39,7 @@ export default function TentangPage() {
               />
               <div className="prose prose-slate prose-lg mt-6">
                 <p>
-                  Pengiriman kendaraan seringkali menjadi proses yang membingungkan dan penuh kekhawatiran bagi banyak orang. Di <strong>Alyssa Auto Logistik</strong>, kami hadir untuk mengubah stigma tersebut.
+                  Pengiriman kendaraan seringkali menjadi proses yang membingungkan dan penuh kekhawatiran bagi banyak orang. Di <strong>{brand.name}</strong>, kami hadir untuk mengubah stigma tersebut.
                 </p>
                 <p>
                   Dengan pengalaman melayani berbagai rute di Indonesia, kami memahami betul tantangan logistik di negara kepulauan. Oleh karena itu, kami menggabungkan standar operasional yang ketat, komunikasi yang proaktif, dan jaringan mitra pengangkut profesional untuk memastikan kendaraan Anda tiba dengan selamat.

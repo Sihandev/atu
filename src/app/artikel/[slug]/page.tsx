@@ -4,7 +4,7 @@ import { Footer } from "@/components/sections/Footer";
 import { FinalCTA } from "@/components/sections/FinalCTA";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { articlesList, servicesList } from "@/config/data";
+import { articlesList, brand, servicesList } from "@/config/data";
 import { Calendar, Clock, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -176,7 +176,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
             "description": article.excerpt,
             "author": {
               "@type": "Organization",
-              "name": "Alyssa Auto Logistik"
+              "name": brand.name
             }
           })
         }}

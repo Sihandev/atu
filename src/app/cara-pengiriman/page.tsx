@@ -4,12 +4,12 @@ import { FinalCTA } from "@/components/sections/FinalCTA";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { ProcessStep } from "@/components/ui/ProcessStep";
-import { processSteps } from "@/config/data";
+import { brand, processSteps } from "@/config/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Cara Pengiriman",
-  description: "Proses dan tahapan mudah mengirim kendaraan bersama Alyssa Auto Logistik.",
+  description: `Proses dan tahapan mudah mengirim kendaraan bersama ${brand.name}.`,
 };
 
 export default function CaraPengirimanPage() {
