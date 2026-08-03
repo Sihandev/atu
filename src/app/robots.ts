@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/'],
     },
-    sitemap: 'https://kirimkendaraan.co.id/sitemap.xml', // Placeholder URL
+    sitemap: 'https://alyssalogistik.co.id/sitemap.xml',
   };
 }

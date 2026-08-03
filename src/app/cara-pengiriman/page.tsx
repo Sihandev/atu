@@ -8,8 +8,8 @@ import { processSteps } from "@/config/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Cara Pengiriman | KirimKendaraan",
-  description: "Proses dan tahapan mudah mengirim kendaraan bersama KirimKendaraan.",
+  title: "Cara Pengiriman",
+  description: "Proses dan tahapan mudah mengirim kendaraan bersama Alyssa Auto Logistik.",
 };
 
 export default function CaraPengirimanPage() {

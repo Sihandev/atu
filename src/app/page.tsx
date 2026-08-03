@@ -1,332 +1,420 @@
 import Link from "next/link";
-import Image from "next/image";
-import {
-  ArrowDownRight,
-  ArrowRight,
-  BadgeCheck,
-  CarFront,
-  ChevronRight,
-  Clock3,
-  Container as ContainerIcon,
-  MapPin,
-  Radar,
-  ShieldCheck,
-  Sparkles,
-  Truck,
-} from "lucide-react";
-import { QuoteForm } from "@/components/sections/QuoteForm";
+import { ArrowRight, BadgeCheck, MoveRight, Radar, ShieldCheck, Truck } from "lucide-react";
 
-const services = [
-  {
-    index: "01",
-    title: "Car Carrier",
-    copy: "Kapasitas armada besar untuk pengiriman dealer, fleet, dan kendaraan pribadi antarkota.",
-    icon: Truck,
-    href: "/layanan/car-carrier",
-  },
-  {
-    index: "02",
-    title: "Enclosed Transport",
-    copy: "Proteksi tertutup untuk kendaraan premium, klasik, koleksi, dan unit bernilai tinggi.",
-    icon: ContainerIcon,
-    href: "/layanan/towing",
-  },
-  {
-    index: "03",
-    title: "Inter-island",
-    copy: "Koordinasi darat dan RoRo dalam satu alur dengan visibilitas status sepanjang perjalanan.",
-    icon: Radar,
-    href: "/layanan/antar-pulau",
-  },
-];
+import { Navbar } from "@/components/sections/Navbar";
+import { Footer } from "@/components/sections/Footer";
+import { HeroMedia } from "@/components/sections/HeroMedia";
+import { Aurora } from "@/components/ui/Aurora";
+import { Counter } from "@/components/ui/Counter";
+import { Reveal } from "@/components/ui/Reveal";
+import { ScrollProgress } from "@/components/ui/ScrollProgress";
+import { Spotlight } from "@/components/ui/Spotlight";
+import { brand, coverage, servicesList, routesList, trustPoints } from "@/config/data";
 
-const steps = [
-  ["01", "Rancang rute", "Tim kami menyusun metode, jadwal, dan proteksi sesuai kendaraan Anda."],
-  ["02", "Inspeksi digital", "Kondisi kendaraan dicatat sebelum loading dan serah terima."],
-  ["03", "Bergerak presisi", "Update milestone membuat perjalanan tetap terlihat dari awal hingga tujuan."],
+/* Imagery generated alongside the Stitch design and served from Google's CDN.
+   Temporary asset URLs — download them into /public before launch.
+   `=s0` asks for the original instead of the 512px derivative Stitch embeds. */
+const hi = (url: string) => `${url}=s0`;
+
+const IMG = {
+  hero: hi(
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuAQMtVJlx520Z6PXSRiHMR9PdutCmHbB71i7_qPJdRL-OC5mprgtvTh4xsW8MnoSh3go6YzOnqgK2CDwOT6v8Q2Q7qGC0M1GH2Bievsa6hg_N6PsxQXlsF_mmGJPB0CYUZ2MbuNUPKeK2FvAZFdVF5gymMdyFxtxVF6PYbgXe8Qw19Afz3kiMj4KmtdgRaXxgSJgjxB1t0sAkAB0lcNYnyY63AiWckXBuZvUsoVDa4FthGhC5auASa38g"
+  ),
+  selfDrive: hi(
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuBMriSt1XBbwpPT5uz28Rdhqe57FH72DIPEQDM70_O8KkD9PKfeM6ObHTNEncpCqeuoYo-d0VAzFXK7oriE37RaInaHMo2RDwMI0b0a35TVPr1J7DwfbLeqVXNOHcLcWweBDWzgRXO8wPqmqz36_XgbPhYHaGdxHtzjIZJ6OUsdTpZf5WMRUvXD6bMrncUI8WGDQNyZWxr2vyjBYmGO5F9nE1Wf3ub43lLORK4yTYvZ5t15wxp0OgcmWA"
+  ),
+  towing: hi(
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuCvdZR1Mb0Cbai3oFNXMskEddRjFUKb55OQD4U0-26ff0gHI-5d4UUFL4NCnTEddJP2U6h4O6HMeiNt9KPDCFoT6XYhuVz6C_7dwbCvNRnvhwx9rEox_dj81dJ3CV8bwI1zl8yQLDC2XLzAyzxn77X6hmwN1pznrl915SdlVxTO2i2KAe-TwU_lF30IvGbwj2THkXWrRB00utynU5gh37nRUt9mE-owYqRCuTFO8Hzh1-zqTmWqlBZikg"
+  ),
+  roro: hi(
+    "https://lh3.googleusercontent.com/aida-public/AB6AXuASgl1LxQmbEzaLQeLlnzwhebrTtJ7TOLqUlpzB5O7SAfufnCi2oJXZLK9Fq7C7BofbuSUL1PymeI2A2Usgsx6hamz683HAZ-Q_DXz8PDcZg8U3Rzsdlft1vn5QjY3lVUc4ICLO7RQi_kZ2xbSeETeAF5KOI9XVVpZfqnRL3u7xMn9-3_1VB2xFYjkpzpQtmRc-r36rd27vv-Ldb4jhwPlvL6-MKg9yKHa4h0BqaVlIe1YNDF6IT-KrQQ"
+  ),
+};
+
+const featured = [
+  { id: "car-carrier", kicker: "Logistik", image: IMG.hero },
+  { id: "self-drive", kicker: "Personal", image: IMG.selfDrive },
+  { id: "towing", kicker: "Eksklusif", image: IMG.towing },
+  { id: "antar-pulau", kicker: "Maritim", image: IMG.roro },
+]
+  .map((tile) => {
+    const service = servicesList.find((s) => s.id === tile.id);
+    return service ? { ...tile, title: service.title, description: service.description } : null;
+  })
+  .filter((tile): tile is NonNullable<typeof tile> => tile !== null);
+
+const heroStats = [
+  { label: "Provinsi", value: coverage.provinces, suffix: "+" },
+  { label: "Kota Tujuan", value: coverage.cities, suffix: "+" },
+  { label: "Pelabuhan", value: coverage.ports, suffix: "+" },
+  { label: "Ketepatan", value: coverage.onTimeRate, suffix: "%" },
 ];
 
 export default function Home() {
   return (
-    <main className="overflow-hidden bg-[#f4efe6] text-[#111318]">
-      <section className="hero-shell relative min-h-screen border-b border-black/10">
-        <div className="pointer-events-none absolute inset-0 orbital-grid opacity-70" />
+    <>
+      <ScrollProgress />
+      <Navbar />
 
-        <header className="relative z-30 mx-auto flex h-24 max-w-[1500px] items-center justify-between px-5 md:px-10">
-          <Link href="/" className="flex items-center gap-3" aria-label="KirimKendaraan home">
-            <span className="grid h-10 w-10 place-items-center bg-[#1557e8] text-lg font-black text-white">K</span>
-            <span className="text-lg font-extrabold tracking-[-0.04em]">KirimKendaraan</span>
-          </Link>
-          <nav className="hidden items-center gap-8 text-sm font-medium lg:flex" aria-label="Navigasi utama">
-            <Link href="/layanan" className="transition-colors hover:text-[#1557e8]">Layanan</Link>
-            <Link href="/rute" className="transition-colors hover:text-[#1557e8]">Jangkauan</Link>
-            <Link href="/cara-pengiriman" className="transition-colors hover:text-[#1557e8]">Cara Kerja</Link>
-            <Link href="/tentang" className="transition-colors hover:text-[#1557e8]">Perusahaan</Link>
-            <Link href="/artikel" className="transition-colors hover:text-[#1557e8]">Insight</Link>
-          </nav>
-          <Link
-            href="/cek-tarif"
-            className="group inline-flex items-center gap-3 rounded-full bg-[#111318] px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-white transition-transform hover:-translate-y-0.5"
-          >
-            Cek tarif <ArrowDownRight className="h-4 w-4 transition-transform group-hover:rotate-45" />
-          </Link>
-        </header>
+      <main className="relative">
+        {/* ── HERO ────────────────────────────────────────────── */}
+        <section className="relative flex min-h-[94vh] items-center overflow-hidden pt-20">
+          <HeroMedia
+            src={IMG.hero}
+            alt="Truk car carrier membawa kendaraan melintasi jembatan saat matahari terbit"
+          />
 
-        <div className="relative z-10 mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1500px] items-center gap-12 px-5 pb-14 md:px-10 lg:grid-cols-[0.86fr_1.14fr] lg:gap-0">
-          <div className="relative z-20 pb-4 pt-12 lg:pb-20 lg:pt-8">
-            <div className="mb-8 flex items-center gap-3 font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-[#1557e8]">
-              <span className="h-px w-10 bg-[#1557e8]" />
-              Vehicle logistics / Indonesia / 2026
-            </div>
-            <h1 className="max-w-[760px] text-[clamp(3.8rem,6.7vw,7.25rem)] font-black uppercase leading-[0.82] tracking-[-0.075em]">
-              Kendaraan
-              <span className="block text-[#1557e8]">bergerak.</span>
-              <span className="block font-serif font-normal italic normal-case tracking-[-0.06em]">Kendali tetap</span>
-              di tangan.
-            </h1>
-            <p className="mt-9 max-w-lg text-base leading-7 text-black/60 md:text-lg">
-              Pengiriman kendaraan premium antarpulau—dirancang untuk memberi visibilitas, keamanan, dan kepastian dari garasi hingga tujuan.
-            </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <Link href="/cek-tarif" className="group inline-flex items-center justify-center gap-5 bg-[#1557e8] px-7 py-4 text-xs font-bold uppercase tracking-[0.14em] text-white transition-all hover:bg-[#0d43c4]">
-                Mulai pengiriman <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-              <Link href="/tracking" className="group inline-flex items-center justify-center gap-5 border border-black/25 px-7 py-4 text-xs font-bold uppercase tracking-[0.14em] transition-all hover:border-black hover:bg-white/50">
-                Track kendaraan <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </Link>
-            </div>
+          <div className="relative z-10 mx-auto w-full max-w-[var(--container-max)] px-6 py-20 md:px-10 lg:px-[var(--spacing-margin-desktop)]">
+            <Reveal className="max-w-3xl">
+              <div className="mb-8 inline-flex items-center gap-3 rounded-full border border-accent/30 bg-accent/10 px-4 py-2 backdrop-blur-xl">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                <span className="font-mono text-label-sm text-accent-2 uppercase">
+                  {brand.tagline}
+                </span>
+              </div>
+
+              <h1 className="font-display text-[clamp(2.75rem,6.4vw,5.25rem)] leading-[1.0] font-extrabold tracking-[-0.04em] text-white">
+                Kendaraan &amp; alat berat,
+                <br />
+                <span className="text-gradient-inv">sampai dengan utuh.</span>
+              </h1>
+
+              <p className="mt-8 max-w-xl text-lg leading-relaxed text-white/75">
+                Antar kota dan antar pulau, menjangkau {coverage.provinces}+ provinsi dan{" "}
+                {coverage.cities}+ kota. Terasuransi penuh, dilacak lewat GPS, dan didampingi tim
+                yang siaga 24 jam.
+              </p>
+
+              <div className="mt-11 flex flex-wrap gap-4">
+                <Link href="/cek-tarif" className="u-btn u-btn-accent u-btn-sheen px-8 py-4">
+                  <span className="sheen" />
+                  Cek Tarif Sekarang
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link href="/rute" className="u-btn u-btn-glass-dark px-8 py-4">
+                  Lihat Rute
+                </Link>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.25} className="mt-20">
+              <div className="grid max-w-3xl grid-cols-2 gap-px overflow-hidden rounded-3xl border border-white/15 bg-white/10 backdrop-blur-xl sm:grid-cols-4">
+                {heroStats.map((stat) => (
+                  <div key={stat.label} className="bg-white/5 px-5 py-6">
+                    <div className="font-display text-3xl font-extrabold text-white">
+                      <Counter to={stat.value} suffix={stat.suffix} />
+                    </div>
+                    <div className="mt-1.5 font-mono text-label-sm text-white/55 uppercase">
+                      {stat.label}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
           </div>
+        </section>
 
-          <div className="fleet-stage relative -mx-2 min-h-[520px] lg:-ml-[8%] lg:mr-[-3%] lg:min-h-[700px]">
-            <div className="fleet-halo" />
-            <div className="fleet-orbit fleet-orbit-outer" />
-            <div className="fleet-orbit fleet-orbit-inner" />
-
-            <div className="fleet-card">
-              <div className="fleet-card-top">
-                <span>KK / NATIONAL NETWORK</span>
-                <span>LIVE OPERATIONS</span>
-              </div>
-              <Image
-                src="/og.png"
-                alt="Armada car carrier KirimKendaraan"
-                fill
-                priority
-                unoptimized
-                sizes="(max-width: 1024px) 100vw, 65vw"
-                className="fleet-image object-cover"
-              />
-              <div className="fleet-image-shade" />
-              <div className="fleet-scan" />
-              <div className="fleet-caption">
-                <span className="fleet-caption-index">01</span>
-                <div>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-white/55">Flagship movement</p>
-                  <p className="mt-1 text-sm font-semibold text-white">Jakarta → Makassar</p>
-                </div>
-              </div>
-            </div>
-
-            <div className="fleet-chip fleet-chip-top">
-              <span className="fleet-chip-dot" />
-              <div>
-                <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-black/45">Status armada</p>
-                <p className="mt-1 text-xs font-bold">Dalam perjalanan</p>
-              </div>
-            </div>
-
-            <div className="fleet-chip fleet-chip-bottom">
-              <div>
-                <p className="font-mono text-[8px] uppercase tracking-[0.18em] text-black/45">ETA terverifikasi</p>
-                <p className="mt-1 text-2xl font-black tracking-[-0.05em]">02D : 14H</p>
-              </div>
-              <Radar className="h-5 w-5 text-[#1557e8]" />
-            </div>
-
-            <div className="fleet-route-label fleet-route-jkt">JKT</div>
-            <div className="fleet-route-label fleet-route-mks">MKS</div>
-          </div>
-        </div>
-
-        <div className="relative z-20 border-t border-black/10 bg-[#111318] text-white">
-          <div className="mx-auto grid max-w-[1500px] divide-y divide-white/10 px-5 md:grid-cols-4 md:divide-x md:divide-y-0 md:px-10">
-            <div className="flex items-center gap-3 py-6 md:pr-8">
-              <span className="relative flex h-3 w-3">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#c9ff3b] opacity-60" />
-                <span className="relative inline-flex h-3 w-3 rounded-full bg-[#c9ff3b]" />
-              </span>
-              <div>
-                <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-white/45">Network active</p>
-                <p className="mt-1 text-sm font-semibold">Nationwide operations</p>
-              </div>
-            </div>
-            {[
-              ["12K+", "Kendaraan terkirim"],
-              ["98.7%", "Tepat waktu"],
-              ["34", "Provinsi terjangkau"],
-            ].map(([value, label]) => (
-              <div key={label} className="flex items-center gap-4 py-6 md:px-8">
-                <span className="text-3xl font-black tracking-[-0.06em]">{value}</span>
-                <span className="font-mono text-[9px] uppercase tracking-[0.16em] text-white/45">{label}</span>
+        {/* ── ROUTE TICKER ────────────────────────────────────── */}
+        <section className="ticker-wrap relative overflow-hidden border-y border-line bg-surface py-5">
+          <div className="ticker">
+            {[0, 1].map((pass) => (
+              <div key={pass} className="flex shrink-0 items-center" aria-hidden={pass === 1}>
+                {routesList.map((route) => (
+                  <span key={route.id} className="flex items-center gap-4 px-8">
+                    <span className="font-mono text-label-sm text-brand uppercase">
+                      {route.origin} → {route.destination}
+                    </span>
+                    <span className="text-sm text-ink-2">{route.duration}</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                  </span>
+                ))}
               </div>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="bg-[#111318] px-5 py-24 text-white md:px-10 md:py-32">
-        <div className="mx-auto max-w-[1420px]">
-          <div className="grid gap-10 border-b border-white/15 pb-16 lg:grid-cols-[0.78fr_1.22fr]">
-            <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#7da5ff]">Built for movement</p>
-              <h2 className="mt-6 text-5xl font-black leading-[0.9] tracking-[-0.065em] md:text-7xl">
-                Bukan sekadar pindah.
-                <span className="block text-white/35">Kami menjaga momentum.</span>
+        {/* ── LAYANAN ─────────────────────────────────────────── */}
+        <section className="relative overflow-hidden py-28">
+          <Aurora className="opacity-70" />
+
+          <div className="relative mx-auto max-w-[var(--container-max)] px-6 md:px-10 lg:px-[var(--spacing-margin-desktop)]">
+            <Reveal className="mb-16 max-w-2xl">
+              <span className="kicker mb-5">Layanan Unggulan</span>
+              <h2 className="font-display text-headline-lg">
+                Satu solusi untuk <span className="text-gradient">setiap muatan.</span>
               </h2>
-            </div>
-            <div className="flex items-end">
-              <p className="max-w-2xl text-xl leading-8 text-white/60">
-                Dari satu kendaraan pribadi hingga mutasi armada perusahaan, setiap perjalanan dirancang dengan metode, proteksi, dan kontrol yang tepat.
+              <p className="mt-5 text-lg text-ink-2">
+                Dari mobil pribadi sampai alat berat 30 ton — metode, armada, dan proteksi kami
+                sesuaikan dengan jenis muatan dan jarak tempuhnya.
               </p>
-            </div>
-          </div>
+            </Reveal>
 
-          <div className="grid lg:grid-cols-3">
-            {services.map((service) => {
-              const Icon = service.icon;
-              return (
-                <Link
-                  key={service.index}
-                  href={service.href}
-                  className="group border-b border-white/15 py-12 transition-colors hover:bg-white/[0.035] lg:border-r lg:px-9 first:lg:pl-0 last:lg:border-r-0"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] tracking-[0.18em] text-[#7da5ff]">{service.index}</span>
-                    <Icon className="h-6 w-6 text-white/35 transition-colors group-hover:text-[#7da5ff]" />
-                  </div>
-                  <h3 className="mt-20 text-3xl font-bold tracking-[-0.04em]">{service.title}</h3>
-                  <p className="mt-4 max-w-sm leading-7 text-white/50">{service.copy}</p>
-                  <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold">
-                    Eksplorasi <ChevronRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                  </span>
-                </Link>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+            <div className="flex h-auto flex-col gap-5 md:h-[540px] md:flex-row">
+              {featured.map((tile, i) => (
+                <Reveal key={tile.id} delay={i * 0.08} className="service-row-expand group flex-grow">
+                  <Link
+                    href={`/layanan/${tile.id}`}
+                    className="relative block h-72 overflow-hidden rounded-[1.75rem] md:h-[540px]"
+                  >
+                    <div
+                      className="absolute inset-0 bg-cover bg-center transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.08]"
+                      style={{ backgroundImage: `url("${tile.image}")` }}
+                    />
+                    <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(2,6,15,0.96)_0%,rgba(5,11,26,0.45)_40%,transparent_74%)]" />
+                    <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(11,95,255,0.6),transparent_58%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+                    <div className="grain absolute inset-0" />
+                    <div className="absolute inset-0 rounded-[1.75rem] ring-1 ring-white/12 ring-inset" />
 
-      <section className="relative bg-[#f4efe6] px-5 py-24 md:px-10 md:py-32">
-        <div className="pointer-events-none absolute inset-0 orbital-grid opacity-40" />
-        <div className="relative mx-auto max-w-[1420px]">
-          <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr]">
-            <div className="lg:sticky lg:top-24 lg:self-start">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#1557e8]">Precision workflow</p>
-              <h2 className="mt-6 text-5xl font-black leading-[0.92] tracking-[-0.065em] md:text-7xl">
-                Tiga tahap.
-                <span className="block font-serif font-normal italic text-[#1557e8]">Satu kendali.</span>
-              </h2>
-              <p className="mt-8 max-w-md text-lg leading-8 text-black/55">
-                Proses yang jelas mengurangi asumsi. Anda tahu siapa yang menangani kendaraan, bagaimana unit bergerak, dan kapan tiba.
-              </p>
-              <Link href="/cara-pengiriman" className="mt-9 inline-flex items-center gap-3 border-b border-black pb-2 text-sm font-bold">
-                Lihat proses lengkap <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-
-            <div className="space-y-4">
-              {steps.map(([number, title, copy]) => (
-                <article key={number} className="group grid gap-8 border border-black/12 bg-white/55 p-7 backdrop-blur-sm transition-all hover:-translate-y-1 hover:bg-white md:grid-cols-[90px_1fr_auto] md:p-10">
-                  <span className="font-mono text-xs text-[#1557e8]">{number}</span>
-                  <div>
-                    <h3 className="text-3xl font-bold tracking-[-0.045em]">{title}</h3>
-                    <p className="mt-3 max-w-xl leading-7 text-black/55">{copy}</p>
-                  </div>
-                  <ArrowDownRight className="h-6 w-6 text-black/30 transition-transform group-hover:rotate-45 group-hover:text-[#1557e8]" />
-                </article>
+                    <div className="absolute bottom-0 left-0 w-full p-7">
+                      <span className="mb-2.5 block font-mono text-label-sm text-accent-2 uppercase">
+                        {tile.kicker}
+                      </span>
+                      <h3 className="font-display text-2xl leading-tight font-bold text-white">
+                        {tile.title}
+                      </h3>
+                      <div className="grid grid-rows-[0fr] transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:grid-rows-[1fr]">
+                        <div className="overflow-hidden">
+                          <p className="pt-3 text-sm leading-relaxed text-white/80">
+                            {tile.description}
+                          </p>
+                          <div className="mt-4 flex items-center gap-2 text-sm font-semibold text-accent-2">
+                            Pelajari Selengkapnya
+                            <MoveRight className="h-4 w-4 transition-transform duration-500 group-hover:translate-x-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </Reveal>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="bg-[#1557e8] px-5 py-24 text-white md:px-10 md:py-32">
-        <div className="mx-auto max-w-[1420px]">
-          <div className="grid items-end gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-            <div>
-              <div className="flex flex-wrap gap-3">
-                {[
-                  [ShieldCheck, "Inspeksi terdokumentasi"],
-                  [BadgeCheck, "Proteksi perjalanan"],
-                  [Clock3, "Milestone real-time"],
-                ].map(([Icon, label]) => {
-                  const TagIcon = Icon as typeof ShieldCheck;
-                  return (
-                    <span key={label as string} className="inline-flex items-center gap-2 rounded-full border border-white/25 px-4 py-2 text-xs font-semibold">
-                      <TagIcon className="h-4 w-4" /> {label as string}
+        {/* ── BENTO ───────────────────────────────────────────── */}
+        <section className="relative overflow-hidden border-y border-line bg-bg-2 py-28">
+          <Aurora className="opacity-60" />
+
+          <div className="relative mx-auto grid max-w-[var(--container-max)] grid-cols-1 gap-5 px-6 md:px-10 lg:grid-cols-4 lg:px-[var(--spacing-margin-desktop)]">
+            <Reveal className="lg:col-span-2">
+              <Spotlight className="glass flex h-full flex-col justify-between rounded-[1.75rem] p-10">
+                <div>
+                  <span className="kicker mb-5">Jangkauan Nasional</span>
+                  <p className="font-display text-[clamp(1.5rem,2.2vw,2rem)] leading-[1.15] font-bold">
+                    {coverage.provinces}+ provinsi, {coverage.cities}+ kota, dan {coverage.ports}+
+                    pelabuhan terhubung lewat{" "}
+                    <span className="text-gradient">jalur darat dan laut.</span>
+                  </p>
+                </div>
+                <div className="mt-14 flex gap-10">
+                  <div>
+                    <div className="font-display text-4xl font-extrabold text-brand">
+                      <Counter to={coverage.shipments} suffix="+" />
+                    </div>
+                    <div className="mt-1.5 font-mono text-label-sm text-ink-2 uppercase">
+                      Pengiriman Selesai
+                    </div>
+                  </div>
+                  <div className="w-px self-stretch bg-line-2" />
+                  <div>
+                    <div className="font-display text-4xl font-extrabold text-accent">
+                      <Counter to={coverage.onTimeRate} suffix="%" />
+                    </div>
+                    <div className="mt-1.5 font-mono text-label-sm text-ink-2 uppercase">
+                      Ketepatan Waktu
+                    </div>
+                  </div>
+                </div>
+              </Spotlight>
+            </Reveal>
+
+            {[
+              {
+                icon: ShieldCheck,
+                title: "Inspeksi Terdokumentasi",
+                copy: "Kondisi kendaraan dicatat dan difoto sebelum dan sesudah pengiriman.",
+                grad: "bg-grad-brand",
+              },
+              {
+                icon: Radar,
+                title: "Pelacakan GPS",
+                copy: "Posisi unit dipantau sepanjang perjalanan, didukung tim yang siaga 24 jam.",
+                grad: "bg-grad-accent",
+              },
+            ].map((card, i) => (
+              <Reveal key={card.title} delay={0.1 + i * 0.08}>
+                <Spotlight className="glass group flex h-full flex-col items-center justify-center rounded-[1.75rem] p-8 text-center">
+                  <div
+                    className={`mb-6 grid h-14 w-14 place-items-center rounded-2xl ${card.grad} transition-transform duration-500 group-hover:scale-110`}
+                  >
+                    <card.icon className="h-6 w-6 text-white" />
+                  </div>
+                  <h5 className="mb-2 font-display text-xl font-bold">{card.title}</h5>
+                  <p className="text-sm leading-relaxed text-ink-2">{card.copy}</p>
+                </Spotlight>
+              </Reveal>
+            ))}
+          </div>
+        </section>
+
+        {/* ── TRACKING ────────────────────────────────────────── */}
+        <section className="relative mx-auto max-w-[var(--container-max)] px-6 py-20 md:px-10 lg:px-[var(--spacing-margin-desktop)]">
+          <Reveal>
+            <Spotlight className="relative overflow-hidden rounded-[2.25rem] bg-grad-ink p-8 md:p-16 lg:p-20">
+              <Aurora className="opacity-45" />
+              <div className="absolute inset-0 rounded-[2.25rem] ring-1 ring-white/10 ring-inset" />
+
+              <div className="relative z-10 grid items-center gap-14 md:grid-cols-2">
+                <div>
+                  <div className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-white/15 bg-white/5 px-4 py-2">
+                    <span className="relative flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-ok opacity-75" />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-ok" />
                     </span>
-                  );
-                })}
+                    <span className="font-mono text-label-sm text-white/70 uppercase">
+                      Pelacakan Real-Time
+                    </span>
+                  </div>
+
+                  <h2 className="font-display text-[clamp(2rem,3.6vw,3rem)] leading-[1.06] font-extrabold tracking-[-0.03em] text-white">
+                    Lacak <span className="text-gradient-inv">kiriman Anda.</span>
+                  </h2>
+                  <p className="mt-6 text-lg text-white/60">
+                    Masukkan nomor resi untuk melihat posisi kendaraan dan perkiraan waktu tiba.
+                  </p>
+
+                  <form
+                    action="/tracking"
+                    className="mt-9 flex items-center gap-2 rounded-full border border-white/15 bg-white/5 p-2 backdrop-blur-xl transition-all focus-within:border-accent/60 focus-within:ring-4 focus-within:ring-accent/20"
+                  >
+                    <label htmlFor="resi" className="sr-only">
+                      Nomor resi
+                    </label>
+                    <input
+                      id="resi"
+                      name="resi"
+                      type="text"
+                      placeholder="AAL-0000-0000"
+                      className="w-full min-w-0 flex-1 border-none bg-transparent px-5 py-3 font-display text-lg tracking-wider text-white uppercase placeholder:text-white/35 focus:outline-none"
+                    />
+                    <button
+                      type="submit"
+                      className="u-btn u-btn-accent u-btn-sheen shrink-0 px-7 py-3"
+                    >
+                      <span className="sheen" />
+                      Lacak
+                    </button>
+                  </form>
+                </div>
+
+                <div className="hidden md:block">
+                  <div className="rotate-2 rounded-[1.5rem] bg-[linear-gradient(150deg,rgba(255,255,255,0.16),rgba(255,255,255,0.04))] p-px transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-0">
+                    <div className="rounded-[1.5rem] bg-[#050b1a]/92 p-6 backdrop-blur-xl">
+                      <div className="mb-7 flex items-center gap-4">
+                        <div className="grid h-12 w-12 place-items-center rounded-xl bg-grad-brand">
+                          <Truck className="h-5 w-5 text-white" />
+                        </div>
+                        <div>
+                          <div className="font-display font-bold text-white">AAL-8829-1922</div>
+                          <div className="font-mono text-label-sm text-ok uppercase">
+                            Contoh tampilan
+                          </div>
+                        </div>
+                      </div>
+
+                      {[
+                        { label: "Tahap 1", text: "Penjemputan & inspeksi", done: true },
+                        { label: "Tahap 2", text: "Perjalanan menuju tujuan", done: false },
+                      ].map((step, i, arr) => (
+                        <div key={step.label} className="flex items-start gap-4">
+                          <div className="flex flex-col items-center">
+                            <div
+                              className={
+                                step.done
+                                  ? "h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_0_4px_rgba(255,157,0,0.22)]"
+                                  : "h-2.5 w-2.5 rounded-full border border-white/30"
+                              }
+                            />
+                            {i < arr.length - 1 && (
+                              <div className="h-12 w-px bg-[linear-gradient(180deg,rgba(255,157,0,0.6),rgba(255,255,255,0.08))]" />
+                            )}
+                          </div>
+                          <div className="-mt-1">
+                            <div className="font-mono text-label-sm text-white/40 uppercase">
+                              {step.label}
+                            </div>
+                            <div className="mt-1 text-sm text-white">{step.text}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h2 className="mt-10 max-w-4xl text-5xl font-black uppercase leading-[0.86] tracking-[-0.075em] md:text-8xl">
-                Ready when
-                <span className="block text-[#c9ff3b]">you are.</span>
+            </Spotlight>
+          </Reveal>
+        </section>
+
+        {/* ── STANDAR KERJA ───────────────────────────────────── */}
+        <section className="relative overflow-hidden pb-28">
+          <div className="relative mx-auto max-w-[var(--container-max)] px-6 md:px-10 lg:px-[var(--spacing-margin-desktop)]">
+            <Reveal className="mb-14 max-w-2xl">
+              <span className="kicker mb-5">Standar Kerja</span>
+              <h2 className="font-display text-headline-lg">
+                Cara kami <span className="text-gradient">menjaga muatan Anda.</span>
               </h2>
-            </div>
-            <div className="border-l border-white/25 pl-8">
-              <p className="max-w-lg text-xl leading-8 text-white/75">
-                Ceritakan kendaraan dan tujuan Anda. Tim kami akan menyusun metode pengiriman yang paling masuk akal—tanpa bahasa rumit.
-              </p>
-              <Link href="/cek-tarif" className="mt-8 inline-flex items-center gap-5 bg-[#c9ff3b] px-7 py-4 text-xs font-black uppercase tracking-[0.14em] text-[#111318]">
-                Dapatkan estimasi <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+            </Reveal>
 
-      <section className="bg-[#f4efe6] px-5 py-24 md:px-10 md:py-28">
-        <div className="mx-auto grid max-w-[1420px] gap-12 lg:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <div className="flex items-center gap-3">
-              <Sparkles className="h-5 w-5 text-[#1557e8]" />
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#1557e8]">Quick quote</p>
-            </div>
-            <h2 className="mt-6 text-5xl font-black leading-[0.92] tracking-[-0.06em] md:text-7xl">
-              Rute berikutnya dimulai di sini.
-            </h2>
-            <div className="mt-10 grid grid-cols-2 gap-5 border-t border-black/15 pt-8">
-              <div>
-                <CarFront className="h-6 w-6 text-[#1557e8]" />
-                <p className="mt-3 text-sm font-semibold">Semua jenis kendaraan</p>
-              </div>
-              <div>
-                <MapPin className="h-6 w-6 text-[#1557e8]" />
-                <p className="mt-3 text-sm font-semibold">Jangkauan nasional</p>
-              </div>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {trustPoints.map((point, i) => (
+                <Reveal key={point} delay={i * 0.06}>
+                  <Spotlight className="glass flex h-full items-start gap-4 rounded-2xl p-6">
+                    <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-accent-soft font-mono text-label-sm text-accent">
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="pt-1 text-ink">{point}</span>
+                  </Spotlight>
+                </Reveal>
+              ))}
             </div>
           </div>
-          <div className="orbital-quote">
-            <QuoteForm />
-          </div>
-        </div>
-      </section>
+        </section>
 
-      <footer className="border-t border-white/10 bg-[#111318] px-5 py-10 text-white md:px-10">
-        <div className="mx-auto flex max-w-[1420px] flex-col gap-8 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
-            <span className="grid h-9 w-9 place-items-center bg-[#1557e8] font-black">K</span>
-            <span className="font-bold">KirimKendaraan</span>
+        {/* ── CTA ─────────────────────────────────────────────── */}
+        <section className="relative overflow-hidden">
+          <div className="relative bg-grad-ink py-28">
+            <Aurora className="opacity-55" />
+            <div className="grain absolute inset-0" />
+            <div className="relative z-10 mx-auto max-w-[var(--container-max)] px-6 text-center md:px-10 lg:px-[var(--spacing-margin-desktop)]">
+              <Reveal>
+                <h2 className="mx-auto max-w-3xl font-display text-[clamp(2.25rem,4.8vw,3.75rem)] leading-[1.03] font-extrabold tracking-[-0.035em] text-white">
+                  Siap kirim <span className="text-gradient-inv">kendaraan Anda?</span>
+                </h2>
+                <p className="mx-auto mt-7 max-w-xl text-lg text-white/60">
+                  Ceritakan unit dan tujuan Anda. Kami susun metode yang paling masuk akal, lengkap
+                  dengan estimasi biayanya.
+                </p>
+                <div className="mt-11 flex flex-wrap justify-center gap-4">
+                  <Link href="/cek-tarif" className="u-btn u-btn-accent u-btn-sheen px-8 py-4">
+                    <span className="sheen" />
+                    Cek Tarif Gratis
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                  <Link href="/kontak" className="u-btn u-btn-glass-dark px-8 py-4">
+                    Hubungi Admin
+                  </Link>
+                </div>
+                <p className="mt-8 inline-flex items-center gap-2 font-mono text-label-sm text-white/45 uppercase">
+                  <BadgeCheck className="h-4 w-4 text-accent" />
+                  Operasional {brand.hours}
+                </p>
+              </Reveal>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-6 text-sm text-white/55">
-            <Link href="/kebijakan-privasi">Privasi</Link>
-            <Link href="/syarat-ketentuan">Syarat</Link>
-            <Link href="/kebijakan-klaim">Klaim</Link>
-            <Link href="/kontak">Kontak</Link>
-          </div>
-          <p className="text-xs text-white/35">© {new Date().getFullYear()} KirimKendaraan.</p>
-        </div>
-      </footer>
-    </main>
+        </section>
+      </main>
+
+      <Footer />
+    </>
   );
 }

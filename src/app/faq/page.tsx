@@ -8,7 +8,7 @@ import { faqs } from "@/config/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "FAQ | KirimKendaraan",
+  title: "FAQ",
   description: "Pertanyaan yang sering diajukan mengenai layanan pengiriman kendaraan kami.",
 };
 

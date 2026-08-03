@@ -43,14 +43,14 @@ export function RouteCard({ from, to, time, type, className, href }: RouteCardPr
 
   if (href) {
     return (
-      <Link href={href} className={cn("block group bg-white rounded-2xl border border-slate-200 p-6 transition-all hover:shadow-xl hover:border-blue-200 hover:-translate-y-1", className)}>
+      <Link href={href} className={cn("block group bg-white rounded-[14px] border border-slate-200 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[var(--shadow-lift)]", className)}>
         {CardContent}
       </Link>
     );
   }
 
   return (
-    <div className={cn("group bg-white rounded-2xl border border-slate-200 p-6 transition-all hover:shadow-xl hover:border-blue-200 hover:-translate-y-1", className)}>
+    <div className={cn("group bg-white rounded-[14px] border border-slate-200 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-blue-300 hover:shadow-[var(--shadow-lift)]", className)}>
       {CardContent}
     </div>
   );

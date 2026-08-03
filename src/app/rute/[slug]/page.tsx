@@ -7,7 +7,6 @@ import { FAQAccordion } from "@/components/ui/FAQAccordion";
 import { routesList } from "@/config/data";
 import { ArrowRight, Clock, ShieldCheck, MapPin } from "lucide-react";
 import type { Metadata } from "next";
-import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 
 interface RoutePageProps {
@@ -23,7 +22,7 @@ export async function generateMetadata({ params }: RoutePageProps): Promise<Meta
   if (!route) return { title: "Rute Tidak Ditemukan" };
 
   return {
-    title: `Kirim Mobil ${route.origin} ke ${route.destination} | KirimKendaraan`,
+    title: `Kirim Mobil ${route.origin} ke ${route.destination}`,
     description: `Layanan pengiriman kendaraan dari ${route.origin} ke ${route.destination}. Estimasi waktu ${route.duration}.`,
   };
 }
@@ -154,11 +153,12 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
               <div className="bg-white rounded-2xl p-6 shadow-xl border border-slate-100">
                 <h3 className="font-bold text-slate-900 mb-2">Tertarik dengan Rute ini?</h3>
                 <p className="text-slate-600 text-sm mb-6">Dapatkan penawaran harga terbaik untuk pengiriman dari {route.origin} ke {route.destination}.</p>
-                <Button className="w-full" asChild>
-                  <Link href={`/cek-tarif?origin=${route.origin}&destination=${route.destination}`}>
-                    Minta Penawaran Harga
-                  </Link>
-                </Button>
+                <Link
+                  href={`/cek-tarif?origin=${route.origin}&destination=${route.destination}`}
+                  className="u-btn u-btn-solid w-full"
+                >
+                  Minta Penawaran Harga
+                </Link>
               </div>
 
               {route.relatedRoutes.length > 0 && (

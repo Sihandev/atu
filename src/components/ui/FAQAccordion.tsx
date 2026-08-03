@@ -3,8 +3,6 @@
 import { useState, useId } from "react";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion } from "framer-motion";
-import { fadeInUp } from "@/lib/motion";
 
 interface FAQAccordionProps {
   question: string;
@@ -17,28 +15,34 @@ export function FAQAccordion({ question, answer, className }: FAQAccordionProps)
   const contentId = useId();
 
   return (
-    <motion.div variants={fadeInUp} className={cn("border-b border-slate-200", className)}>
+    <div className={cn("border-b border-outline-variant/50", className)}>
       <button
         type="button"
-        className="flex w-full items-center justify-between py-6 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 rounded-md"
+        className="flex w-full items-center justify-between gap-6 rounded-md py-6 text-left focus-visible:ring-2 focus-visible:ring-secondary focus-visible:ring-offset-2 focus-visible:outline-none"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-controls={contentId}
       >
-        <span className="text-lg font-medium text-slate-900">{question}</span>
+        <span className="text-lg font-medium text-on-surface">{question}</span>
         <ChevronDown
-          className={cn("h-5 w-5 text-slate-500 transition-transform duration-200", isOpen ? "rotate-180" : "")}
+          className={cn(
+            "h-5 w-5 shrink-0 text-on-surface-variant transition-transform duration-300",
+            isOpen && "rotate-180"
+          )}
+          aria-hidden="true"
         />
       </button>
       <div
         id={contentId}
         className={cn(
-          "overflow-hidden transition-all duration-300 ease-in-out",
-          isOpen ? "max-h-96 pb-6 opacity-100" : "max-h-0 opacity-0"
+          "grid transition-all duration-300 ease-in-out",
+          isOpen ? "grid-rows-[1fr] pb-6 opacity-100" : "grid-rows-[0fr] opacity-0"
         )}
       >
-        <p className="text-slate-600 leading-relaxed">{answer}</p>
+        <div className="overflow-hidden">
+          <p className="leading-relaxed text-on-surface-variant">{answer}</p>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

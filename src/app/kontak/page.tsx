@@ -8,7 +8,7 @@ import { brand } from "@/config/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Hubungi Kami | KirimKendaraan",
+  title: "Hubungi Kami",
   description: "Hubungi kami untuk informasi lebih lanjut mengenai layanan pengiriman kendaraan.",
 };
 

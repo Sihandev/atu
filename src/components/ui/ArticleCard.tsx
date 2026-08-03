@@ -35,14 +35,14 @@ export function ArticleCard({ title, date, image, className, href }: ArticleCard
 
   if (href) {
     return (
-      <Link href={href} className={cn("group block overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:shadow-lg", className)}>
+      <Link href={href} className={cn("group block overflow-hidden rounded-[14px] border border-slate-200 bg-white transition-all duration-300 hover:shadow-[var(--shadow-lift)]", className)}>
         {CardContent}
       </Link>
     );
   }
 
   return (
-    <div className={cn("group overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:shadow-lg", className)}>
+    <div className={cn("group overflow-hidden rounded-[14px] border border-slate-200 bg-white transition-all duration-300 hover:shadow-[var(--shadow-lift)]", className)}>
       {CardContent}
     </div>
   );

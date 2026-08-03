@@ -8,7 +8,7 @@ import { articlesList } from "@/config/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Artikel & Panduan | KirimKendaraan",
+  title: "Artikel & Panduan",
   description: "Kumpulan artikel, tips, dan panduan lengkap seputar pengiriman kendaraan antar kota dan antar pulau di Indonesia.",
 };
 

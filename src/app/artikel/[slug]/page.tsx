@@ -22,7 +22,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   if (!article) return { title: "Artikel Tidak Ditemukan" };
 
   return {
-    title: `${article.title} | KirimKendaraan`,
+    title: `${article.title}`,
     description: article.excerpt,
   };
 }
@@ -176,7 +176,7 @@ export default async function ArticleDetailPage({ params }: ArticlePageProps) {
             "description": article.excerpt,
             "author": {
               "@type": "Organization",
-              "name": "KirimKendaraan"
+              "name": "Alyssa Auto Logistik"
             }
           })
         }}

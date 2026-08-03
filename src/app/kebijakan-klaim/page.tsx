@@ -5,7 +5,7 @@ import { Section } from "@/components/ui/Section";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Kebijakan Klaim Asuransi | KirimKendaraan",
+  title: "Kebijakan Klaim Asuransi",
   description: "Prosedur dan kebijakan klaim asuransi pengiriman kendaraan.",
 };
 

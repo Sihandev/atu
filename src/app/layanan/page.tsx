@@ -8,7 +8,7 @@ import { servicesList } from "@/config/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Layanan Pengiriman Kendaraan | KirimKendaraan",
+  title: "Layanan Pengiriman Kendaraan",
   description: "Eksplorasi berbagai layanan pengiriman kendaraan kami: Kirim Mobil, Motor, Towing, Car Carrier, dan Antar Pulau.",
 };
 

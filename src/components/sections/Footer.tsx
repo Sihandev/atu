@@ -1,86 +1,108 @@
 import Link from "next/link";
-import { Container } from "@/components/ui/Container";
-import { brand, navigation, services, routes } from "@/config/data";
+import { Mail, MessageCircle } from "lucide-react";
+import { brand, coverage, servicesList } from "@/config/data";
+
+const company = [
+  { label: "Tentang Kami", href: "/tentang" },
+  { label: "Cara Pengiriman", href: "/cara-pengiriman" },
+  { label: "Artikel", href: "/artikel" },
+];
+
+const help = [
+  { label: "FAQ", href: "/faq" },
+  { label: "Kontak", href: "/kontak" },
+  { label: "Kebijakan Privasi", href: "/kebijakan-privasi" },
+  { label: "Syarat & Ketentuan", href: "/syarat-ketentuan" },
+];
+
+function Column({ heading, items }: { heading: string; items: { label: string; href: string }[] }) {
+  return (
+    <div>
+      <h5 className="mb-6 font-bold text-white">{heading}</h5>
+      <ul className="space-y-4">
+        {items.map((item) => (
+          <li key={item.href}>
+            <Link
+              href={item.href}
+              className="inline-block text-white/60 transition-all duration-300 hover:translate-x-1 hover:text-white"
+            >
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
 
 export function Footer() {
   return (
-    <footer className="bg-slate-900 text-slate-300 py-16 border-t border-slate-800">
-      <Container>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
-          {/* Brand Col */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="h-8 w-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-xl">
-                K
-              </div>
-              <span className="font-bold text-xl text-white tracking-tight">
-                {brand.name}
-              </span>
-            </Link>
-            <p className="text-slate-400 mb-6 leading-relaxed max-w-sm">
-              Solusi pengiriman kendaraan antar kota dan antar pulau terpercaya, aman, dan transparan untuk seluruh wilayah Indonesia.
-            </p>
-            <div className="flex flex-col gap-2 text-sm">
-              <p>Email: <a href={`mailto:${brand.email}`} className="text-white hover:text-blue-400 transition-colors">{brand.email}</a></p>
-              <p>Telepon: <span className="text-white">{brand.phone}</span></p>
-            </div>
-          </div>
-
-          {/* Links Col */}
-          <div>
-            <h4 className="text-white font-semibold mb-6">Perusahaan</h4>
-            <ul className="flex flex-col gap-4 text-sm">
-              {navigation.filter(item => ["Beranda", "Tentang", "Artikel", "Layanan", "Kontak", "FAQ"].includes(item.label) || item.label === "Cara Pengiriman").map((item) => (
-                <li key={item.label}>
-                  <Link href={item.href} className="hover:text-blue-400 transition-colors">
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-              <li><Link href="/faq" className="hover:text-blue-400 transition-colors">FAQ</Link></li>
-              <li><Link href="/kontak" className="hover:text-blue-400 transition-colors">Kontak</Link></li>
-            </ul>
-          </div>
-
-          {/* Services Col */}
-          <div>
-            <h4 className="text-white font-semibold mb-6">Layanan Kami</h4>
-            <ul className="flex flex-col gap-4 text-sm">
-              {services.slice(0, 5).map((service) => (
-                <li key={service.id}>
-                  <Link href={`/layanan/${service.id}`} className="hover:text-blue-400 transition-colors">
-                    {service.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Routes Col */}
-          <div>
-            <h4 className="text-white font-semibold mb-6">Rute Populer</h4>
-            <ul className="flex flex-col gap-4 text-sm">
-              {routes.slice(0,5).map((route, idx) => (
-                <li key={idx}>
-                  <Link href={`/rute/${route.id}`} className="hover:text-blue-400 transition-colors">
-                    {route.from} - {route.to}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+    /* Picks up where the CTA band's gradient ends so the two read as one
+       continuous surface instead of showing a seam. */
+    <footer className="relative w-full overflow-hidden bg-[linear-gradient(180deg,#02060f_0%,#01030a_100%)]">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(0,194,255,0.55),transparent)]"
+      />
+      <div className="mx-auto grid max-w-[var(--container-max)] grid-cols-1 gap-gutter px-6 py-16 md:grid-cols-2 md:px-10 lg:grid-cols-4 lg:px-[var(--spacing-margin-desktop)]">
+        <div>
+          <div className="font-display text-2xl font-extrabold tracking-[-0.03em] text-white">{brand.name}</div>
+          <p className="mt-1 font-mono text-label-sm tracking-widest text-accent uppercase">
+            {brand.legalName}
+          </p>
+          <p className="mt-6 text-white/60">
+            {brand.tagline} — antar kota dan antar pulau, menjangkau {coverage.provinces}+ provinsi
+            dan {coverage.cities}+ kota di Indonesia.
+          </p>
+          <p className="mt-6 text-sm leading-relaxed text-white/50">
+            {brand.address}
+          </p>
+          <p className="mt-3 text-sm text-white/50">
+            Operasional: {brand.hours}
+          </p>
+          <p className="mt-3 text-sm text-white/50">NPWP {brand.npwp}</p>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
-          <p>© {new Date().getFullYear()} {brand.name}. Hak Cipta Dilindungi.</p>
-          <div className="flex items-center gap-6">
-            <Link href="/syarat-ketentuan" className="hover:text-white transition-colors">Syarat & Ketentuan</Link>
-            <Link href="/kebijakan-privasi" className="hover:text-white transition-colors">Kebijakan Privasi</Link>
-            <Link href="/kebijakan-pembatalan" className="hover:text-white transition-colors">Pembatalan</Link>
-            <Link href="/kebijakan-klaim" className="hover:text-white transition-colors">Klaim</Link>
-          </div>
+        <Column heading="Perusahaan" items={company} />
+        <Column
+          heading="Layanan"
+          items={servicesList.map((s) => ({ label: s.title, href: `/layanan/${s.id}` }))}
+        />
+        <Column heading="Bantuan" items={help} />
+      </div>
+
+      <div className="mx-auto max-w-[var(--container-max)] px-6 pb-12 md:px-10 lg:px-[var(--spacing-margin-desktop)]">
+        <h5 className="mb-6 font-bold text-white">Hubungi Kami</h5>
+        <div className="flex flex-wrap items-center gap-4">
+          <a
+            href={`https://wa.me/${brand.phone.replace(/\D/g, "")}`}
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand"
+            aria-label="WhatsApp"
+          >
+            <MessageCircle className="h-5 w-5" />
+          </a>
+          {/* Email is only rendered if the business actually publishes one. */}
+          {brand.email && (
+            <a
+              href={`mailto:${brand.email}`}
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-brand"
+              aria-label="Email"
+            >
+              <Mail className="h-5 w-5" />
+            </a>
+          )}
+          <a
+            href={`https://wa.me/${brand.phone.replace(/\D/g, "")}`}
+            className="font-display text-lg text-white transition-colors hover:text-accent"
+          >
+            {brand.phone}
+          </a>
         </div>
-      </Container>
+      </div>
+
+      <div className="border-t border-white/5 py-8 text-center text-sm text-white/40">
+        © {new Date().getFullYear()} {brand.legalName}. Seluruh hak cipta dilindungi.
+      </div>
     </footer>
   );
 }

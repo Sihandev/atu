@@ -4,7 +4,7 @@ import { services, routes, articles } from '@/config/data';
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://kirimkendaraan.co.id'; // Placeholder URL
+  const baseUrl = 'https://alyssalogistik.co.id';
 
   // Base routes
   const baseRoutes = [

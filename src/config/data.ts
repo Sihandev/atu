@@ -1,10 +1,29 @@
 import { Car, Truck, Anchor, Plane, ArrowRightCircle, CheckCircle } from "lucide-react";
 
+/* Sourced from alyssalogistik.co.id. Anything the live site does not publish
+   is left empty rather than invented — see `email` below. */
 export const brand = {
-  name: "KirimKendaraan",
-  phone: "+6281234567890", // placeholder
-  email: "hello@kirimkendaraan.co.id",
+  name: "Alyssa Logistik",
+  legalName: "PT Alyssa Auto Logistik",
+  tagline: "Jasa Pengiriman Kendaraan & Alat Berat",
+  phone: "+62818631135",
+  /* The live site publishes no email address. Left blank on purpose so the UI
+     hides the field instead of showing an address that does not exist. */
+  email: "",
+  address: "Jl. Enim Raya 2 No. 86, Jakarta Utara, DKI Jakarta 14330",
+  hours: "24 jam, setiap hari",
+  npwp: "26.981.990.0-042.000",
+  domain: "alyssalogistik.co.id",
   whatsappMessage: "Halo, saya ingin bertanya tentang layanan pengiriman kendaraan.",
+};
+
+/* Coverage figures as published on alyssalogistik.co.id. */
+export const coverage = {
+  provinces: 34,
+  cities: 120,
+  ports: 15,
+  shipments: 10000,
+  onTimeRate: 98,
 };
 
 export const navigation = [
@@ -78,7 +97,7 @@ export const servicesList = [
     description: "Solusi hemat untuk pengiriman kendaraan dalam jumlah besar via truk transporter.",
     icon: Truck,
     hero: "Kirim Mobil Lebih Hemat dengan Car Carrier",
-    explanation: "Pengiriman menggunakan truk besar yang dapat mengangkut 4-6 mobil sekaligus. Menjadi solusi paling ekonomis untuk pengiriman antar kota dalam pulau yang sama.",
+    explanation: "Pengiriman menggunakan truk besar yang dapat mengangkut hingga 5 unit mobil sekaligus. Menjadi solusi paling ekonomis untuk pengiriman antar kota dalam pulau yang sama.",
     useCases: ["Pengiriman Dealer/Showroom", "Mutasi Kendaraan Perusahaan", "Pindahan Hemat"],
     process: ["Booking & Konsultasi", "Kumpul di Pool / Pick-up Lokal", "Loading ke Car Carrier", "Perjalanan Terjadwal", "Bongkar di Pool Tujuan"],
     durationFactors: ["Jarak Pengiriman", "Menunggu Kuota Penuh (Tergantung Rute)", "Kondisi Jalan Raya"],
@@ -124,6 +143,42 @@ export const servicesList = [
     faq: [
       { question: "Apakah bisa kirim mobil beserta isinya (barang)?", answer: "Beberapa kapal RoRo melarang keras barang di dalam mobil. Sebaiknya konsultasikan terlebih dahulu jenis barang bawaan Anda." },
       { question: "Kenapa jadwal kapal sering berubah?", answer: "Jadwal kapal sangat bergantung pada kondisi cuaca, pasang surut air laut, dan regulasi otoritas pelabuhan (syahbandar)." }
+    ]
+  },
+  {
+    id: "self-loader",
+    title: "Self Loader",
+    description: "Pengangkutan alat berat hingga 20 ton dengan truk self loader yang memuat sendiri.",
+    icon: Truck,
+    hero: "Pengiriman Alat Berat dengan Self Loader",
+    explanation: "Truk self loader memuat dan membongkar unit sendiri menggunakan sistem hidrolik, tanpa perlu crane di lokasi. Kapasitas angkut maksimal 20 ton, cocok untuk alat berat berukuran sedang.",
+    useCases: ["Excavator Mini & Standar", "Forklift", "Genset", "Unit Proyek Konstruksi"],
+    process: ["Survei Unit & Lokasi", "Penjadwalan Armada", "Pemuatan Hidrolik", "Perjalanan", "Pembongkaran di Lokasi Tujuan"],
+    durationFactors: ["Jarak Tempuh", "Akses Jalan ke Lokasi", "Perizinan Jalur (Bila Diperlukan)"],
+    priceFactors: ["Bobot dan Dimensi Unit", "Jarak Pengiriman", "Tingkat Kesulitan Akses Lokasi"],
+    docsAndSafety: "Bobot dan dimensi unit wajib dikonfirmasi sebelum penjadwalan agar armada dan perizinan sesuai. Unit diikat sesuai standar pengangkutan alat berat dan didokumentasikan sebelum berangkat.",
+    relatedRoutes: ["jakarta-makassar", "jakarta-balikpapan", "surabaya-makassar"],
+    faq: [
+      { question: "Apakah perlu menyiapkan crane di lokasi?", answer: "Tidak. Self loader memuat dan membongkar unit sendiri dengan sistem hidrolik, sehingga tidak memerlukan crane tambahan di lokasi." },
+      { question: "Bagaimana jika bobot unit melebihi 20 ton?", answer: "Untuk unit di atas 20 ton kami arahkan ke layanan Low Bed Trailer yang berkapasitas hingga 30 ton." }
+    ]
+  },
+  {
+    id: "low-bed-trailer",
+    title: "Low Bed Trailer",
+    description: "Trailer lantai rendah untuk mesin industri dan alat berat hingga 30 ton.",
+    icon: Truck,
+    hero: "Angkutan Alat Berat & Mesin Industri dengan Low Bed Trailer",
+    explanation: "Trailer dengan lantai rendah sehingga total tinggi muatan tetap aman untuk dilalui. Kapasitas angkut maksimal 30 ton, dipakai untuk alat berat besar dan mesin industri.",
+    useCases: ["Excavator Besar", "Bulldozer", "Mesin Pabrik", "Unit Pertambangan"],
+    process: ["Survei Unit & Rute", "Pengurusan Perizinan Jalur", "Pemuatan dengan Ramp/Crane", "Perjalanan dengan Pengawalan Bila Perlu", "Pembongkaran di Lokasi"],
+    durationFactors: ["Jarak Tempuh", "Perizinan dan Pengawalan", "Batas Jam Operasional Jalan", "Kondisi Rute"],
+    priceFactors: ["Bobot dan Dimensi Unit", "Jarak Pengiriman", "Perizinan dan Pengawalan", "Kebutuhan Alat Bantu Muat"],
+    docsAndSafety: "Pengangkutan dimensi besar mengikuti ketentuan perizinan jalur dan jam operasional. Data bobot dan dimensi unit wajib akurat karena menentukan armada, izin, dan rute yang dipakai.",
+    relatedRoutes: ["jakarta-makassar", "jakarta-balikpapan", "surabaya-makassar"],
+    faq: [
+      { question: "Apakah pengiriman alat berat butuh izin khusus?", answer: "Untuk muatan dengan dimensi atau bobot berlebih, umumnya diperlukan izin jalur dan kadang pengawalan. Kami bantu urus sesuai rute yang dilalui." },
+      { question: "Berapa kapasitas maksimalnya?", answer: "Low Bed Trailer kami melayani muatan hingga 30 ton. Di atas itu perlu dikonsultasikan terlebih dahulu." }
     ]
   },
 ];

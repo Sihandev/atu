@@ -8,7 +8,7 @@ import { routesList } from "@/config/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Rute Pengiriman Kendaraan | KirimKendaraan",
+  title: "Rute Pengiriman Kendaraan",
   description: "Daftar rute populer pengiriman kendaraan antar kota dan antar pulau di Indonesia.",
 };
 

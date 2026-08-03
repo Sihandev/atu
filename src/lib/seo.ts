@@ -92,7 +92,7 @@ export function generateArticleSchema(
   description: string,
   url: string,
   datePublished: string,
-  imageUrl: string = "https://kirimkendaraan.co.id/og-image.jpg"
+  imageUrl: string = "https://alyssalogistik.co.id/og-image.jpg"
 ) {
   return {
     "@context": "https://schema.org",
@@ -104,14 +104,14 @@ export function generateArticleSchema(
     "author": {
       "@type": "Organization",
       "name": brand.name,
-      "url": "https://kirimkendaraan.co.id"
+      "url": "https://alyssalogistik.co.id"
     },
     "publisher": {
       "@type": "Organization",
       "name": brand.name,
       "logo": {
         "@type": "ImageObject",
-        "url": "https://kirimkendaraan.co.id/logo.png"
+        "url": "https://alyssalogistik.co.id/logo.png"
       }
     },
     "mainEntityOfPage": {

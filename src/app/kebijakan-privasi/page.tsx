@@ -5,7 +5,7 @@ import { Section } from "@/components/ui/Section";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Kebijakan Privasi | KirimKendaraan",
+  title: "Kebijakan Privasi",
   description: "Kebijakan Privasi layanan pengiriman kendaraan kami.",
 };
 

@@ -27,14 +27,14 @@ export function ServiceCard({ title, description, icon: Icon, className, href }:
 
   if (href) {
     return (
-      <Link href={href} className={cn("group block rounded-2xl border border-slate-200 bg-white p-8 transition-all hover:shadow-xl hover:-translate-y-1", className)}>
+      <Link href={href} className={cn("group block rounded-[14px] border border-slate-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]", className)}>
         {CardContent}
       </Link>
     );
   }
 
   return (
-    <div className={cn("group rounded-2xl border border-slate-200 bg-white p-8 transition-all hover:shadow-xl hover:-translate-y-1", className)}>
+    <div className={cn("group rounded-[14px] border border-slate-200 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-lift)]", className)}>
       {CardContent}
     </div>
   );
