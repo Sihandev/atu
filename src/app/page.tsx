@@ -11,24 +11,15 @@ import { ScrollProgress } from "@/components/ui/ScrollProgress";
 import { Spotlight } from "@/components/ui/Spotlight";
 import { brand, coverage, servicesList, routesList, trustPoints } from "@/config/data";
 
-/* Imagery generated alongside the Stitch design and served from Google's CDN.
-   Temporary asset URLs — download them into /public before launch.
-   `=s0` asks for the original instead of the 512px derivative Stitch embeds. */
-const hi = (url: string) => `${url}=s0`;
-
+/* Served from /public so the site does not depend on Google's temporary
+   Stitch CDN URLs, which expire and would leave the hero and every service
+   tile blank in production. Replace these with real fleet photography when
+   it is available — same filenames, no code change needed. */
 const IMG = {
-  hero: hi(
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuAQMtVJlx520Z6PXSRiHMR9PdutCmHbB71i7_qPJdRL-OC5mprgtvTh4xsW8MnoSh3go6YzOnqgK2CDwOT6v8Q2Q7qGC0M1GH2Bievsa6hg_N6PsxQXlsF_mmGJPB0CYUZ2MbuNUPKeK2FvAZFdVF5gymMdyFxtxVF6PYbgXe8Qw19Afz3kiMj4KmtdgRaXxgSJgjxB1t0sAkAB0lcNYnyY63AiWckXBuZvUsoVDa4FthGhC5auASa38g"
-  ),
-  selfDrive: hi(
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuBMriSt1XBbwpPT5uz28Rdhqe57FH72DIPEQDM70_O8KkD9PKfeM6ObHTNEncpCqeuoYo-d0VAzFXK7oriE37RaInaHMo2RDwMI0b0a35TVPr1J7DwfbLeqVXNOHcLcWweBDWzgRXO8wPqmqz36_XgbPhYHaGdxHtzjIZJ6OUsdTpZf5WMRUvXD6bMrncUI8WGDQNyZWxr2vyjBYmGO5F9nE1Wf3ub43lLORK4yTYvZ5t15wxp0OgcmWA"
-  ),
-  towing: hi(
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuCvdZR1Mb0Cbai3oFNXMskEddRjFUKb55OQD4U0-26ff0gHI-5d4UUFL4NCnTEddJP2U6h4O6HMeiNt9KPDCFoT6XYhuVz6C_7dwbCvNRnvhwx9rEox_dj81dJ3CV8bwI1zl8yQLDC2XLzAyzxn77X6hmwN1pznrl915SdlVxTO2i2KAe-TwU_lF30IvGbwj2THkXWrRB00utynU5gh37nRUt9mE-owYqRCuTFO8Hzh1-zqTmWqlBZikg"
-  ),
-  roro: hi(
-    "https://lh3.googleusercontent.com/aida-public/AB6AXuASgl1LxQmbEzaLQeLlnzwhebrTtJ7TOLqUlpzB5O7SAfufnCi2oJXZLK9Fq7C7BofbuSUL1PymeI2A2Usgsx6hamz683HAZ-Q_DXz8PDcZg8U3Rzsdlft1vn5QjY3lVUc4ICLO7RQi_kZ2xbSeETeAF5KOI9XVVpZfqnRL3u7xMn9-3_1VB2xFYjkpzpQtmRc-r36rd27vv-Ldb4jhwPlvL6-MKg9yKHa4h0BqaVlIe1YNDF6IT-KrQQ"
-  ),
+  hero: "/img/hero-car-carrier.jpg",
+  selfDrive: "/img/self-drive.jpg",
+  towing: "/img/towing.jpg",
+  roro: "/img/roro.jpg",
 };
 
 const featured = [
