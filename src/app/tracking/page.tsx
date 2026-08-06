@@ -1,184 +1,310 @@
 "use client";
 
-import { useState } from "react";
-import { Navbar } from "@/components/sections/Navbar";
-import { Footer } from "@/components/sections/Footer";
-import { Container } from "@/components/ui/Container";
-import { Section } from "@/components/ui/Section";
-import { Button } from "@/components/ui/Button";
-import { Search, MapPin, Truck, CheckCircle2, PackageCheck, AlertCircle } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import {
+  AlertCircle,
+  ArrowRight,
+  CheckCircle2,
+  Clock3,
+  ExternalLink,
+  MapPin,
+  RefreshCw,
+  Route,
+  Search,
+  ShieldCheck,
+  Truck,
+} from "lucide-react";
 
-// Mock tracking data logic based on the TrackingPreview component logic
-type TrackingStatus = 'idle' | 'loading' | 'found' | 'not-found';
+import { Footer } from "@/components/sections/Footer";
+import { Navbar } from "@/components/sections/Navbar";
+import { getSupabase } from "@/lib/supabase";
+import {
+  ALYSSA_TRACKING_API,
+  formatTrackingTime,
+  trackingLabel,
+  trackingRoute,
+  type AlyssaTrip,
+  type TrackingCheckpoint,
+} from "@/lib/tracking";
+
+type ViewState = "idle" | "loading" | "found" | "not-found" | "error";
+
+function mapsUrl(checkpoint: TrackingCheckpoint) {
+  if (checkpoint.lat === null || checkpoint.lat === undefined) return null;
+  if (checkpoint.lng === null || checkpoint.lng === undefined) return null;
+  return `https://www.google.com/maps?q=${encodeURIComponent(`${checkpoint.lat},${checkpoint.lng}`)}`;
+}
+
+function vehicleLabel(trip: AlyssaTrip) {
+  return [trip.tipe_kendaraan || trip.vehicle_type, trip.nopol].filter(Boolean).join(" · ") || "Unit kendaraan";
+}
 
 export default function TrackingPage() {
   const [resi, setResi] = useState("");
-  const [status, setStatus] = useState<TrackingStatus>("idle");
+  const [searchedCode, setSearchedCode] = useState("");
+  const [tripId, setTripId] = useState<string | null>(null);
+  const [trip, setTrip] = useState<AlyssaTrip | null>(null);
+  const [state, setState] = useState<ViewState>("idle");
+  const [message, setMessage] = useState("");
+  const [lastChecked, setLastChecked] = useState<Date | null>(null);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!resi.trim()) return;
-
-    setStatus("loading");
-
-    // Simulate API call
-    setTimeout(() => {
-      if (resi.toLowerCase() === "kk12345678") {
-        setStatus("found");
-      } else {
-        setStatus("not-found");
+  const fetchTrip = useCallback(async (id: string, quiet = false) => {
+    if (!quiet) setState("loading");
+    try {
+      const response = await fetch(`${ALYSSA_TRACKING_API}/${encodeURIComponent(id)}`, {
+        cache: "no-store",
+      });
+      if (!response.ok) {
+        if (response.status === 404) {
+          setTrip(null);
+          setState("not-found");
+          setMessage("Data perjalanan belum tersedia di sistem operasional.");
+          return;
+        }
+        throw new Error(`Tracking API merespons ${response.status}`);
       }
-    }, 1200);
-  };
+      const data = (await response.json()) as AlyssaTrip;
+      setTrip(data);
+      setTripId(id);
+      setState("found");
+      setLastChecked(new Date());
+    } catch {
+      if (!quiet) {
+        setState("error");
+        setMessage("Server tracking sedang tidak dapat dihubungi. Silakan coba lagi sebentar.");
+      }
+    }
+  }, []);
+
+  const search = useCallback(async (rawCode: string) => {
+    const code = rawCode.trim().toUpperCase();
+    if (!code) return;
+    setResi(code);
+    setSearchedCode(code);
+    setTrip(null);
+    setTripId(null);
+    setMessage("");
+    setState("loading");
+
+    try {
+      const { data, error } = await getSupabase().rpc("lookup_tracking_trip", {
+        p_order_code: code,
+      });
+      if (error) throw error;
+      const linkedTripId = Array.isArray(data) ? data[0]?.tracking_trip_id : null;
+      if (!linkedTripId) {
+        setState("not-found");
+        setMessage("Nomor resi belum terhubung ke tracking operasional.");
+        return;
+      }
+      await fetchTrip(linkedTripId);
+    } catch {
+      setState("error");
+      setMessage("Tracking belum dapat dibuka. Pastikan nomor resi benar lalu coba lagi.");
+    }
+  }, [fetchTrip]);
+
+  useEffect(() => {
+    const initial = new URLSearchParams(window.location.search).get("resi");
+    if (!initial) return;
+    const timer = window.setTimeout(() => void search(initial), 0);
+    return () => window.clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    if (!tripId || state !== "found") return;
+    const timer = window.setInterval(() => void fetchTrip(tripId, true), 30_000);
+    return () => window.clearInterval(timer);
+  }, [fetchTrip, state, tripId]);
+
+  const checkpoints = [...(trip?.daily_checkpoints ?? [])].reverse();
+  const legs = trip?.legs ?? [];
 
   return (
-    <main className="min-h-screen pt-[72px] bg-slate-50 flex flex-col">
+    <main className="min-h-screen bg-bg pt-[72px] text-ink">
       <Navbar />
 
-      <Section className="py-12 md:py-20 flex-grow flex flex-col">
-        <Container className="flex-grow flex flex-col items-center">
-
-          <div className="w-full max-w-2xl mx-auto text-center mb-8">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Search className="w-8 h-8 text-blue-600" />
-            </div>
-            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Lacak Pengiriman Anda</h1>
-            <p className="text-slate-600">
-              Masukkan nomor resi yang Anda dapatkan melalui WhatsApp atau email untuk melihat status terkini kendaraan Anda.
-            </p>
+      <section className="relative overflow-hidden border-b border-line bg-grad-ink px-6 py-16 md:py-24">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_10%,rgba(11,95,255,0.32),transparent_36%),radial-gradient(circle_at_18%_90%,rgba(255,157,0,0.16),transparent_28%)]" />
+        <div className="relative mx-auto max-w-4xl text-center">
+          <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-2xl border border-white/15 bg-white/10 text-accent backdrop-blur-xl">
+            <Route className="h-6 w-6" />
           </div>
+          <span className="font-mono text-label-sm text-accent-2 uppercase">Live vehicle tracking</span>
+          <h1 className="mt-4 font-display text-[clamp(2.4rem,6vw,4.5rem)] leading-none font-extrabold tracking-[-0.045em] text-white">
+            Perjalanan dalam kendali.
+          </h1>
+          <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/60 md:text-lg">
+            Masukkan nomor resi KirimKendaraan untuk melihat progres kendaraan terbaru.
+          </p>
 
-          <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-xl border border-slate-200 p-6 md:p-8 mb-8">
-            <form onSubmit={handleSearch} className="flex flex-col sm:flex-row gap-4">
-              <div className="relative flex-grow">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Contoh: KK12345678"
-                  value={resi}
-                  onChange={(e) => setResi(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 sm:py-4 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent text-slate-900 font-medium placeholder:font-normal"
-                />
-              </div>
-              <Button type="submit" size="lg" className="sm:w-auto h-[52px] sm:h-auto whitespace-nowrap" disabled={status === "loading"}>
-                {status === "loading" ? "Mencari..." : "Lacak Sekarang"}
-              </Button>
-            </form>
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              void search(resi);
+            }}
+            className="mx-auto mt-9 flex max-w-2xl items-center gap-2 rounded-full border border-white/15 bg-white/8 p-2 backdrop-blur-xl focus-within:border-accent/60 focus-within:ring-4 focus-within:ring-accent/15"
+          >
+            <Search className="ml-4 h-5 w-5 shrink-0 text-white/45" />
+            <label htmlFor="tracking-code" className="sr-only">Nomor resi</label>
+            <input
+              id="tracking-code"
+              value={resi}
+              onChange={(event) => setResi(event.target.value.toUpperCase())}
+              placeholder="AAL-XXXX-XXXX"
+              autoComplete="off"
+              className="min-w-0 flex-1 bg-transparent px-2 py-3 font-mono text-base tracking-wider text-white uppercase placeholder:text-white/30 focus:outline-none md:text-lg"
+            />
+            <button
+              type="submit"
+              disabled={!resi.trim() || state === "loading"}
+              className="u-btn u-btn-accent u-btn-sheen shrink-0 px-5 py-3 disabled:opacity-50 md:px-7"
+            >
+              <span className="sheen" />
+              {state === "loading" ? <RefreshCw className="h-4 w-4 animate-spin" /> : "Lacak"}
+              {state !== "loading" && <ArrowRight className="h-4 w-4" />}
+            </button>
+          </form>
+        </div>
+      </section>
 
-            <div className="mt-4 text-center">
-              <p className="text-sm text-slate-500">Coba masukkan <strong className="text-slate-700">KK12345678</strong> untuk melihat demo.</p>
-            </div>
+      <section className="mx-auto min-h-[430px] max-w-5xl px-6 py-12 md:px-10 md:py-16">
+        {state === "idle" && (
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              [ShieldCheck, "Data aman", "Hanya informasi perjalanan yang relevan ditampilkan."],
+              [RefreshCw, "Pembaruan otomatis", "Posisi dan progres dicek kembali setiap 30 detik."],
+              [Truck, "Satu kode resi", "Tidak perlu membuka sistem operasional lain."],
+            ].map(([Icon, title, copy]) => {
+              const CardIcon = Icon as typeof ShieldCheck;
+              return (
+                <div key={String(title)} className="glass rounded-3xl p-6">
+                  <CardIcon className="mb-5 h-6 w-6 text-brand" />
+                  <h2 className="font-display text-lg font-bold">{String(title)}</h2>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-2">{String(copy)}</p>
+                </div>
+              );
+            })}
           </div>
+        )}
 
-          {/* Results Area */}
-          <div className="w-full max-w-3xl mx-auto flex-grow">
+        {state === "loading" && (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-brand/10">
+              <RefreshCw className="h-6 w-6 animate-spin text-brand" />
+            </div>
+            <p className="font-display text-xl font-bold">Menghubungkan data perjalanan</p>
+            <p className="mt-2 text-sm text-ink-2">Mohon tunggu sebentar.</p>
+          </div>
+        )}
 
-            {status === "loading" && (
-              <div className="flex flex-col items-center justify-center py-12 text-slate-500">
-                <div className="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-                <p>Mengambil data dari server...</p>
+        {(state === "not-found" || state === "error") && (
+          <div className="mx-auto max-w-2xl rounded-3xl border border-red-500/20 bg-red-500/5 p-8 text-center md:p-12">
+            <AlertCircle className="mx-auto h-10 w-10 text-red-500" />
+            <h2 className="mt-5 font-display text-2xl font-bold">
+              {state === "not-found" ? "Tracking belum ditemukan" : "Tracking belum bisa dibuka"}
+            </h2>
+            <p className="mt-3 leading-relaxed text-ink-2">{message}</p>
+            {searchedCode && <p className="mt-4 font-mono text-sm text-ink-3">{searchedCode}</p>}
+          </div>
+        )}
+
+        {state === "found" && trip && (
+          <div className="space-y-5">
+            <div className="relative overflow-hidden rounded-[2rem] bg-grad-ink p-7 text-white md:p-10">
+              <div className="absolute right-0 top-0 h-52 w-52 translate-x-1/4 -translate-y-1/3 rounded-full bg-brand/30 blur-3xl" />
+              <div className="relative flex flex-col justify-between gap-8 md:flex-row md:items-end">
+                <div>
+                  <div className="flex items-center gap-2 font-mono text-label-sm text-white/45 uppercase">
+                    <span className="h-2 w-2 rounded-full bg-ok shadow-[0_0_0_5px_rgba(34,197,94,0.13)]" />
+                    Terhubung ke operasional
+                  </div>
+                  <p className="mt-5 font-mono text-sm tracking-wider text-white/50">{searchedCode}</p>
+                  <h2 className="mt-2 font-display text-3xl font-extrabold md:text-4xl">{trackingLabel(trip)}</h2>
+                  <p className="mt-3 flex items-center gap-2 text-white/65">
+                    <MapPin className="h-4 w-4 text-accent" /> {trackingRoute(trip)}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/8 px-5 py-4 backdrop-blur-xl">
+                  <p className="font-mono text-label-sm text-white/40 uppercase">Kendaraan</p>
+                  <p className="mt-1 font-display font-bold">{vehicleLabel(trip)}</p>
+                  <p className="mt-2 font-mono text-xs text-white/40">{trip.trip_id}</p>
+                </div>
               </div>
-            )}
+            </div>
 
-            {status === "not-found" && (
-              <div className="bg-red-50 border border-red-100 rounded-2xl p-8 text-center">
-                <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-                <h3 className="text-xl font-bold text-slate-900 mb-2">Resi Tidak Ditemukan</h3>
-                <p className="text-slate-600 mb-6">
-                  Kami tidak dapat menemukan data untuk nomor resi <strong className="text-slate-900">{resi}</strong>. Pastikan nomor yang dimasukkan benar.
-                </p>
-                <p className="text-sm text-slate-500">Jika Anda baru saja melakukan booking, data mungkin membutuhkan waktu hingga 2 jam untuk masuk ke sistem.</p>
-              </div>
-            )}
-
-            {status === "found" && (
-              <div className="bg-white rounded-2xl shadow-md border border-slate-200 overflow-hidden">
-                <div className="bg-blue-600 p-6 text-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="grid gap-5 lg:grid-cols-[1.4fr_0.6fr]">
+              <div className="glass rounded-[2rem] p-6 md:p-8">
+                <div className="mb-7 flex items-center justify-between gap-4">
                   <div>
-                    <div className="text-blue-200 text-sm mb-1">Nomor Resi</div>
-                    <div className="text-2xl font-bold font-mono">KK12345678</div>
+                    <span className="kicker">Riwayat posisi</span>
+                    <h3 className="mt-2 font-display text-2xl font-bold">Checkpoint perjalanan</h3>
                   </div>
-                  <div className="bg-white/20 px-4 py-2 rounded-lg backdrop-blur-sm self-start md:self-auto">
-                    <div className="text-blue-100 text-xs uppercase font-semibold tracking-wider mb-0.5">Status Pengiriman</div>
-                    <div className="font-bold flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
-                      Sedang Dalam Perjalanan
-                    </div>
-                  </div>
+                  <MapPin className="h-6 w-6 text-brand" />
                 </div>
 
-                <div className="p-6 md:p-8">
-                  {/* Basic Info */}
-                  <div className="grid sm:grid-cols-2 gap-6 mb-10 pb-8 border-b border-slate-100">
-                    <div>
-                      <div className="text-sm text-slate-500 mb-1">Kendaraan</div>
-                      <div className="font-medium text-slate-900">Honda CR-V (B 1234 XYZ)</div>
-                    </div>
-                    <div>
-                      <div className="text-sm text-slate-500 mb-1">Layanan</div>
-                      <div className="font-medium text-slate-900">Car Carrier (Jakarta - Surabaya)</div>
-                    </div>
-                  </div>
-
-                  {/* Timeline */}
-                  <div className="relative">
-                    <div className="absolute left-[21px] top-4 bottom-4 w-0.5 bg-slate-200"></div>
-
-                    <div className="space-y-8 relative">
-                      {/* Current Step */}
-                      <div className="flex gap-4 sm:gap-6 relative z-10">
-                        <div className="flex-shrink-0 w-11 h-11 rounded-full bg-blue-100 border-4 border-white shadow-sm flex items-center justify-center">
-                          <Truck className="w-5 h-5 text-blue-600" />
-                        </div>
-                        <div className="pt-1">
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 mb-1">
-                            <h4 className="font-bold text-slate-900 text-lg">Tiba di Checkpoint Semarang</h4>
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800 self-start">Terbaru</span>
+                {checkpoints.length ? (
+                  <div className="space-y-0">
+                    {checkpoints.map((checkpoint, index) => {
+                      const map = mapsUrl(checkpoint);
+                      return (
+                        <div key={`${checkpoint.ts}-${index}`} className="flex gap-4">
+                          <div className="flex flex-col items-center">
+                            <span className={`mt-1 h-3 w-3 rounded-full ${index === 0 ? "bg-brand shadow-[0_0_0_5px_rgba(11,95,255,0.12)]" : "bg-line-2"}`} />
+                            {index < checkpoints.length - 1 && <span className="h-full min-h-16 w-px bg-line-2" />}
                           </div>
-                          <p className="text-slate-600 text-sm mb-1">Truk pembawa kendaraan sedang melakukan istirahat dan pengecekan rutin di Pool Semarang.</p>
-                          <div className="text-xs font-medium text-slate-500">14 Okt 2023, 15:30 WIB</div>
+                          <div className="pb-7">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <p className="font-display font-bold">{checkpoint.status || "Pembaruan lokasi"}</p>
+                              {index === 0 && <span className="rounded-full bg-brand/10 px-2.5 py-1 text-[10px] font-bold tracking-wider text-brand uppercase">Terbaru</span>}
+                            </div>
+                            <p className="mt-1 text-sm text-ink-3">{formatTrackingTime(checkpoint.ts || checkpoint.date)}</p>
+                            {map && (
+                              <a href={map} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline">
+                                Lihat titik di peta <ExternalLink className="h-3.5 w-3.5" />
+                              </a>
+                            )}
+                          </div>
                         </div>
-                      </div>
-
-                      {/* Past Steps */}
-                      <div className="flex gap-4 sm:gap-6 relative z-10 opacity-70">
-                        <div className="flex-shrink-0 w-11 h-11 rounded-full bg-slate-200 border-4 border-white flex items-center justify-center">
-                          <CheckCircle2 className="w-5 h-5 text-slate-500" />
-                        </div>
-                        <div className="pt-2">
-                          <h4 className="font-bold text-slate-700">Berangkat dari Pool Jakarta</h4>
-                          <div className="text-xs font-medium text-slate-500 mt-1">13 Okt 2023, 20:00 WIB</div>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-4 sm:gap-6 relative z-10 opacity-70">
-                        <div className="flex-shrink-0 w-11 h-11 rounded-full bg-slate-200 border-4 border-white flex items-center justify-center">
-                          <CheckCircle2 className="w-5 h-5 text-slate-500" />
-                        </div>
-                        <div className="pt-2">
-                          <h4 className="font-bold text-slate-700">Loading ke Car Carrier</h4>
-                          <div className="text-xs font-medium text-slate-500 mt-1">13 Okt 2023, 14:00 WIB</div>
-                        </div>
-                      </div>
-
-                      <div className="flex gap-4 sm:gap-6 relative z-10 opacity-70">
-                        <div className="flex-shrink-0 w-11 h-11 rounded-full bg-slate-200 border-4 border-white flex items-center justify-center">
-                          <PackageCheck className="w-5 h-5 text-slate-500" />
-                        </div>
-                        <div className="pt-2">
-                          <h4 className="font-bold text-slate-700">Kendaraan Diterima di Pool (Serah Terima Awal)</h4>
-                          <div className="text-xs font-medium text-slate-500 mt-1">13 Okt 2023, 09:15 WIB</div>
-                        </div>
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
+                ) : (
+                  <p className="rounded-2xl bg-bg-2 p-5 text-sm leading-relaxed text-ink-2">
+                    Belum ada checkpoint lokasi. Status perjalanan tetap akan diperbarui otomatis.
+                  </p>
+                )}
+              </div>
 
+              <div className="space-y-5">
+                <div className="glass rounded-[2rem] p-6">
+                  <Clock3 className="h-5 w-5 text-accent" />
+                  <p className="mt-5 font-mono text-label-sm text-ink-3 uppercase">Terakhir diperiksa</p>
+                  <p className="mt-2 font-display text-lg font-bold">{lastChecked ? formatTrackingTime(lastChecked.toISOString()) : "Baru saja"}</p>
+                  <button onClick={() => tripId && void fetchTrip(tripId)} className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline">
+                    <RefreshCw className="h-4 w-4" /> Perbarui sekarang
+                  </button>
+                </div>
+
+                <div className="glass rounded-[2rem] p-6">
+                  <p className="font-mono text-label-sm text-ink-3 uppercase">Tahapan rute</p>
+                  <div className="mt-5 space-y-4">
+                    {legs.length ? legs.map((leg, index) => (
+                      <div key={`${leg.asal}-${leg.tujuan}-${index}`} className="flex gap-3">
+                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-ok" />
+                        <div>
+                          <p className="text-sm font-semibold">{[leg.asal, leg.tujuan].filter(Boolean).join(" → ") || `Tahap ${index + 1}`}</p>
+                          <p className="mt-1 text-xs text-ink-3">{leg.status || leg.tipe || "Dijadwalkan"}{leg.eta ? ` · ETA ${formatTrackingTime(leg.eta)}` : ""}</p>
+                        </div>
+                      </div>
+                    )) : <p className="text-sm text-ink-2">Detail tahapan sedang disiapkan.</p>}
+                  </div>
                 </div>
               </div>
-            )}
+            </div>
           </div>
-        </Container>
-      </Section>
+        )}
+      </section>
 
       <Footer />
     </main>

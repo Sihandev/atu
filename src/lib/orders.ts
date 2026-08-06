@@ -48,6 +48,9 @@ export interface Order {
   notes: string | null;
   status: OrderStatus;
   admin_notes: string | null;
+  tracking_url: string | null;
+  tracking_trip_id: string | null;
+  tracking_connected_at: string | null;
 }
 
 /** Everything the public form is allowed to send. Status and admin_notes are
@@ -108,7 +111,12 @@ export async function listOrders(): Promise<Order[]> {
 
 export async function updateOrder(
   id: string,
-  patch: Partial<Pick<Order, "status" | "admin_notes">>
+  patch: Partial<
+    Pick<
+      Order,
+      "status" | "admin_notes" | "tracking_url" | "tracking_trip_id" | "tracking_connected_at"
+    >
+  >
 ): Promise<Order> {
   const supabase = getSupabase();
   const { data, error } = await supabase

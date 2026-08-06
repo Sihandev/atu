@@ -70,14 +70,29 @@ create table if not exists public.orders (
   -- Internal only. Never rendered on the public site.
   admin_notes      text,
 
+  -- Admin pastes the provider link once; customers only ever receive the
+  -- KirimKendaraan order code. The public RPC below reveals no order data.
+  tracking_url          text,
+  tracking_trip_id      text,
+  tracking_connected_at timestamptz,
+
   -- Loose validation so obviously bad rows cannot be inserted.
   constraint orders_name_not_blank  check (length(btrim(customer_name)) > 1),
   constraint orders_phone_not_blank check (length(btrim(customer_phone)) >= 8)
 );
 
+-- Existing projects also receive the tracking columns when this script is
+-- run again; CREATE TABLE IF NOT EXISTS alone would not add them.
+alter table public.orders add column if not exists tracking_url text;
+alter table public.orders add column if not exists tracking_trip_id text;
+alter table public.orders add column if not exists tracking_connected_at timestamptz;
+
 create index if not exists orders_created_at_idx on public.orders (created_at desc);
 create index if not exists orders_status_idx     on public.orders (status);
 create index if not exists orders_code_idx       on public.orders (order_code);
+create index if not exists orders_tracking_trip_idx
+  on public.orders (tracking_trip_id)
+  where tracking_trip_id is not null;
 
 -- Keep updated_at honest instead of trusting the client to send it.
 create or replace function public.touch_updated_at()
@@ -93,6 +108,23 @@ drop trigger if exists orders_touch_updated_at on public.orders;
 create trigger orders_touch_updated_at
   before update on public.orders
   for each row execute function public.touch_updated_at();
+
+-- ---------------------------------------------------------------------
+-- Table privileges
+--
+-- RLS is only consulted *after* Postgres has checked table-level GRANTs, so
+-- policies alone are not enough — without these every request fails with
+-- "permission denied for table orders". Granting anon INSERT only (and no
+-- SELECT) is itself a second layer of defence: even if an RLS policy were
+-- ever loosened by mistake, anon still could not read a row.
+-- ---------------------------------------------------------------------
+grant usage on schema public to anon, authenticated;
+
+grant insert          on public.orders to anon;
+grant select, update  on public.orders to authenticated;
+
+-- Note the omissions: anon gets no select/update/delete, and nobody gets
+-- delete at all.
 
 -- ---------------------------------------------------------------------
 -- Row Level Security
@@ -123,6 +155,26 @@ create policy "admins can update orders"
 
 -- Deliberately no DELETE policy. Orders are cancelled via the 'batal'
 -- status so the record survives; nobody can erase history from the UI.
+
+-- Public tracking lookup. SECURITY DEFINER intentionally bypasses the table
+-- SELECT policy, but returns one non-customer field for one exact random code.
+create or replace function public.lookup_tracking_trip(p_order_code text)
+returns table (tracking_trip_id text)
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select o.tracking_trip_id
+  from public.orders as o
+  where upper(o.order_code) = upper(btrim(p_order_code))
+    and o.tracking_trip_id is not null
+    and o.status <> 'batal'
+  limit 1;
+$$;
+
+revoke all on function public.lookup_tracking_trip(text) from public;
+grant execute on function public.lookup_tracking_trip(text) to anon, authenticated;
 
 -- ---------------------------------------------------------------------
 -- Creating the admin account

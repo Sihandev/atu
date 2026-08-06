@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MessageCircle, X } from "lucide-react";
+import { ExternalLink, Link2, MessageCircle, X } from "lucide-react";
 import {
   ORDER_STATUSES,
   STATUS_META,
@@ -11,6 +11,7 @@ import {
   type OrderStatus,
 } from "@/lib/orders";
 import { cn } from "@/lib/utils";
+import { extractTripId } from "@/lib/tracking";
 
 function Field({ label, value }: { label: string; value?: string | number | null }) {
   if (value === null || value === undefined || value === "") return null;
@@ -38,6 +39,7 @@ export function OrderDrawer({
 }) {
   const [status, setStatus] = useState<OrderStatus>(order?.status ?? "baru");
   const [adminNotes, setAdminNotes] = useState(order?.admin_notes ?? "");
+  const [trackingUrl, setTrackingUrl] = useState(order?.tracking_url ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -50,13 +52,31 @@ export function OrderDrawer({
 
   if (!order) return null;
 
-  const dirty = status !== order.status || adminNotes !== (order.admin_notes ?? "");
+  const dirty =
+    status !== order.status ||
+    adminNotes !== (order.admin_notes ?? "") ||
+    trackingUrl !== (order.tracking_url ?? "");
 
   const save = async () => {
     setSaving(true);
     setError(null);
     try {
-      const updated = await updateOrder(order.id, { status, admin_notes: adminNotes || null });
+      const tripId = trackingUrl ? extractTripId(trackingUrl) : null;
+      if (trackingUrl && !tripId) {
+        throw new Error("Link tracking tidak valid. Paste link Alyssa lengkap atau ID TRIP-nya.");
+      }
+      const updated = await updateOrder(order.id, {
+        status,
+        admin_notes: adminNotes || null,
+        tracking_url: trackingUrl.trim() || null,
+        tracking_trip_id: tripId,
+        tracking_connected_at:
+          tripId && tripId !== order.tracking_trip_id
+            ? new Date().toISOString()
+            : tripId
+              ? order.tracking_connected_at
+              : null,
+      });
       onSaved(updated);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Gagal menyimpan perubahan.");
@@ -143,6 +163,55 @@ export function OrderDrawer({
               <p className="leading-relaxed whitespace-pre-wrap text-ink-2">{order.notes}</p>
             </section>
           )}
+
+          <section className="border-t border-line pt-6">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3 className="font-mono text-label-sm text-brand uppercase">
+                  Tracking Operasional
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-2">
+                  Paste link tracking dari sistem Alyssa. Pelanggan tetap melihatnya lewat website
+                  ini menggunakan kode {order.order_code}.
+                </p>
+              </div>
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand/10 text-brand">
+                <Link2 className="h-5 w-5" />
+              </div>
+            </div>
+
+            <label
+              htmlFor="tracking-url"
+              className="mt-5 mb-2 block font-mono text-label-sm text-ink-3 uppercase"
+            >
+              Link Alyssa / Trip ID
+            </label>
+            <input
+              id="tracking-url"
+              type="text"
+              value={trackingUrl}
+              onChange={(e) => setTrackingUrl(e.target.value)}
+              placeholder="https://alyssaautologistiks.up.railway.app/track/TRIP-..."
+              className="w-full rounded-2xl border border-line-2 bg-bg px-4 py-3 text-sm text-ink placeholder:text-ink-3 focus:border-brand focus:ring-4 focus:ring-brand/15 focus:outline-none"
+            />
+            {extractTripId(trackingUrl) && (
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <span className="rounded-full border border-ok/30 bg-ok/10 px-3 py-1 font-mono text-xs text-ok">
+                  Terhubung: {extractTripId(trackingUrl)}
+                </span>
+                {trackingUrl.startsWith("http") && (
+                  <a
+                    href={trackingUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm font-semibold text-brand hover:underline"
+                  >
+                    Buka sumber <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                )}
+              </div>
+            )}
+          </section>
 
           <section className="border-t border-line pt-6">
             <h3 className="mb-4 font-mono text-label-sm text-brand uppercase">Status</h3>
