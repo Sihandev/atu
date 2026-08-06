@@ -18,7 +18,7 @@ import {
 
 import { Footer } from "@/components/sections/Footer";
 import { Navbar } from "@/components/sections/Navbar";
-import { getSupabase } from "@/lib/supabase";
+import { getPublicSupabase } from "@/lib/supabase";
 import { STATUS_META, type OrderStatus } from "@/lib/orders";
 import {
   ALYSSA_TRACKING_API,
@@ -108,10 +108,29 @@ export default function TrackingPage() {
     setState("loading");
 
     try {
-      const { data, error } = await getSupabase().rpc("lookup_order_status", {
+      const supabase = getPublicSupabase();
+      const { data, error } = await supabase.rpc("lookup_order_status", {
         p_order_code: code,
       });
-      if (error) throw error;
+      if (error) {
+        // Older database installs only have the original trip lookup. Keep
+        // linked shipments working while the richer status RPC is rolled out.
+        const { data: legacyData, error: legacyError } = await supabase.rpc(
+          "lookup_tracking_trip",
+          { p_order_code: code }
+        );
+        if (legacyError) throw legacyError;
+        const legacyTripId = Array.isArray(legacyData)
+          ? legacyData[0]?.tracking_trip_id
+          : legacyData?.tracking_trip_id;
+        if (!legacyTripId) {
+          setState("not-found");
+          setMessage("Nomor resi belum terhubung ke tracking operasional.");
+          return;
+        }
+        await fetchTrip(legacyTripId);
+        return;
+      }
       const foundOrder = (Array.isArray(data) ? data[0] : null) as PublicOrderStatus | null;
       if (!foundOrder) {
         setState("not-found");
@@ -144,7 +163,7 @@ export default function TrackingPage() {
   useEffect(() => {
     if (state !== "found" || !searchedCode) return;
     const timer = window.setInterval(async () => {
-      const { data, error } = await getSupabase().rpc("lookup_order_status", {
+      const { data, error } = await getPublicSupabase().rpc("lookup_order_status", {
         p_order_code: searchedCode,
       });
       if (error) return;
