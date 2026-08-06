@@ -16,6 +16,7 @@ const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 export const isSupabaseConfigured = Boolean(url && anonKey);
 
 let client: SupabaseClient | null = null;
+let publicClient: SupabaseClient | null = null;
 
 export function getSupabase(): SupabaseClient {
   if (!isSupabaseConfigured) {
@@ -31,4 +32,29 @@ export function getSupabase(): SupabaseClient {
     },
   });
   return client;
+}
+
+/**
+ * Session-free client for public order submission.
+ *
+ * Admin auth is persisted for the dashboard. Without a separate client, that
+ * same session also leaks into the public booking form when an admin tests it
+ * in the same browser, changing the database role from `anon` to
+ * `authenticated`. Public writes must always use the deliberately restricted
+ * anonymous role.
+ */
+export function getPublicSupabase(): SupabaseClient {
+  if (!isSupabaseConfigured) {
+    throw new Error(
+      "Supabase belum dikonfigurasi. Set NEXT_PUBLIC_SUPABASE_URL dan NEXT_PUBLIC_SUPABASE_ANON_KEY."
+    );
+  }
+  publicClient ??= createClient(url!, anonKey!, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+  });
+  return publicClient;
 }

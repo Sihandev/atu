@@ -1,4 +1,4 @@
-import { getSupabase } from "@/lib/supabase";
+import { getPublicSupabase, getSupabase } from "@/lib/supabase";
 
 export const ORDER_STATUSES = [
   "baru",
@@ -87,7 +87,7 @@ export function generateOrderCode(): string {
 }
 
 export async function createOrder(input: NewOrder): Promise<Pick<Order, "order_code">> {
-  const supabase = getSupabase();
+  const supabase = getPublicSupabase();
   const orderCode = generateOrderCode();
   const { error } = await supabase
     .from("orders")
