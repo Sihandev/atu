@@ -168,6 +168,24 @@ export default function AdminPage() {
     };
   }, [session, refresh]);
 
+  useEffect(() => {
+    if (!session) return;
+    const supabase = getSupabase();
+    const channel = supabase
+      .channel("admin-orders-live")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "orders" },
+        () => void refresh()
+      )
+      .subscribe();
+    const fallback = window.setInterval(() => void refresh(), 30_000);
+    return () => {
+      window.clearInterval(fallback);
+      void supabase.removeChannel(channel);
+    };
+  }, [session, refresh]);
+
   const counts = useMemo(() => {
     const base = { semua: orders.length } as Record<string, number>;
     for (const s of ORDER_STATUSES) base[s] = 0;

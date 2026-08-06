@@ -176,6 +176,58 @@ $$;
 revoke all on function public.lookup_tracking_trip(text) from public;
 grant execute on function public.lookup_tracking_trip(text) to anon, authenticated;
 
+-- Public order status. A customer who knows the random receipt code can see
+-- progress and route, but never names, phone numbers, addresses, or notes.
+create or replace function public.lookup_order_status(p_order_code text)
+returns table (
+  order_code text,
+  status text,
+  created_at timestamptz,
+  updated_at timestamptz,
+  origin text,
+  destination text,
+  vehicle_type text,
+  vehicle_brand text,
+  vehicle_model text,
+  tracking_trip_id text
+)
+language sql
+security definer
+set search_path = public
+stable
+as $$
+  select
+    o.order_code,
+    o.status::text,
+    o.created_at,
+    o.updated_at,
+    o.origin,
+    o.destination,
+    o.vehicle_type,
+    o.vehicle_brand,
+    o.vehicle_model,
+    o.tracking_trip_id
+  from public.orders as o
+  where upper(o.order_code) = upper(btrim(p_order_code))
+  limit 1;
+$$;
+
+revoke all on function public.lookup_order_status(text) from public;
+grant execute on function public.lookup_order_status(text) to anon, authenticated;
+
+-- Enables instant admin updates when a customer submits or a status changes.
+do $$
+begin
+  if not exists (
+    select 1 from pg_publication_tables
+    where pubname = 'supabase_realtime'
+      and schemaname = 'public'
+      and tablename = 'orders'
+  ) then
+    alter publication supabase_realtime add table public.orders;
+  end if;
+end $$;
+
 -- ---------------------------------------------------------------------
 -- Creating the admin account
 -- ---------------------------------------------------------------------

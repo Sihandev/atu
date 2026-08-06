@@ -86,16 +86,15 @@ export function generateOrderCode(): string {
   return `AAL-${chars.slice(0, 4).join("")}-${chars.slice(4).join("")}`;
 }
 
-export async function createOrder(input: NewOrder): Promise<Order> {
+export async function createOrder(input: NewOrder): Promise<Pick<Order, "order_code">> {
   const supabase = getSupabase();
-  const { data, error } = await supabase
+  const orderCode = generateOrderCode();
+  const { error } = await supabase
     .from("orders")
-    .insert({ ...input, order_code: generateOrderCode() })
-    .select()
-    .single();
+    .insert({ ...input, order_code: orderCode });
 
   if (error) throw new Error(error.message);
-  return data as Order;
+  return { order_code: orderCode };
 }
 
 export async function listOrders(): Promise<Order[]> {

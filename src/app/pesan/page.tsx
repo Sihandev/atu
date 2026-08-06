@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Check, MessageCircle } from "lucide-react";
+import { ArrowRight, Check, Copy, MessageCircle, PackageCheck } from "lucide-react";
 
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
@@ -18,6 +18,7 @@ export default function OrderPage() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [orderCode, setOrderCode] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -73,26 +74,59 @@ export default function OrderPage() {
 
       <main className="mx-auto max-w-[900px] px-6 pt-32 pb-24 md:px-10">
         {orderCode ? (
-          <div className="glass rounded-3xl p-8 text-center md:p-12">
+          <div className="glass overflow-hidden rounded-3xl text-center">
+            <div className="bg-grad-ink px-8 py-10 text-white md:px-12">
             <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-grad-brand">
               <Check className="h-7 w-7 text-white" />
             </div>
             <h1 className="font-display text-3xl font-extrabold tracking-[-0.03em]">
               Pesanan diterima
             </h1>
-            <p className="mt-4 text-ink-2">
-              Simpan nomor resi ini untuk melacak kiriman Anda. Tim kami akan menghubungi Anda
-              lewat WhatsApp.
+            <p className="mt-4 text-white/65">
+              Data pesanan sudah masuk ke admin. Tim kami akan memeriksa detail dan menghubungi
+              Anda melalui WhatsApp.
             </p>
-            <p className="mt-8 font-mono text-2xl tracking-widest text-brand">{orderCode}</p>
-            <div className="mt-10 flex flex-wrap justify-center gap-4">
+            <div className="mx-auto mt-8 flex max-w-md items-center justify-between gap-4 rounded-2xl border border-white/15 bg-white/8 px-5 py-4 text-left backdrop-blur-xl">
+              <div>
+                <p className="font-mono text-label-sm text-white/45 uppercase">Nomor resi</p>
+                <p className="mt-1 font-mono text-xl tracking-wider text-accent-2">{orderCode}</p>
+              </div>
+              <button
+                type="button"
+                onClick={async () => {
+                  await navigator.clipboard.writeText(orderCode);
+                  setCopied(true);
+                  window.setTimeout(() => setCopied(false), 1800);
+                }}
+                className="grid h-11 w-11 place-items-center rounded-xl border border-white/15 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                aria-label="Salin nomor resi"
+              >
+                {copied ? <Check className="h-4 w-4 text-ok" /> : <Copy className="h-4 w-4" />}
+              </button>
+            </div>
+            </div>
+
+            <div className="px-8 py-8 md:px-12">
+              <div className="mx-auto flex max-w-md items-start gap-4 rounded-2xl border border-accent/25 bg-accent/8 p-4 text-left">
+                <PackageCheck className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                <div>
+                  <p className="font-display font-bold text-ink">Status: Sedang diproses</p>
+                  <p className="mt-1 text-sm leading-relaxed text-ink-2">
+                    Pesanan menunggu konfirmasi admin. Perubahan status dapat dilihat menggunakan
+                    resi di atas.
+                  </p>
+                </div>
+              </div>
+
+            <div className="mt-8 flex flex-wrap justify-center gap-4">
               <a href={wa} className="u-btn u-btn-primary" target="_blank" rel="noopener noreferrer">
                 <MessageCircle className="h-4 w-4" />
                 Konfirmasi via WhatsApp
               </a>
-              <Link href="/tracking" className="u-btn u-btn-outline">
-                Lacak Pesanan
+              <Link href={`/tracking?resi=${encodeURIComponent(orderCode)}`} className="u-btn u-btn-outline">
+                Lihat Status Pesanan
               </Link>
+            </div>
             </div>
           </div>
         ) : (

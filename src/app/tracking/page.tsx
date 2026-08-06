@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
   AlertCircle,
   ArrowRight,
+  Check,
   CheckCircle2,
   Clock3,
   ExternalLink,
@@ -18,6 +19,7 @@ import {
 import { Footer } from "@/components/sections/Footer";
 import { Navbar } from "@/components/sections/Navbar";
 import { getSupabase } from "@/lib/supabase";
+import { STATUS_META, type OrderStatus } from "@/lib/orders";
 import {
   ALYSSA_TRACKING_API,
   formatTrackingTime,
@@ -28,6 +30,28 @@ import {
 } from "@/lib/tracking";
 
 type ViewState = "idle" | "loading" | "found" | "not-found" | "error";
+
+interface PublicOrderStatus {
+  order_code: string;
+  status: OrderStatus;
+  created_at: string;
+  updated_at: string;
+  origin: string;
+  destination: string;
+  vehicle_type: string | null;
+  vehicle_brand: string | null;
+  vehicle_model: string | null;
+  tracking_trip_id: string | null;
+}
+
+const ORDER_PROGRESS: Array<{ status: OrderStatus; label: string; copy: string }> = [
+  { status: "baru", label: "Pesanan diterima", copy: "Data sedang diperiksa oleh admin." },
+  { status: "dikonfirmasi", label: "Pesanan dikonfirmasi", copy: "Jadwal dan metode pengiriman telah disepakati." },
+  { status: "dijemput", label: "Kendaraan dijemput", copy: "Unit telah masuk ke proses operasional." },
+  { status: "dalam_perjalanan", label: "Dalam perjalanan", copy: "Kendaraan bergerak menuju kota tujuan." },
+  { status: "tiba", label: "Tiba di tujuan", copy: "Kendaraan telah sampai di kota tujuan." },
+  { status: "selesai", label: "Pengiriman selesai", copy: "Serah terima kendaraan telah diselesaikan." },
+];
 
 function mapsUrl(checkpoint: TrackingCheckpoint) {
   if (checkpoint.lat === null || checkpoint.lat === undefined) return null;
@@ -44,6 +68,7 @@ export default function TrackingPage() {
   const [searchedCode, setSearchedCode] = useState("");
   const [tripId, setTripId] = useState<string | null>(null);
   const [trip, setTrip] = useState<AlyssaTrip | null>(null);
+  const [order, setOrder] = useState<PublicOrderStatus | null>(null);
   const [state, setState] = useState<ViewState>("idle");
   const [message, setMessage] = useState("");
   const [lastChecked, setLastChecked] = useState<Date | null>(null);
@@ -55,12 +80,6 @@ export default function TrackingPage() {
         cache: "no-store",
       });
       if (!response.ok) {
-        if (response.status === 404) {
-          setTrip(null);
-          setState("not-found");
-          setMessage("Data perjalanan belum tersedia di sistem operasional.");
-          return;
-        }
         throw new Error(`Tracking API merespons ${response.status}`);
       }
       const data = (await response.json()) as AlyssaTrip;
@@ -70,8 +89,9 @@ export default function TrackingPage() {
       setLastChecked(new Date());
     } catch {
       if (!quiet) {
-        setState("error");
-        setMessage("Server tracking sedang tidak dapat dihubungi. Silakan coba lagi sebentar.");
+        setTrip(null);
+        setState("found");
+        setMessage("Data posisi live belum tersedia. Status pesanan tetap dapat dilihat di bawah.");
       }
     }
   }, []);
@@ -83,21 +103,25 @@ export default function TrackingPage() {
     setSearchedCode(code);
     setTrip(null);
     setTripId(null);
+    setOrder(null);
     setMessage("");
     setState("loading");
 
     try {
-      const { data, error } = await getSupabase().rpc("lookup_tracking_trip", {
+      const { data, error } = await getSupabase().rpc("lookup_order_status", {
         p_order_code: code,
       });
       if (error) throw error;
-      const linkedTripId = Array.isArray(data) ? data[0]?.tracking_trip_id : null;
-      if (!linkedTripId) {
+      const foundOrder = (Array.isArray(data) ? data[0] : null) as PublicOrderStatus | null;
+      if (!foundOrder) {
         setState("not-found");
-        setMessage("Nomor resi belum terhubung ke tracking operasional.");
+        setMessage("Nomor resi tidak ditemukan. Periksa kembali kode yang Anda masukkan.");
         return;
       }
-      await fetchTrip(linkedTripId);
+      setOrder(foundOrder);
+      setState("found");
+      setLastChecked(new Date());
+      if (foundOrder.tracking_trip_id) await fetchTrip(foundOrder.tracking_trip_id);
     } catch {
       setState("error");
       setMessage("Tracking belum dapat dibuka. Pastikan nomor resi benar lalu coba lagi.");
@@ -117,8 +141,29 @@ export default function TrackingPage() {
     return () => window.clearInterval(timer);
   }, [fetchTrip, state, tripId]);
 
+  useEffect(() => {
+    if (state !== "found" || !searchedCode) return;
+    const timer = window.setInterval(async () => {
+      const { data, error } = await getSupabase().rpc("lookup_order_status", {
+        p_order_code: searchedCode,
+      });
+      if (error) return;
+      const latest = (Array.isArray(data) ? data[0] : null) as PublicOrderStatus | null;
+      if (!latest) return;
+      setOrder(latest);
+      setLastChecked(new Date());
+      if (latest.tracking_trip_id && latest.tracking_trip_id !== tripId) {
+        await fetchTrip(latest.tracking_trip_id, true);
+      }
+    }, 30_000);
+    return () => window.clearInterval(timer);
+  }, [fetchTrip, searchedCode, state, tripId]);
+
   const checkpoints = [...(trip?.daily_checkpoints ?? [])].reverse();
   const legs = trip?.legs ?? [];
+  const currentProgress = order
+    ? Math.max(0, ORDER_PROGRESS.findIndex((step) => step.status === order.status))
+    : 0;
 
   return (
     <main className="min-h-screen bg-bg pt-[72px] text-ink">
@@ -206,6 +251,75 @@ export default function TrackingPage() {
             </h2>
             <p className="mt-3 leading-relaxed text-ink-2">{message}</p>
             {searchedCode && <p className="mt-4 font-mono text-sm text-ink-3">{searchedCode}</p>}
+          </div>
+        )}
+
+        {state === "found" && order && !trip && (
+          <div className="space-y-5">
+            <div className="relative overflow-hidden rounded-[2rem] bg-grad-ink p-7 text-white md:p-10">
+              <div className="absolute right-0 top-0 h-52 w-52 translate-x-1/4 -translate-y-1/3 rounded-full bg-brand/30 blur-3xl" />
+              <div className="relative flex flex-col justify-between gap-8 md:flex-row md:items-end">
+                <div>
+                  <div className="flex items-center gap-2 font-mono text-label-sm text-white/45 uppercase">
+                    <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_0_5px_rgba(255,157,0,0.13)]" />
+                    Status pesanan
+                  </div>
+                  <p className="mt-5 font-mono text-sm tracking-wider text-white/50">{order.order_code}</p>
+                  <h2 className="mt-2 font-display text-3xl font-extrabold md:text-4xl">
+                    {STATUS_META[order.status]?.label ?? "Sedang diproses"}
+                  </h2>
+                  <p className="mt-3 flex items-center gap-2 text-white/65">
+                    <MapPin className="h-4 w-4 text-accent" /> {order.origin} → {order.destination}
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-white/10 bg-white/8 px-5 py-4 backdrop-blur-xl">
+                  <p className="font-mono text-label-sm text-white/40 uppercase">Kendaraan</p>
+                  <p className="mt-1 font-display font-bold">
+                    {[order.vehicle_type, order.vehicle_brand, order.vehicle_model].filter(Boolean).join(" · ") || "Detail kendaraan diproses"}
+                  </p>
+                  <p className="mt-2 text-xs text-white/40">Diperbarui {formatTrackingTime(order.updated_at)}</p>
+                </div>
+              </div>
+            </div>
+
+            {message && (
+              <p className="rounded-2xl border border-accent/20 bg-accent/8 px-5 py-4 text-sm text-ink-2">
+                {message}
+              </p>
+            )}
+
+            <div className="glass rounded-[2rem] p-6 md:p-9">
+              <span className="kicker">Progres pesanan</span>
+              <h3 className="mt-2 font-display text-2xl font-bold">Dari pemesanan sampai serah terima</h3>
+              <div className="mt-8 space-y-0">
+                {ORDER_PROGRESS.map((step, index) => {
+                  const complete = order.status !== "batal" && index <= currentProgress;
+                  const current = order.status !== "batal" && index === currentProgress;
+                  return (
+                    <div key={step.status} className="flex gap-4">
+                      <div className="flex flex-col items-center">
+                        <span className={`grid h-8 w-8 place-items-center rounded-full border ${complete ? "border-brand bg-brand text-white" : "border-line-2 bg-surface text-ink-3"}`}>
+                          {complete ? <Check className="h-4 w-4" /> : <span className="h-2 w-2 rounded-full bg-line-2" />}
+                        </span>
+                        {index < ORDER_PROGRESS.length - 1 && <span className={`h-14 w-px ${index < currentProgress ? "bg-brand" : "bg-line-2"}`} />}
+                      </div>
+                      <div className="pt-1">
+                        <div className="flex items-center gap-2">
+                          <p className={`font-display font-bold ${complete ? "text-ink" : "text-ink-3"}`}>{step.label}</p>
+                          {current && <span className="rounded-full bg-accent/12 px-2.5 py-1 text-[10px] font-bold tracking-wider text-accent uppercase">Saat ini</span>}
+                        </div>
+                        <p className="mt-1 text-sm text-ink-3">{step.copy}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              {order.status === "batal" && (
+                <p className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/5 px-5 py-4 text-sm text-red-500">
+                  Pesanan ini telah dibatalkan. Hubungi admin jika Anda memerlukan bantuan.
+                </p>
+              )}
+            </div>
           </div>
         )}
 
