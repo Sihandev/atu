@@ -450,6 +450,90 @@ body {
   transform: translateY(-2px);
 }
 
+/* Admin quotation: kept out of the visual UI and revealed only by print. */
+.quotation-print-root {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+  }
+
+  body > * {
+    visibility: hidden !important;
+  }
+
+  .quotation-print-root,
+  .quotation-print-root * {
+    visibility: visible !important;
+  }
+
+  .quotation-print-root {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: block !important;
+    width: 210mm;
+    min-height: 297mm;
+    overflow: hidden;
+    background: #fff;
+    color: #101828;
+    font-family: Arial, sans-serif;
+  }
+
+  .quote-accent {
+    height: 8mm;
+    background: linear-gradient(90deg, #0667e8, #03a9f4);
+  }
+
+  .quote-page { padding: 16mm 17mm 13mm; }
+  .quote-header,
+  .quote-title-row,
+  .quote-service-card,
+  .quote-price,
+  .quote-footer { display: flex; justify-content: space-between; gap: 12mm; }
+  .quote-header { align-items: flex-start; padding-bottom: 10mm; border-bottom: 1px solid #d8e0eb; }
+  .quote-brand { margin: 0; color: #0667e8; font-size: 23pt; font-weight: 800; letter-spacing: -1px; }
+  .quote-legal { margin: 1mm 0 0; color: #5c6b80; font-size: 9pt; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; }
+  .quote-company-contact { max-width: 74mm; text-align: right; color: #526174; font-size: 8.5pt; line-height: 1.55; }
+  .quote-company-contact p { margin: 0; }
+  .quote-title-row { align-items: flex-start; padding: 12mm 0 10mm; }
+  .quote-eyebrow,
+  .quote-section-label { margin: 0 0 2mm; color: #0667e8; font-size: 7.5pt; font-weight: 800; letter-spacing: 1.5px; }
+  .quote-title-row h1 { margin: 0; font-size: 25pt; line-height: 1; letter-spacing: -1px; }
+  .quote-meta { min-width: 70mm; margin: 0; font-size: 8.5pt; }
+  .quote-meta div { display: flex; justify-content: space-between; gap: 8mm; padding: 1.2mm 0; }
+  .quote-meta dt { color: #758399; }
+  .quote-meta dd { margin: 0; font-weight: 700; text-align: right; }
+  .quote-customer { padding: 7mm; border-radius: 4mm; background: #f1f6fc; }
+  .quote-customer h2 { margin: 0 0 1mm; font-size: 15pt; }
+  .quote-customer p:last-child { margin: 0; color: #607087; font-size: 9pt; }
+  .quote-service-card { margin-top: 7mm; padding: 7mm 0; border-top: 1px solid #d8e0eb; border-bottom: 1px solid #d8e0eb; }
+  .quote-service-card > div { width: 50%; }
+  .quote-service-card h3 { margin: 0 0 2mm; font-size: 13pt; }
+  .quote-service-card h3 span { color: #03a9f4; }
+  .quote-service-card p:not(.quote-section-label) { margin: 1mm 0; color: #607087; font-size: 8.5pt; }
+  .quote-price { align-items: center; margin-top: 8mm; padding: 8mm; border-radius: 4mm; background: #071a33; color: #fff; }
+  .quote-price .quote-section-label { color: #58c7ff; }
+  .quote-price p:not(.quote-section-label) { margin: 0; color: #b5c4d7; font-size: 9pt; }
+  .quote-price strong { white-space: nowrap; color: #fff; font-size: 22pt; }
+  .quote-terms { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; margin-top: 9mm; }
+  .quote-terms p:not(.quote-section-label) { margin: 0; color: #526174; font-size: 9pt; line-height: 1.6; white-space: pre-wrap; }
+  .quote-footer { position: absolute; right: 17mm; bottom: 14mm; left: 17mm; align-items: flex-end; padding-top: 7mm; border-top: 1px solid #d8e0eb; }
+  .quote-footer p { margin: 0 0 2mm; font-size: 8.5pt; color: #526174; }
+  .quote-footer small { color: #8793a4; font-size: 7.5pt; }
+  .quote-signature { min-width: 58mm; text-align: left; }
+  .quote-sign-line { height: 13mm; border-bottom: 1px solid #aab5c4; }
+  .quote-signature strong { display: block; margin-top: 2mm; font-size: 9pt; }
+}
+
 /* One-shot light sweep */
 .u-btn-sheen > .sheen {
   position: absolute;

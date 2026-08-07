@@ -9,6 +9,13 @@ import { Footer } from "@/components/sections/Footer";
 import { createOrder, type NewOrder } from "@/lib/orders";
 import { isSupabaseConfigured } from "@/lib/supabase";
 import { brand, servicesList } from "@/config/data";
+import {
+  modelsForBrand,
+  vehicleBrands,
+  vehicleFuels,
+  vehicleTransmissions,
+  vehicleTypes,
+} from "@/config/vehicles";
 
 const field =
   "w-full rounded-xl border border-line-2 bg-surface px-4 py-3 text-ink placeholder:text-ink-3 focus:border-brand focus:ring-4 focus:ring-brand/15 focus:outline-none";
@@ -19,6 +26,8 @@ export default function OrderPage() {
   const [error, setError] = useState<string | null>(null);
   const [orderCode, setOrderCode] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState("");
+  const [selectedModel, setSelectedModel] = useState("");
 
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,9 +50,20 @@ export default function OrderPage() {
       customer_email: text("customer_email"),
       service_id: text("service_id"),
       vehicle_type: text("vehicle_type"),
-      vehicle_brand: text("vehicle_brand"),
-      vehicle_model: text("vehicle_model"),
+      vehicle_brand:
+        text("vehicle_brand") === "Lainnya"
+          ? text("vehicle_brand_custom")
+          : text("vehicle_brand"),
+      vehicle_model:
+        text("vehicle_model") === "Lainnya" || text("vehicle_brand") === "Lainnya"
+          ? text("vehicle_model_custom")
+          : text("vehicle_model"),
       vehicle_year: year ? Number(year) : undefined,
+      vehicle_variant: text("vehicle_variant"),
+      vehicle_color: text("vehicle_color"),
+      vehicle_plate: text("vehicle_plate"),
+      vehicle_transmission: text("vehicle_transmission"),
+      vehicle_fuel: text("vehicle_fuel"),
       running_condition: text("running_condition"),
       pickup_address: text("pickup_address"),
       delivery_address: text("delivery_address"),
@@ -245,11 +265,9 @@ export default function OrderPage() {
                     <label htmlFor="vehicle_type" className={labelCls}>
                       Jenis
                     </label>
-                    <select id="vehicle_type" name="vehicle_type" defaultValue="" className={field}>
+                    <select id="vehicle_type" name="vehicle_type" required defaultValue="" className={field}>
                       <option value="">Pilih jenis</option>
-                      <option>Mobil</option>
-                      <option>Motor</option>
-                      <option>Alat Berat</option>
+                      {vehicleTypes.map((type) => <option key={type}>{type}</option>)}
                     </select>
                   </div>
                   <div>
@@ -271,26 +289,101 @@ export default function OrderPage() {
                     <label htmlFor="vehicle_brand" className={labelCls}>
                       Merek
                     </label>
-                    <input id="vehicle_brand" name="vehicle_brand" className={field} />
+                    <select
+                      id="vehicle_brand"
+                      name="vehicle_brand"
+                      required
+                      value={selectedBrand}
+                      onChange={(event) => {
+                        setSelectedBrand(event.target.value);
+                        setSelectedModel("");
+                      }}
+                      className={field}
+                    >
+                      <option value="">Pilih merek</option>
+                      {vehicleBrands.map((vehicleBrand) => (
+                        <option key={vehicleBrand}>{vehicleBrand}</option>
+                      ))}
+                      <option>Lainnya</option>
+                    </select>
+                    {selectedBrand === "Lainnya" && (
+                      <input
+                        name="vehicle_brand_custom"
+                        aria-label="Merek kendaraan lainnya"
+                        placeholder="Tulis merek kendaraan"
+                        className={`${field} mt-3`}
+                      />
+                    )}
                   </div>
                   <div>
                     <label htmlFor="vehicle_model" className={labelCls}>
                       Model
                     </label>
-                    <input id="vehicle_model" name="vehicle_model" className={field} />
+                    <select
+                      id="vehicle_model"
+                      name="vehicle_model"
+                      required
+                      value={selectedModel}
+                      onChange={(event) => setSelectedModel(event.target.value)}
+                      className={field}
+                      disabled={!selectedBrand}
+                    >
+                      <option value="">{selectedBrand ? "Pilih model" : "Pilih merek dulu"}</option>
+                      {modelsForBrand(selectedBrand).map((model) => (
+                        <option key={model}>{model}</option>
+                      ))}
+                      {selectedBrand && <option>Lainnya</option>}
+                    </select>
+                    {(selectedModel === "Lainnya" || selectedBrand === "Lainnya") && (
+                      <input
+                        name="vehicle_model_custom"
+                        aria-label="Model kendaraan lainnya"
+                        placeholder="Tulis model kendaraan"
+                        className={`${field} mt-3`}
+                      />
+                    )}
                   </div>
                   <div>
                     <label htmlFor="vehicle_year" className={labelCls}>
                       Tahun
                     </label>
-                    <input
+                    <select
                       id="vehicle_year"
                       name="vehicle_year"
-                      type="number"
-                      min="1950"
-                      max="2100"
+                      defaultValue=""
                       className={field}
-                    />
+                    >
+                      <option value="">Pilih tahun</option>
+                      {Array.from({ length: new Date().getFullYear() - 1978 }, (_, index) =>
+                        new Date().getFullYear() + 1 - index
+                      ).map((yearOption) => <option key={yearOption}>{yearOption}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="vehicle_variant" className={labelCls}>Varian / Trim</label>
+                    <input id="vehicle_variant" name="vehicle_variant" placeholder="Contoh: 1.5 Q Hybrid" className={field} />
+                  </div>
+                  <div>
+                    <label htmlFor="vehicle_color" className={labelCls}>Warna</label>
+                    <input id="vehicle_color" name="vehicle_color" placeholder="Contoh: Hitam" className={field} />
+                  </div>
+                  <div>
+                    <label htmlFor="vehicle_plate" className={labelCls}>Nomor Polisi</label>
+                    <input id="vehicle_plate" name="vehicle_plate" placeholder="B 1234 XYZ (opsional)" className={field} />
+                  </div>
+                  <div>
+                    <label htmlFor="vehicle_transmission" className={labelCls}>Transmisi</label>
+                    <select id="vehicle_transmission" name="vehicle_transmission" defaultValue="" className={field}>
+                      <option value="">Pilih transmisi</option>
+                      {vehicleTransmissions.map((item) => <option key={item}>{item}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="vehicle_fuel" className={labelCls}>Bahan Bakar</label>
+                    <select id="vehicle_fuel" name="vehicle_fuel" defaultValue="" className={field}>
+                      <option value="">Pilih bahan bakar</option>
+                      {vehicleFuels.map((item) => <option key={item}>{item}</option>)}
+                    </select>
                   </div>
                 </div>
               </fieldset>

@@ -60,7 +60,6 @@ export function Footer() {
           <p className="mt-3 text-sm text-white/50">
             Operasional: {brand.hours}
           </p>
-          <p className="mt-3 text-sm text-white/50">NPWP {brand.npwp}</p>
         </div>
 
         <Column heading="Perusahaan" items={company} />

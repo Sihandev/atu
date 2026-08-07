@@ -109,26 +109,29 @@ export default function TrackingPage() {
 
     try {
       const supabase = getPublicSupabase();
+      // Linked shipments use the original RPC first. It is present on older
+      // databases and avoids repeatedly probing a newer function that may not
+      // have been installed yet.
+      const { data: legacyData, error: legacyError } = await supabase.rpc(
+        "lookup_tracking_trip",
+        { p_order_code: code }
+      );
+      const legacyTripId = !legacyError
+        ? Array.isArray(legacyData)
+          ? legacyData[0]?.tracking_trip_id
+          : legacyData?.tracking_trip_id
+        : null;
+      if (legacyTripId) {
+        await fetchTrip(legacyTripId);
+        return;
+      }
+
       const { data, error } = await supabase.rpc("lookup_order_status", {
         p_order_code: code,
       });
       if (error) {
-        // Older database installs only have the original trip lookup. Keep
-        // linked shipments working while the richer status RPC is rolled out.
-        const { data: legacyData, error: legacyError } = await supabase.rpc(
-          "lookup_tracking_trip",
-          { p_order_code: code }
-        );
-        if (legacyError) throw legacyError;
-        const legacyTripId = Array.isArray(legacyData)
-          ? legacyData[0]?.tracking_trip_id
-          : legacyData?.tracking_trip_id;
-        if (!legacyTripId) {
-          setState("not-found");
-          setMessage("Nomor resi belum terhubung ke tracking operasional.");
-          return;
-        }
-        await fetchTrip(legacyTripId);
+        setState("not-found");
+        setMessage("Nomor resi belum terhubung ke tracking operasional.");
         return;
       }
       const foundOrder = (Array.isArray(data) ? data[0] : null) as PublicOrderStatus | null;
@@ -161,7 +164,7 @@ export default function TrackingPage() {
   }, [fetchTrip, state, tripId]);
 
   useEffect(() => {
-    if (state !== "found" || !searchedCode) return;
+    if (state !== "found" || !searchedCode || !order) return;
     const timer = window.setInterval(async () => {
       const { data, error } = await getPublicSupabase().rpc("lookup_order_status", {
         p_order_code: searchedCode,
@@ -176,7 +179,7 @@ export default function TrackingPage() {
       }
     }, 30_000);
     return () => window.clearInterval(timer);
-  }, [fetchTrip, searchedCode, state, tripId]);
+  }, [fetchTrip, order, searchedCode, state, tripId]);
 
   const checkpoints = [...(trip?.daily_checkpoints ?? [])].reverse();
   const legs = trip?.legs ?? [];

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ExternalLink, Link2, MessageCircle, X } from "lucide-react";
+import { ExternalLink, FileText, Link2, MessageCircle, Printer, Send, X } from "lucide-react";
 import {
   ORDER_STATUSES,
   STATUS_META,
@@ -12,6 +12,11 @@ import {
 } from "@/lib/orders";
 import { cn } from "@/lib/utils";
 import { extractTripId } from "@/lib/tracking";
+import {
+  formatRupiah,
+  QuotationSheet,
+  quoteNumber,
+} from "@/components/admin/QuotationSheet";
 
 function Field({ label, value }: { label: string; value?: string | number | null }) {
   if (value === null || value === undefined || value === "") return null;
@@ -40,6 +45,10 @@ export function OrderDrawer({
   const [status, setStatus] = useState<OrderStatus>(order?.status ?? "baru");
   const [adminNotes, setAdminNotes] = useState(order?.admin_notes ?? "");
   const [trackingUrl, setTrackingUrl] = useState(order?.tracking_url ?? "");
+  const [quotedPrice, setQuotedPrice] = useState(order?.quoted_price?.toString() ?? "");
+  const [quoteValidUntil, setQuoteValidUntil] = useState(order?.quote_valid_until ?? "");
+  const [quotePaymentTerms, setQuotePaymentTerms] = useState(order?.quote_payment_terms ?? "");
+  const [quoteNotes, setQuoteNotes] = useState(order?.quote_notes ?? "");
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -55,7 +64,11 @@ export function OrderDrawer({
   const dirty =
     status !== order.status ||
     adminNotes !== (order.admin_notes ?? "") ||
-    trackingUrl !== (order.tracking_url ?? "");
+    trackingUrl !== (order.tracking_url ?? "") ||
+    quotedPrice !== (order.quoted_price?.toString() ?? "") ||
+    quoteValidUntil !== (order.quote_valid_until ?? "") ||
+    quotePaymentTerms !== (order.quote_payment_terms ?? "") ||
+    quoteNotes !== (order.quote_notes ?? "");
 
   const save = async () => {
     setSaving(true);
@@ -76,6 +89,14 @@ export function OrderDrawer({
             : tripId
               ? order.tracking_connected_at
               : null,
+        quoted_price: quotedPrice ? Number(quotedPrice) : null,
+        quote_valid_until: quoteValidUntil || null,
+        quote_payment_terms: quotePaymentTerms.trim() || null,
+        quote_notes: quoteNotes.trim() || null,
+        quote_created_at:
+          quotedPrice && (!order.quote_created_at || quotedPrice !== order.quoted_price?.toString())
+            ? new Date().toISOString()
+            : order.quote_created_at,
       });
       onSaved(updated);
     } catch (e) {
@@ -86,6 +107,30 @@ export function OrderDrawer({
   };
 
   const waLink = `https://wa.me/${order.customer_phone.replace(/\D/g, "")}`;
+  const numericPrice = quotedPrice ? Number(quotedPrice) : null;
+  const vehicleSummary = [
+    order.vehicle_brand,
+    order.vehicle_model,
+    order.vehicle_variant,
+    order.vehicle_year,
+  ].filter(Boolean).join(" ");
+  const quoteMessage = [
+    `Halo ${order.customer_name},`,
+    "",
+    `Berikut penawaran resmi dari Alyssa Express (${quoteNumber(order)}):`,
+    `Rute: ${order.origin} → ${order.destination}`,
+    `Kendaraan: ${vehicleSummary || order.vehicle_type || "Unit kendaraan"}`,
+    `Harga penawaran: ${formatRupiah(numericPrice)}`,
+    quoteValidUntil
+      ? `Berlaku hingga: ${new Date(`${quoteValidUntil}T00:00:00`).toLocaleDateString("id-ID")}`
+      : "",
+    quotePaymentTerms ? `Pembayaran: ${quotePaymentTerms}` : "",
+    quoteNotes ? `Catatan: ${quoteNotes}` : "",
+    "",
+    `Nomor pesanan: ${order.order_code}`,
+    "Silakan balas pesan ini untuk konfirmasi atau pertanyaan lebih lanjut. Terima kasih.",
+  ].filter(Boolean).join("\n");
+  const quoteWaLink = `${waLink}?text=${encodeURIComponent(quoteMessage)}`;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -151,6 +196,11 @@ export function OrderDrawer({
               <Field label="Merek" value={order.vehicle_brand} />
               <Field label="Model" value={order.vehicle_model} />
               <Field label="Tahun" value={order.vehicle_year} />
+              <Field label="Varian" value={order.vehicle_variant} />
+              <Field label="Warna" value={order.vehicle_color} />
+              <Field label="Nomor Polisi" value={order.vehicle_plate} />
+              <Field label="Transmisi" value={order.vehicle_transmission} />
+              <Field label="Bahan Bakar" value={order.vehicle_fuel} />
               <Field label="Kondisi" value={order.running_condition} />
             </dl>
           </section>
@@ -163,6 +213,87 @@ export function OrderDrawer({
               <p className="leading-relaxed whitespace-pre-wrap text-ink-2">{order.notes}</p>
             </section>
           )}
+
+          <section className="rounded-3xl border border-brand/20 bg-brand/5 p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-mono text-label-sm text-brand uppercase">Penawaran Harga</h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-2">
+                  Isi harga lalu kirim ringkasannya ke WhatsApp pelanggan atau cetak penawaran A4.
+                </p>
+              </div>
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand text-white">
+                <FileText className="h-5 w-5" />
+              </div>
+            </div>
+
+            <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <label className="block">
+                <span className="mb-2 block font-mono text-label-sm text-ink-3 uppercase">Harga Total</span>
+                <div className="flex rounded-2xl border border-line-2 bg-surface focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/15">
+                  <span className="px-4 py-3 font-semibold text-ink-2">Rp</span>
+                  <input
+                    type="number"
+                    min="0"
+                    step="1000"
+                    value={quotedPrice}
+                    onChange={(event) => setQuotedPrice(event.target.value)}
+                    placeholder="0"
+                    className="min-w-0 flex-1 bg-transparent py-3 pr-4 text-ink outline-none"
+                  />
+                </div>
+              </label>
+              <label className="block">
+                <span className="mb-2 block font-mono text-label-sm text-ink-3 uppercase">Berlaku Hingga</span>
+                <input
+                  type="date"
+                  value={quoteValidUntil}
+                  onChange={(event) => setQuoteValidUntil(event.target.value)}
+                  className="w-full rounded-2xl border border-line-2 bg-surface px-4 py-3 text-ink focus:border-brand focus:ring-4 focus:ring-brand/15 focus:outline-none"
+                />
+              </label>
+            </div>
+
+            <label className="mt-4 block">
+              <span className="mb-2 block font-mono text-label-sm text-ink-3 uppercase">Ketentuan Pembayaran</span>
+              <input
+                value={quotePaymentTerms}
+                onChange={(event) => setQuotePaymentTerms(event.target.value)}
+                placeholder="Contoh: DP 50%, pelunasan sebelum unit diserahkan"
+                className="w-full rounded-2xl border border-line-2 bg-surface px-4 py-3 text-ink placeholder:text-ink-3 focus:border-brand focus:ring-4 focus:ring-brand/15 focus:outline-none"
+              />
+            </label>
+            <label className="mt-4 block">
+              <span className="mb-2 block font-mono text-label-sm text-ink-3 uppercase">Catatan Penawaran</span>
+              <textarea
+                rows={3}
+                value={quoteNotes}
+                onChange={(event) => setQuoteNotes(event.target.value)}
+                placeholder="Yang termasuk dalam harga, asuransi, jadwal, atau ketentuan lain."
+                className="w-full rounded-2xl border border-line-2 bg-surface px-4 py-3 text-ink placeholder:text-ink-3 focus:border-brand focus:ring-4 focus:ring-brand/15 focus:outline-none"
+              />
+            </label>
+
+            <div className="mt-5 flex flex-wrap gap-3">
+              <a
+                href={quoteWaLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-disabled={!numericPrice}
+                className={cn("u-btn u-btn-primary text-sm", !numericPrice && "pointer-events-none opacity-40")}
+              >
+                <Send className="h-4 w-4" /> Kirim ke WhatsApp
+              </a>
+              <button
+                type="button"
+                onClick={() => window.print()}
+                disabled={!numericPrice}
+                className="u-btn u-btn-outline text-sm disabled:pointer-events-none disabled:opacity-40"
+              >
+                <Printer className="h-4 w-4" /> Cetak Penawaran
+              </button>
+            </div>
+          </section>
 
           <section className="border-t border-line pt-6">
             <div className="flex items-center justify-between gap-4">
@@ -270,6 +401,13 @@ export function OrderDrawer({
           </button>
         </footer>
       </aside>
+      <QuotationSheet
+        order={order}
+        price={numericPrice}
+        validUntil={quoteValidUntil}
+        paymentTerms={quotePaymentTerms}
+        notes={quoteNotes}
+      />
     </div>
   );
 }

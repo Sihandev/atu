@@ -41,6 +41,11 @@ export interface Order {
   vehicle_brand: string | null;
   vehicle_model: string | null;
   vehicle_year: number | null;
+  vehicle_variant: string | null;
+  vehicle_color: string | null;
+  vehicle_plate: string | null;
+  vehicle_transmission: string | null;
+  vehicle_fuel: string | null;
   running_condition: string | null;
   pickup_address: string | null;
   delivery_address: string | null;
@@ -51,6 +56,11 @@ export interface Order {
   tracking_url: string | null;
   tracking_trip_id: string | null;
   tracking_connected_at: string | null;
+  quoted_price: number | null;
+  quote_valid_until: string | null;
+  quote_payment_terms: string | null;
+  quote_notes: string | null;
+  quote_created_at: string | null;
 }
 
 /** Everything the public form is allowed to send. Status and admin_notes are
@@ -68,6 +78,11 @@ export type NewOrder = Pick<
       | "vehicle_brand"
       | "vehicle_model"
       | "vehicle_year"
+      | "vehicle_variant"
+      | "vehicle_color"
+      | "vehicle_plate"
+      | "vehicle_transmission"
+      | "vehicle_fuel"
       | "running_condition"
       | "pickup_address"
       | "delivery_address"
@@ -89,9 +104,27 @@ export function generateOrderCode(): string {
 export async function createOrder(input: NewOrder): Promise<Pick<Order, "order_code">> {
   const supabase = getPublicSupabase();
   const orderCode = generateOrderCode();
-  const { error } = await supabase
+  let { error } = await supabase
     .from("orders")
     .insert({ ...input, order_code: orderCode });
+
+  /* Keep the public form usable during the short window between a Vercel
+   * deploy and the one-time database migration. Once the columns exist the
+   * first insert succeeds and all detail fields are stored. */
+  if (error?.message.includes("column")) {
+    const {
+      vehicle_variant: _vehicleVariant,
+      vehicle_color: _vehicleColor,
+      vehicle_plate: _vehiclePlate,
+      vehicle_transmission: _vehicleTransmission,
+      vehicle_fuel: _vehicleFuel,
+      ...compatibleInput
+    } = input;
+    void [_vehicleVariant, _vehicleColor, _vehiclePlate, _vehicleTransmission, _vehicleFuel];
+    ({ error } = await supabase
+      .from("orders")
+      .insert({ ...compatibleInput, order_code: orderCode }));
+  }
 
   if (error) throw new Error(error.message);
   return { order_code: orderCode };
@@ -113,7 +146,16 @@ export async function updateOrder(
   patch: Partial<
     Pick<
       Order,
-      "status" | "admin_notes" | "tracking_url" | "tracking_trip_id" | "tracking_connected_at"
+      | "status"
+      | "admin_notes"
+      | "tracking_url"
+      | "tracking_trip_id"
+      | "tracking_connected_at"
+      | "quoted_price"
+      | "quote_valid_until"
+      | "quote_payment_terms"
+      | "quote_notes"
+      | "quote_created_at"
     >
   >
 ): Promise<Order> {

@@ -3,10 +3,9 @@ import { Car, Truck, Anchor, Plane, ArrowRightCircle, CheckCircle } from "lucide
 /* Sourced from alyssalogistik.co.id. Anything the live site does not publish
    is left empty rather than invented — see `email` below. */
 export const brand = {
-  /* Trading name shown across the UI. The legal entity below is the one
-     registered against the NPWP and stays as-is. */
+  /* Trading name shown across the UI and the legal entity supplied by the owner. */
   name: "Alyssa Express",
-  legalName: "PT Alyssa Auto Logistik",
+  legalName: "CV. Alyssa Trans Utama",
   tagline: "Jasa Pengiriman Kendaraan & Alat Berat",
   phone: "+62818631135",
   /* The live site publishes no email address. Left blank on purpose so the UI
@@ -14,7 +13,6 @@ export const brand = {
   email: "",
   address: "Jl. Enim Raya 2 No. 86, Jakarta Utara, DKI Jakarta 14330",
   hours: "24 jam, setiap hari",
-  npwp: "26.981.990.0-042.000",
   domain: "alyssalogistik.co.id",
   whatsappMessage: "Halo, saya ingin bertanya tentang layanan pengiriman kendaraan.",
 };

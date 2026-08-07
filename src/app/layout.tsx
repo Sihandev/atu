@@ -75,7 +75,6 @@ export default function RootLayout({
     description: brand.tagline,
     url: `https://${brand.domain}`,
     logo: `https://${brand.domain}/logo.png`,
-    taxID: brand.npwp,
     address: {
       "@type": "PostalAddress",
       streetAddress: "Jl. Enim Raya 2 No. 86",

@@ -59,6 +59,11 @@ create table if not exists public.orders (
   vehicle_brand    text,
   vehicle_model    text,
   vehicle_year     int,
+  vehicle_variant  text,
+  vehicle_color    text,
+  vehicle_plate    text,
+  vehicle_transmission text,
+  vehicle_fuel     text,
   running_condition text,
 
   pickup_address   text,
@@ -76,6 +81,13 @@ create table if not exists public.orders (
   tracking_trip_id      text,
   tracking_connected_at timestamptz,
 
+  -- Commercial quotation prepared by admin.
+  quoted_price       numeric(14,2),
+  quote_valid_until  date,
+  quote_payment_terms text,
+  quote_notes        text,
+  quote_created_at   timestamptz,
+
   -- Loose validation so obviously bad rows cannot be inserted.
   constraint orders_name_not_blank  check (length(btrim(customer_name)) > 1),
   constraint orders_phone_not_blank check (length(btrim(customer_phone)) >= 8)
@@ -86,6 +98,16 @@ create table if not exists public.orders (
 alter table public.orders add column if not exists tracking_url text;
 alter table public.orders add column if not exists tracking_trip_id text;
 alter table public.orders add column if not exists tracking_connected_at timestamptz;
+alter table public.orders add column if not exists vehicle_variant text;
+alter table public.orders add column if not exists vehicle_color text;
+alter table public.orders add column if not exists vehicle_plate text;
+alter table public.orders add column if not exists vehicle_transmission text;
+alter table public.orders add column if not exists vehicle_fuel text;
+alter table public.orders add column if not exists quoted_price numeric(14,2);
+alter table public.orders add column if not exists quote_valid_until date;
+alter table public.orders add column if not exists quote_payment_terms text;
+alter table public.orders add column if not exists quote_notes text;
+alter table public.orders add column if not exists quote_created_at timestamptz;
 
 create index if not exists orders_created_at_idx on public.orders (created_at desc);
 create index if not exists orders_status_idx     on public.orders (status);
