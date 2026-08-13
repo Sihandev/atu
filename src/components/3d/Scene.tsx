@@ -11,12 +11,12 @@ function PackageModel(props: React.ComponentProps<"group">) {
     <group {...props}>
       <mesh castShadow receiveShadow position={[0, 0.5, 0]}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color="#f59e0b" roughness={0.4} />
+        <meshStandardMaterial color="#1475cb" roughness={0.4} />
       </mesh>
       {/* Tape */}
       <mesh position={[0, 1.01, 0]}>
         <planeGeometry args={[1, 0.2]} />
-        <meshStandardMaterial color="#d97706" />
+        <meshStandardMaterial color="#6928b4" />
       </mesh>
     </group>
   );
@@ -29,12 +29,12 @@ function TruckModel(props: React.ComponentProps<"group">) {
       {/* Main Trailer Body */}
       <mesh position={[0, 1.5, 0]} castShadow receiveShadow>
         <boxGeometry args={[4, 2, 1.5]} />
-        <meshStandardMaterial color="#2563eb" roughness={0.2} metalness={0.1} />
+        <meshStandardMaterial color="#08a9d6" roughness={0.2} metalness={0.1} />
       </mesh>
       {/* Detail: Cabin/Front */}
       <mesh position={[2.5, 0.75, 0]} castShadow receiveShadow>
         <boxGeometry args={[1, 1.5, 1.5]} />
-        <meshStandardMaterial color="#1e3a8a" roughness={0.3} metalness={0.1} />
+        <meshStandardMaterial color="#2851b8" roughness={0.3} metalness={0.1} />
       </mesh>
       {/* Wheels */}
       {[-1.5, 1, 2.5].map((x) => (
@@ -60,7 +60,7 @@ function ShipModel(props: React.ComponentProps<"group">) {
       {/* Hull */}
       <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
         <boxGeometry args={[6, 1, 2]} />
-        <meshStandardMaterial color="#b91c1c" roughness={0.5} />
+        <meshStandardMaterial color="#6928b4" roughness={0.5} />
       </mesh>
       {/* Bridge */}
       <mesh position={[-2, 1.5, 0]} castShadow receiveShadow>
@@ -70,7 +70,7 @@ function ShipModel(props: React.ComponentProps<"group">) {
       {/* Containers */}
       <mesh position={[1, 1.25, 0]} castShadow receiveShadow>
         <boxGeometry args={[3, 0.5, 1.5]} />
-        <meshStandardMaterial color="#2563eb" roughness={0.2} />
+        <meshStandardMaterial color="#1475cb" roughness={0.2} />
       </mesh>
     </group>
   );
@@ -128,7 +128,7 @@ export default function Scene() {
     >
       <ambientLight intensity={0.6} />
       <directionalLight position={[10, 10, 5]} intensity={1.5} castShadow />
-      <pointLight position={[-10, -10, -5]} intensity={0.5} color="#3b82f6" />
+      <pointLight position={[-10, -10, -5]} intensity={0.5} color="#8b4dd3" />
 
       <JourneyScene />
 

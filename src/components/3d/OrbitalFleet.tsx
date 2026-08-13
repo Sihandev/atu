@@ -66,8 +66,8 @@ function Carrier() {
     rig.current.rotation.y = -0.3 + Math.sin(clock.elapsedTime * 0.28) * 0.025;
   });
 
-  const cobalt = "#1557e8";
-  const steel = "#1d2735";
+  const cobalt = "#2851b8";
+  const steel = "#151a50";
 
   return (
     <group ref={rig} position={[0.7, -0.7, 0]} rotation={[0.02, -0.3, 0]}>
@@ -151,12 +151,12 @@ function RouteOrbit() {
   return (
     <group>
       <mesh ref={lineRef} geometry={geometry}>
-        <meshBasicMaterial color="#165dff" transparent opacity={0.5} />
+        <meshBasicMaterial color="#3c39a8" transparent opacity={0.5} />
       </mesh>
       <mesh ref={particle}>
         <sphereGeometry args={[0.11, 16, 16]} />
-        <meshBasicMaterial color="#67a0ff" />
-        <pointLight color="#2868ff" intensity={2.4} distance={2.8} />
+        <meshBasicMaterial color="#8b4dd3" />
+        <pointLight color="#6928b4" intensity={2.4} distance={2.8} />
       </mesh>
     </group>
   );
@@ -180,10 +180,10 @@ function CameraRig() {
 function Scene() {
   return (
     <>
-      <fog attach="fog" args={["#f5f0e7", 10, 18]} />
+      <fog attach="fog" args={["#eef4ff", 10, 18]} />
       <ambientLight intensity={1.35} />
-      <directionalLight position={[4, 8, 6]} intensity={3.4} color="#fff2df" castShadow shadow-mapSize={[1024, 1024]} />
-      <directionalLight position={[-5, 2, -4]} intensity={2.2} color="#3a6cff" />
+      <directionalLight position={[4, 8, 6]} intensity={3.4} color="#e9faff" castShadow shadow-mapSize={[1024, 1024]} />
+      <directionalLight position={[-5, 2, -4]} intensity={2.2} color="#6555df" />
       <pointLight position={[2, 1, 4]} intensity={2.2} color="#ffffff" />
       <RouteOrbit />
       <Carrier />

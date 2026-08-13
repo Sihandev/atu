@@ -152,7 +152,7 @@ export default function Home() {
                       style={{ backgroundImage: `url("${tile.image}")` }}
                     />
                     <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(2,6,15,0.96)_0%,rgba(5,11,26,0.45)_40%,transparent_74%)]" />
-                    <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(11,95,255,0.6),transparent_58%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
+                    <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(60,57,168,0.66),transparent_58%)] opacity-0 transition-opacity duration-700 group-hover:opacity-100" />
                     <div className="grain absolute inset-0" />
                     <div className="absolute inset-0 rounded-[1.75rem] ring-1 ring-white/12 ring-inset" />
 
@@ -300,7 +300,7 @@ export default function Home() {
 
                 <div className="hidden md:block">
                   <div className="rotate-2 rounded-[1.5rem] bg-[linear-gradient(150deg,rgba(255,255,255,0.16),rgba(255,255,255,0.04))] p-px transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] hover:rotate-0">
-                    <div className="rounded-[1.5rem] bg-[#050b1a]/92 p-6 backdrop-blur-xl">
+                    <div className="rounded-[1.5rem] bg-[#090b2b]/92 p-6 backdrop-blur-xl">
                       <div className="mb-7 flex items-center gap-4">
                         <div className="grid h-12 w-12 place-items-center rounded-xl bg-grad-brand">
                           <Truck className="h-5 w-5 text-white" />
@@ -322,12 +322,12 @@ export default function Home() {
                             <div
                               className={
                                 step.done
-                                  ? "h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_0_4px_rgba(255,157,0,0.22)]"
+                                  ? "h-2.5 w-2.5 rounded-full bg-accent shadow-[0_0_0_4px_rgba(105,40,180,0.22)]"
                                   : "h-2.5 w-2.5 rounded-full border border-white/30"
                               }
                             />
                             {i < arr.length - 1 && (
-                              <div className="h-12 w-px bg-[linear-gradient(180deg,rgba(255,157,0,0.6),rgba(255,255,255,0.08))]" />
+                              <div className="h-12 w-px bg-[linear-gradient(180deg,rgba(105,40,180,0.7),rgba(255,255,255,0.08))]" />
                             )}
                           </div>
                           <div className="-mt-1">

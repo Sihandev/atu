@@ -41,8 +41,8 @@ export function HeroMedia({ src, alt }: { src: string; alt: string }) {
             "linear-gradient(to bottom, rgba(2,6,15,0.5) 0%, transparent 22%, transparent 60%, var(--c-bg) 100%)",
         }}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_-10%,rgba(0,194,255,0.3),transparent_60%)] mix-blend-screen" />
-      <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_88%_88%,rgba(255,157,0,0.22),transparent_62%)] mix-blend-screen" />
+      <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_50%_-10%,rgba(8,169,214,0.32),transparent_60%)] mix-blend-screen" />
+      <div className="absolute inset-0 bg-[radial-gradient(80%_60%_at_88%_88%,rgba(105,40,180,0.3),transparent_62%)] mix-blend-screen" />
       <div className="grain absolute inset-0" />
     </div>
   );

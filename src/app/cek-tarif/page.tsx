@@ -244,7 +244,7 @@ export default function QuotePage() {
                     </div>
                   </div>
 
-                  <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-amber-800 text-sm">
+                  <div className="rounded-xl border border-accent/25 bg-accent-soft/70 p-4 text-sm text-accent">
                     <strong>Perhatian:</strong> Harga otomatis tidak ditampilkan karena sangat bergantung pada detail spesifik dan asuransi. Anda akan diarahkan ke WhatsApp untuk mendapatkan penawaran akurat langsung dari tim kami.
                   </div>
 

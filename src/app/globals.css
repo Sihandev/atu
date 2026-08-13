@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 /* ============================================================
-   PT ALYSSA AUTO LOGISTIK — DESIGN TOKENS
-   Electric azure → cyan, amber accent, dual mode.
+   ALYSSA EXPRESS / CV. ALYSSA TRANS UTAMA — DESIGN TOKENS
+   Official mark palette: cyan → blue → indigo → purple.
    Every colour is a CSS variable so `.dark` can reassign it.
    ============================================================ */
 
@@ -12,54 +12,53 @@
   color-scheme: light;
 
   /* ---- surfaces ---- */
-  --c-bg: #e9f0ff;
-  --c-bg-2: #f4f8ff;
+  --c-bg: #eef4ff;
+  --c-bg-2: #f8faff;
   --c-surface: #ffffff;
-  --c-surface-2: #f3f7ff;
-  --c-surface-3: #e4ecff;
+  --c-surface-2: #f3f6ff;
+  --c-surface-3: #e5eaff;
 
   /* ---- ink ---- */
-  --c-ink: #050b1a;
-  --c-ink-2: #46527a;
-  --c-ink-3: #7683aa;
+  --c-ink: #090b2b;
+  --c-ink-2: #454b76;
+  --c-ink-3: #747ca7;
 
-  /* ---- brand: electric azure → cyan ---- */
-  --c-brand: #0b5fff;
-  --c-brand-2: #00c2ff;
-  --c-brand-deep: #0038b8;
-  --c-brand-soft: #d3e4ff;
-  --c-brand-dim: #86b6ff;
+  /* ---- brand: sampled from the Alyssa mark ---- */
+  --c-brand: #1475cb;
+  --c-brand-2: #08a9d6;
+  --c-brand-deep: #2851b8;
+  --c-brand-soft: #dceaff;
+  --c-brand-dim: #77b8ee;
 
-  /* ---- accent: amber. The second hue is what stops the page
-         reading as one more monotone blue AI template. ---- */
-  --c-accent: #ff9d00;
-  --c-accent-2: #ffc14d;
-  --c-accent-soft: #fff0d6;
+  /* ---- accent: violet end of the mark ---- */
+  --c-accent: #6928b4;
+  --c-accent-2: #8b4dd3;
+  --c-accent-soft: #eee4ff;
 
   --c-ok: #00b56a;
   --c-err: #e5484d;
 
   /* ---- lines ---- */
-  --c-line: rgba(5, 11, 26, 0.1);
-  --c-line-2: rgba(5, 11, 26, 0.18);
+  --c-line: rgba(24, 31, 92, 0.1);
+  --c-line-2: rgba(24, 31, 92, 0.18);
 
   /* ---- glass ---- */
   --glass-bg: linear-gradient(
     145deg,
     rgba(255, 255, 255, 0.92) 0%,
     rgba(255, 255, 255, 0.68) 50%,
-    rgba(211, 228, 255, 0.6) 100%
+    rgba(221, 229, 255, 0.68) 100%
   );
   --glass-ring: rgba(255, 255, 255, 0.85);
-  --glass-shadow: 0 24px 60px -28px rgba(5, 11, 26, 0.32);
+  --glass-shadow: 0 24px 60px -28px rgba(25, 35, 102, 0.32);
 
   /* ---- gradients ---- */
-  --grad-brand: linear-gradient(135deg, #00c2ff 0%, #0b5fff 55%, #0038b8 100%);
-  --grad-brand-rev: linear-gradient(135deg, #0b5fff 0%, #00c2ff 100%);
-  --grad-accent: linear-gradient(135deg, #ffc14d 0%, #ff9d00 100%);
-  --grad-ink: linear-gradient(160deg, #0a1430 0%, #050b1a 50%, #02060f 100%);
-  --grad-text: linear-gradient(115deg, #050b1a 0%, #0b5fff 52%, #00c2ff 100%);
-  --grad-text-inv: linear-gradient(115deg, #ffffff 0%, #b6dcff 45%, #64e0ff 100%);
+  --grad-brand: linear-gradient(135deg, #08a9d6 0%, #1475cb 35%, #3c39a8 68%, #6928b4 100%);
+  --grad-brand-rev: linear-gradient(135deg, #6928b4 0%, #2851b8 50%, #08a9d6 100%);
+  --grad-accent: linear-gradient(135deg, #3c39a8 0%, #6928b4 100%);
+  --grad-ink: linear-gradient(160deg, #151a50 0%, #090b2b 52%, #050617 100%);
+  --grad-text: linear-gradient(115deg, #090b2b 0%, #2851b8 42%, #6928b4 76%, #08a9d6 100%);
+  --grad-text-inv: linear-gradient(115deg, #ffffff 0%, #bfeaff 40%, #bba5ff 100%);
   --grad-sheen: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.6) 48%, transparent 76%);
 
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -74,41 +73,43 @@
 .dark {
   color-scheme: dark;
 
-  --c-bg: #04070f;
-  --c-bg-2: #070c18;
-  --c-surface: #0d1526;
-  --c-surface-2: #111b30;
-  --c-surface-3: #16233d;
+  --c-bg: #050617;
+  --c-bg-2: #090b22;
+  --c-surface: #10132e;
+  --c-surface-2: #15183a;
+  --c-surface-3: #1d2250;
 
-  --c-ink: #e9f0ff;
-  --c-ink-2: #9fb0d4;
-  --c-ink-3: #6b7ca3;
+  --c-ink: #f0f3ff;
+  --c-ink-2: #abb3dc;
+  --c-ink-3: #737eae;
 
-  --c-brand: #3d8bff;
-  --c-brand-2: #22d3ff;
-  --c-brand-deep: #0b5fff;
-  --c-brand-soft: #12294d;
-  --c-brand-dim: #5aa3ff;
+  --c-brand: #4f8ee6;
+  --c-brand-2: #24c4e7;
+  --c-brand-deep: #2851b8;
+  --c-brand-soft: #182d61;
+  --c-brand-dim: #72aaf0;
 
-  --c-accent: #ffb020;
-  --c-accent-2: #ffd27a;
-  --c-accent-soft: #2a1f08;
+  --c-accent: #a368e8;
+  --c-accent-2: #c29afa;
+  --c-accent-soft: #2b194d;
 
-  --c-line: rgba(233, 240, 255, 0.1);
-  --c-line-2: rgba(233, 240, 255, 0.2);
+  --c-line: rgba(229, 234, 255, 0.1);
+  --c-line-2: rgba(229, 234, 255, 0.2);
 
   --glass-bg: linear-gradient(
     145deg,
-    rgba(38, 56, 92, 0.55) 0%,
-    rgba(13, 21, 38, 0.72) 52%,
-    rgba(7, 12, 24, 0.85) 100%
+    rgba(42, 46, 104, 0.58) 0%,
+    rgba(16, 19, 46, 0.76) 52%,
+    rgba(5, 6, 23, 0.88) 100%
   );
   --glass-ring: rgba(255, 255, 255, 0.12);
   --glass-shadow: 0 30px 70px -32px rgba(0, 0, 0, 0.85);
 
-  --grad-brand: linear-gradient(135deg, #22d3ff 0%, #3d8bff 55%, #0b5fff 100%);
-  --grad-ink: linear-gradient(160deg, #0d1526 0%, #04070f 55%, #01030a 100%);
-  --grad-text: linear-gradient(115deg, #ffffff 0%, #7cc0ff 48%, #22d3ff 100%);
+  --grad-brand: linear-gradient(135deg, #24c4e7 0%, #4f8ee6 36%, #6350d7 68%, #a368e8 100%);
+  --grad-brand-rev: linear-gradient(135deg, #a368e8 0%, #4f8ee6 55%, #24c4e7 100%);
+  --grad-accent: linear-gradient(135deg, #6350d7 0%, #a368e8 100%);
+  --grad-ink: linear-gradient(160deg, #181d4b 0%, #090b22 55%, #030412 100%);
+  --grad-text: linear-gradient(115deg, #ffffff 0%, #8fdaf2 42%, #c29afa 100%);
 }
 
 /* Map the variables into Tailwind. `@theme inline` emits var() references,
@@ -410,7 +411,7 @@ body {
 }
 
 .u-btn-accent {
-  color: #2a1a00;
+  color: #ffffff;
   border-radius: 9999px;
   padding: 0.85rem 1.6rem;
   background-image: var(--grad-accent);
@@ -490,7 +491,7 @@ body {
 
   .quote-accent {
     height: 8mm;
-    background: linear-gradient(90deg, #0667e8, #03a9f4);
+    background: linear-gradient(90deg, #08a9d6, #1475cb 42%, #3c39a8 72%, #6928b4);
   }
 
   .quote-page { padding: 16mm 17mm 13mm; }
@@ -500,28 +501,28 @@ body {
   .quote-price,
   .quote-footer { display: flex; justify-content: space-between; gap: 12mm; }
   .quote-header { align-items: flex-start; padding-bottom: 10mm; border-bottom: 1px solid #d8e0eb; }
-  .quote-brand { margin: 0; color: #0667e8; font-size: 23pt; font-weight: 800; letter-spacing: -1px; }
-  .quote-legal { margin: 1mm 0 0; color: #5c6b80; font-size: 9pt; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; }
-  .quote-company-contact { max-width: 74mm; text-align: right; color: #526174; font-size: 8.5pt; line-height: 1.55; }
+  .quote-brand { margin: 0; color: #2851b8; font-size: 23pt; font-weight: 800; letter-spacing: -1px; }
+  .quote-legal { margin: 1mm 0 0; color: #3c39a8; font-size: 9pt; font-weight: 700; letter-spacing: 1.3px; text-transform: uppercase; }
+  .quote-company-contact { max-width: 74mm; text-align: right; color: #454b76; font-size: 8.5pt; line-height: 1.55; }
   .quote-company-contact p { margin: 0; }
   .quote-title-row { align-items: flex-start; padding: 12mm 0 10mm; }
   .quote-eyebrow,
-  .quote-section-label { margin: 0 0 2mm; color: #0667e8; font-size: 7.5pt; font-weight: 800; letter-spacing: 1.5px; }
+  .quote-section-label { margin: 0 0 2mm; color: #3c39a8; font-size: 7.5pt; font-weight: 800; letter-spacing: 1.5px; }
   .quote-title-row h1 { margin: 0; font-size: 25pt; line-height: 1; letter-spacing: -1px; }
   .quote-meta { min-width: 70mm; margin: 0; font-size: 8.5pt; }
   .quote-meta div { display: flex; justify-content: space-between; gap: 8mm; padding: 1.2mm 0; }
   .quote-meta dt { color: #758399; }
   .quote-meta dd { margin: 0; font-weight: 700; text-align: right; }
-  .quote-customer { padding: 7mm; border-radius: 4mm; background: #f1f6fc; }
+  .quote-customer { padding: 7mm; border-radius: 4mm; background: #f1f4ff; }
   .quote-customer h2 { margin: 0 0 1mm; font-size: 15pt; }
   .quote-customer p:last-child { margin: 0; color: #607087; font-size: 9pt; }
   .quote-service-card { margin-top: 7mm; padding: 7mm 0; border-top: 1px solid #d8e0eb; border-bottom: 1px solid #d8e0eb; }
   .quote-service-card > div { width: 50%; }
   .quote-service-card h3 { margin: 0 0 2mm; font-size: 13pt; }
-  .quote-service-card h3 span { color: #03a9f4; }
+  .quote-service-card h3 span { color: #08a9d6; }
   .quote-service-card p:not(.quote-section-label) { margin: 1mm 0; color: #607087; font-size: 8.5pt; }
-  .quote-price { align-items: center; margin-top: 8mm; padding: 8mm; border-radius: 4mm; background: #071a33; color: #fff; }
-  .quote-price .quote-section-label { color: #58c7ff; }
+  .quote-price { align-items: center; margin-top: 8mm; padding: 8mm; border-radius: 4mm; background: linear-gradient(120deg, #10164a, #3c39a8 58%, #6928b4); color: #fff; }
+  .quote-price .quote-section-label { color: #9beaff; }
   .quote-price p:not(.quote-section-label) { margin: 0; color: #b5c4d7; font-size: 9pt; }
   .quote-price strong { white-space: nowrap; color: #fff; font-size: 22pt; }
   .quote-terms { display: grid; grid-template-columns: 1fr 1fr; gap: 10mm; margin-top: 9mm; }

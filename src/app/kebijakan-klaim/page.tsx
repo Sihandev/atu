@@ -24,7 +24,7 @@ export default function KebijakanKlaimPage() {
       <Section className="py-12 md:py-20">
         <Container>
           <div className="max-w-3xl mx-auto prose prose-slate prose-lg">
-            <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-lg mb-8">
+            <div className="mb-8 rounded-lg border border-accent/25 bg-accent-soft/70 p-4 text-accent">
               <strong>Catatan:</strong> Dokumen ini merupakan placeholder dan memerlukan tinjauan hukum resmi sebelum digunakan untuk publik.
             </div>
             <h2>1. Waktu Pelaporan</h2>

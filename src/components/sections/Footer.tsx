@@ -39,10 +39,10 @@ export function Footer() {
   return (
     /* Picks up where the CTA band's gradient ends so the two read as one
        continuous surface instead of showing a seam. */
-    <footer className="relative w-full overflow-hidden bg-[linear-gradient(180deg,#02060f_0%,#01030a_100%)]">
+    <footer className="relative w-full overflow-hidden bg-[linear-gradient(160deg,#11174a_0%,#090b2b_46%,#120829_100%)]">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(0,194,255,0.55),transparent)]"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(8,169,214,0.72),rgba(105,40,180,0.68),transparent)]"
       />
       <div className="mx-auto grid max-w-[var(--container-max)] grid-cols-1 gap-gutter px-6 py-16 md:grid-cols-2 md:px-10 lg:grid-cols-4 lg:px-[var(--spacing-margin-desktop)]">
         <div>

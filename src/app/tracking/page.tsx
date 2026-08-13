@@ -192,7 +192,7 @@ export default function TrackingPage() {
       <Navbar />
 
       <section className="relative overflow-hidden border-b border-line bg-grad-ink px-6 py-16 md:py-24">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_10%,rgba(11,95,255,0.32),transparent_36%),radial-gradient(circle_at_18%_90%,rgba(255,157,0,0.16),transparent_28%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_10%,rgba(8,169,214,0.3),transparent_36%),radial-gradient(circle_at_18%_90%,rgba(105,40,180,0.22),transparent_30%)]" />
         <div className="relative mx-auto max-w-4xl text-center">
           <div className="mx-auto mb-6 grid h-14 w-14 place-items-center rounded-2xl border border-white/15 bg-white/10 text-accent backdrop-blur-xl">
             <Route className="h-6 w-6" />
@@ -283,7 +283,7 @@ export default function TrackingPage() {
               <div className="relative flex flex-col justify-between gap-8 md:flex-row md:items-end">
                 <div>
                   <div className="flex items-center gap-2 font-mono text-label-sm text-white/45 uppercase">
-                    <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_0_5px_rgba(255,157,0,0.13)]" />
+                    <span className="h-2 w-2 rounded-full bg-accent shadow-[0_0_0_5px_rgba(105,40,180,0.16)]" />
                     Status pesanan
                   </div>
                   <p className="mt-5 font-mono text-sm tracking-wider text-white/50">{order.order_code}</p>
@@ -386,7 +386,7 @@ export default function TrackingPage() {
                       return (
                         <div key={`${checkpoint.ts}-${index}`} className="flex gap-4">
                           <div className="flex flex-col items-center">
-                            <span className={`mt-1 h-3 w-3 rounded-full ${index === 0 ? "bg-brand shadow-[0_0_0_5px_rgba(11,95,255,0.12)]" : "bg-line-2"}`} />
+                            <span className={`mt-1 h-3 w-3 rounded-full ${index === 0 ? "bg-brand shadow-[0_0_0_5px_rgba(20,117,203,0.14)]" : "bg-line-2"}`} />
                             {index < checkpoints.length - 1 && <span className="h-full min-h-16 w-px bg-line-2" />}
                           </div>
                           <div className="pb-7">
