@@ -80,7 +80,7 @@ export default function RootLayout({
     logo: `https://${brand.domain}/logo.png`,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "Jl. Enim Raya 2 No. 86",
+      streetAddress: "Jl. Sungai Bambu No. 01, RT 004/RW 006, Kelurahan Sungai Bambu, Kecamatan Tanjung Priok",
       addressLocality: "Jakarta Utara",
       addressRegion: "DKI Jakarta",
       postalCode: "14330",

@@ -3,7 +3,7 @@ import { BrandLogo } from "@/components/ui/BrandLogo";
 import { FloatingWhatsApp } from "@/components/ui/FloatingWhatsApp";
 import { brand } from "@/config/data";
 const columns = [
-    { title: "EKSPLORASI", links: [["Layanan", "/layanan"], ["Rute pengiriman", "/rute"], ["Cara pengiriman", "/cara-pengiriman"], ["Artikel & panduan", "/artikel"]] },
+    { title: "EKSPLORASI", links: [["Layanan", "/layanan"], ["Cara pengiriman", "/cara-pengiriman"], ["Artikel & panduan", "/artikel"]] },
     { title: "LAYANAN PELANGGAN", links: [["Buat pesanan", "/pesan"], ["Lacak kendaraan", "/tracking"], ["Pertanyaan umum", "/faq"], ["Hubungi kami", "/kontak"]] },
     { title: "PERUSAHAAN", links: [["Tentang Kirim Mobilku", "/tentang"], ["Kebijakan privasi", "/kebijakan-privasi"], ["Syarat & ketentuan", "/syarat-ketentuan"], ["Kebijakan klaim", "/kebijakan-klaim"]] },
 ];
