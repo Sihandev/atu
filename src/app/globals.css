@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================================
-   ALYSSA EXPRESS / CV. ALYSSA TRANS UTAMA — DESIGN TOKENS
+   KIRIM MOBILKU / CV. ALYSSA TRANS UTAMA — DESIGN TOKENS
    Official mark palette: cyan → blue → indigo → purple.
    Every colour is a CSS variable so `.dark` can reassign it.
    ============================================================ */
@@ -12,16 +12,16 @@
   color-scheme: light;
 
   /* ---- surfaces ---- */
-  --c-bg: #eef4ff;
-  --c-bg-2: #f8faff;
+  --c-bg: #f7f8fa;
+  --c-bg-2: #edf0f4;
   --c-surface: #ffffff;
   --c-surface-2: #f3f6ff;
   --c-surface-3: #e5eaff;
 
   /* ---- ink ---- */
-  --c-ink: #090b2b;
-  --c-ink-2: #454b76;
-  --c-ink-3: #747ca7;
+  --c-ink: #141b28;
+  --c-ink-2: #566170;
+  --c-ink-3: #697483;
 
   /* ---- brand: sampled from the Alyssa mark ---- */
   --c-brand: #1475cb;

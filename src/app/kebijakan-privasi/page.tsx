@@ -13,11 +13,11 @@ export default function KebijakanPrivasiPage() {
   return (
     <main className="min-h-screen pt-[72px]">
       <Navbar />
-      <Section className="bg-slate-50 border-b border-slate-200 py-12">
+      <Section className="bg-bg-2 border-b border-line py-12">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Kebijakan Privasi</h1>
-            <p className="text-lg text-slate-600">Terakhir diperbarui: 15 Oktober 2023</p>
+            <h1 className="text-4xl md:text-5xl font-bold text-ink mb-6">Kebijakan Privasi</h1>
+            <p className="text-lg text-ink-2">Terakhir diperbarui: 15 Oktober 2023</p>
           </div>
         </Container>
       </Section>

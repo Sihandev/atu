@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface ArticleCardProps {
   title: string;
@@ -13,19 +14,15 @@ interface ArticleCardProps {
 export function ArticleCard({ title, date, image, className, href }: ArticleCardProps) {
   const CardContent = (
     <>
-      <div className="aspect-[16/9] w-full bg-slate-100 overflow-hidden relative">
-        <div className="absolute inset-0 bg-slate-200" />
-        {/* Placeholder for actual image since we use local/optimized assets */}
-        <div className="absolute inset-0 flex items-center justify-center text-slate-400">
-           Image Placeholder
-        </div>
+      <div className="aspect-[16/9] w-full bg-surface-2 overflow-hidden relative">
+        <Image src={image} alt={title} fill unoptimized sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
       </div>
       <div className="p-6">
-        <time className="mb-3 block text-sm font-medium text-blue-600">{date}</time>
-        <h3 className="mb-4 text-xl font-bold leading-snug text-slate-900 group-hover:text-blue-600 transition-colors">
+        <time className="mb-3 block text-sm font-medium text-brand">{date}</time>
+        <h3 className="mb-4 text-xl font-bold leading-snug text-ink group-hover:text-brand transition-colors">
           {title}
         </h3>
-        <div className="inline-flex items-center text-sm font-medium text-slate-900 transition-colors group-hover:text-blue-600">
+        <div className="inline-flex items-center text-sm font-medium text-ink transition-colors group-hover:text-brand">
           Baca Selengkapnya
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </div>
@@ -35,14 +32,14 @@ export function ArticleCard({ title, date, image, className, href }: ArticleCard
 
   if (href) {
     return (
-      <Link href={href} className={cn("group block overflow-hidden rounded-[14px] border border-slate-200 bg-white transition-all duration-300 hover:shadow-[var(--shadow-lift)]", className)}>
+      <Link href={href} className={cn("group block overflow-hidden rounded-[14px] border border-line bg-surface transition-all duration-300 hover:shadow-[var(--shadow-lift)]", className)}>
         {CardContent}
       </Link>
     );
   }
 
   return (
-    <div className={cn("group overflow-hidden rounded-[14px] border border-slate-200 bg-white transition-all duration-300 hover:shadow-[var(--shadow-lift)]", className)}>
+    <div className={cn("group overflow-hidden rounded-[14px] border border-line bg-surface transition-all duration-300 hover:shadow-[var(--shadow-lift)]", className)}>
       {CardContent}
     </div>
   );

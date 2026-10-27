@@ -7,6 +7,7 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { brand } from "@/config/data";
 import type { Metadata } from "next";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Tentang Kami",
@@ -15,14 +16,14 @@ export const metadata: Metadata = {
 
 export default function TentangPage() {
   return (
-    <main className="min-h-screen pt-[72px]">
+    <main className="min-h-screen pt-[84px]">
       <Navbar />
 
-      <Section className="bg-slate-50 border-b border-slate-200 py-16 md:py-24">
+      <Section className="interior-hero">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Tentang Kami</h1>
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <h1 className="text-4xl md:text-5xl font-bold text-ink mb-6">Tentang Kami</h1>
+            <p className="text-xl text-ink-2 leading-relaxed">
               Kami adalah penyedia layanan logistik kendaraan yang berdedikasi untuk memberikan pengalaman pengiriman yang aman, transparan, dan dapat diandalkan ke seluruh pelosok Indonesia.
             </p>
           </div>
@@ -49,8 +50,8 @@ export default function TentangPage() {
                 </p>
               </div>
             </div>
-            <div className="order-1 md:order-2 bg-slate-200 rounded-2xl h-80 md:h-[500px] w-full flex items-center justify-center text-slate-400">
-              <span className="text-lg">Gambar Operasional Logistik</span>
+            <div className="order-1 md:order-2 relative overflow-hidden rounded-lg h-80 md:h-[500px] w-full">
+              <Image src="/img/hero-car-carrier.jpg" alt="Ilustrasi pengangkutan kendaraan dengan car carrier" fill unoptimized sizes="(max-width: 768px) 100vw, 50vw" className="object-cover" />
             </div>
           </div>
         </Container>

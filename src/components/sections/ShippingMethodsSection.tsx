@@ -1,6 +1,5 @@
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { shippingMethods } from "@/config/data";
 import { CheckCircle2 } from "lucide-react";
 

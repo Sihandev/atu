@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { navigation, brand } from "@/config/data";
+import { navigation } from "@/config/data";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { cn } from "@/lib/utils";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -51,7 +52,7 @@ export function Navbar() {
           : "border-b border-line bg-surface/80 backdrop-blur-2xl"
       )}
     >
-      <div className="mx-auto flex h-20 max-w-[var(--container-max)] items-center justify-between gap-6 px-6 md:px-10 lg:px-[var(--spacing-margin-desktop)]">
+      <div className="express-shell express-nav flex items-center justify-between gap-6">
         <Link
           href="/"
           onClick={() => setIsOpen(false)}
@@ -60,28 +61,18 @@ export function Navbar() {
             overHero ? "text-white" : "text-ink"
           )}
         >
-          <span className="block font-display text-xl font-extrabold tracking-[-0.03em]">
-            {brand.name}
-          </span>
-          <span
-            className={cn(
-              "mt-1 block font-mono text-label-sm uppercase transition-colors duration-500",
-              overHero ? "text-white/55" : "text-accent"
-            )}
-          >
-            Kendaraan &amp; Alat Berat
-          </span>
+          <BrandLogo />
         </Link>
 
-        <div className="hidden items-center gap-7 lg:flex">
-          {navigation.map((item) => {
+        <div className="hidden items-center gap-5 xl:gap-7 lg:flex">
+          {navigation.filter(item => item.href !== "/" && item.href !== "/artikel").map((item) => {
             const active = pathname === item.href;
             return (
               <Link
                 key={item.label}
                 href={item.href}
                 className={cn(
-                  "relative py-1 text-[15px] transition-colors duration-300",
+                  "relative py-1 text-[12px] transition-colors duration-300",
                   active
                     ? overHero
                       ? "font-semibold text-white"
@@ -111,7 +102,7 @@ export function Navbar() {
             )}
           />
 
-          <Link href="/cek-tarif" className="u-btn u-btn-primary u-btn-sheen">
+          <Link href="/pesan" className="u-btn u-btn-primary u-btn-sheen text-xs">
             <span className="sheen" />
             Cek Tarif
           </Link>
@@ -142,6 +133,7 @@ export function Navbar() {
       {/* Mobile drawer — solid colour first so it can never look see-through */}
       <div
         aria-hidden={!isOpen}
+        inert={!isOpen}
         className={cn(
           "fixed inset-0 z-40 flex h-screen flex-col overflow-y-auto overscroll-contain bg-bg px-6 pt-28 pb-10 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] lg:hidden",
           isOpen ? "translate-x-0" : "pointer-events-none translate-x-full"
@@ -164,7 +156,7 @@ export function Navbar() {
           ))}
         </ul>
         <Link
-          href="/cek-tarif"
+          href="/pesan"
           onClick={() => setIsOpen(false)}
           className="u-btn u-btn-primary mt-8 w-full py-4"
         >

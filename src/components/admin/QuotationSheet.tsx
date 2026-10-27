@@ -1,3 +1,4 @@
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import { brand } from "@/config/data";
 import { formatDateTime, type Order } from "@/lib/orders";
 
@@ -40,7 +41,7 @@ export function QuotationSheet({
       <div className="quote-page">
         <header className="quote-header">
           <div>
-            <p className="quote-brand">{brand.name}</p>
+            <BrandLogo />
             <p className="quote-legal">{brand.legalName}</p>
           </div>
           <div className="quote-company-contact">

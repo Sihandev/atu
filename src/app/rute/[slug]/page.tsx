@@ -50,7 +50,7 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-8">
               <div className="text-3xl md:text-5xl font-bold">{route.origin}</div>
-              <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-blue-600/20 text-blue-400">
+              <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-brand/20 text-blue-400">
                 <ArrowRight className="w-6 h-6" />
               </div>
               <div className="md:hidden text-blue-400">
@@ -67,14 +67,14 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
               <div className="flex items-center gap-2 bg-slate-800/50 rounded-xl px-6 py-4 border border-slate-700">
                 <Clock className="w-5 h-5 text-blue-400" />
                 <div className="text-left">
-                  <div className="text-xs text-slate-400">Estimasi Waktu</div>
+                  <div className="text-xs text-ink-3">Estimasi Waktu</div>
                   <div className="font-semibold">{route.duration}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 bg-slate-800/50 rounded-xl px-6 py-4 border border-slate-700">
                 <ShieldCheck className="w-5 h-5 text-blue-400" />
                 <div className="text-left">
-                  <div className="text-xs text-slate-400">Metode Tersedia</div>
+                  <div className="text-xs text-ink-3">Metode Tersedia</div>
                   <div className="font-semibold">{route.methods.join(", ")}</div>
                 </div>
               </div>
@@ -87,31 +87,31 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
         <Container>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="md:col-span-2 space-y-8">
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-                  <MapPin className="w-6 h-6 text-blue-600" />
+              <div className="bg-surface rounded-2xl shadow-sm border border-line p-6 md:p-8">
+                <h2 className="text-2xl font-bold text-ink mb-6 flex items-center gap-3">
+                  <MapPin className="w-6 h-6 text-brand" />
                   Proses & Transit
                 </h2>
                 <div className="space-y-6">
-                  <div className="bg-blue-50 border border-blue-100 p-4 rounded-xl text-slate-700">
+                  <div className="bg-brand-soft border border-line p-4 rounded-xl text-ink-2">
                     <strong>Info Transit:</strong> {route.transit}
                   </div>
 
                   <div className="mt-8">
-                    <h3 className="font-semibold text-slate-900 mb-4">Tahapan Perjalanan:</h3>
+                    <h3 className="font-semibold text-ink mb-4">Tahapan Perjalanan:</h3>
                     <div className="space-y-4">
                       {route.process.map((step, idx) => (
                         <div key={idx} className="flex gap-4">
                           <div className="flex flex-col items-center">
-                            <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-sm font-bold text-slate-500 z-10">
+                            <div className="w-8 h-8 rounded-full bg-surface-2 flex items-center justify-center text-sm font-bold text-ink-3 z-10">
                               {idx + 1}
                             </div>
                             {idx !== route.process.length - 1 && (
-                              <div className="w-px h-full bg-slate-200 mt-2 -mb-2"></div>
+                              <div className="w-px h-full bg-surface-3 mt-2 -mb-2"></div>
                             )}
                           </div>
                           <div className="pt-1 pb-4">
-                            <p className="text-slate-700 font-medium">{step}</p>
+                            <p className="text-ink-2 font-medium">{step}</p>
                           </div>
                         </div>
                       ))}
@@ -122,8 +122,8 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
 
               {route.faq.length > 0 && (
                 <div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-6">Pertanyaan Seputar Rute Ini</h3>
-                  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8">
+                  <h3 className="text-2xl font-bold text-ink mb-6">Pertanyaan Seputar Rute Ini</h3>
+                  <div className="bg-surface rounded-2xl shadow-sm border border-line p-6 md:p-8">
                     {route.faq.map((faq, idx) => (
                       <FAQAccordion
                         key={idx}
@@ -138,21 +138,21 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
             </div>
 
             <div className="space-y-6">
-              <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200">
-                <h3 className="font-bold text-slate-900 mb-4">Faktor Penentu Harga</h3>
+              <div className="bg-bg-2 rounded-2xl p-6 border border-line">
+                <h3 className="font-bold text-ink mb-4">Faktor Penentu Harga</h3>
                 <ul className="space-y-3">
                   {route.priceFactors.map((factor, idx) => (
-                    <li key={idx} className="flex items-start text-slate-600 text-sm">
-                      <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 mr-2 flex-shrink-0"></span>
+                    <li key={idx} className="flex items-start text-ink-2 text-sm">
+                      <span className="w-1.5 h-1.5 rounded-full bg-brand-soft0 mt-1.5 mr-2 flex-shrink-0"></span>
                       {factor}
                     </li>
                   ))}
                 </ul>
               </div>
 
-              <div className="bg-white rounded-2xl p-6 shadow-xl border border-slate-100">
-                <h3 className="font-bold text-slate-900 mb-2">Tertarik dengan Rute ini?</h3>
-                <p className="text-slate-600 text-sm mb-6">Dapatkan penawaran harga terbaik untuk pengiriman dari {route.origin} ke {route.destination}.</p>
+              <div className="bg-surface rounded-2xl p-6 shadow-xl border border-line">
+                <h3 className="font-bold text-ink mb-2">Tertarik dengan Rute ini?</h3>
+                <p className="text-ink-2 text-sm mb-6">Dapatkan penawaran harga terbaik untuk pengiriman dari {route.origin} ke {route.destination}.</p>
                 <Link
                   href={`/cek-tarif?origin=${route.origin}&destination=${route.destination}`}
                   className="u-btn u-btn-solid w-full"
@@ -163,10 +163,10 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
 
               {route.relatedRoutes.length > 0 && (
                 <div className="pt-6">
-                  <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">Rute Terkait</h3>
+                  <h3 className="text-sm font-bold text-ink-3 uppercase tracking-wider mb-4">Rute Terkait</h3>
                   <div className="space-y-2">
                     {route.relatedRoutes.map((rr, idx) => (
-                      <Link key={idx} href={`/rute/kirim-mobil-${rr}`} className="block text-blue-600 font-medium hover:underline text-sm">
+                      <Link key={idx} href={`/rute/kirim-mobil-${rr}`} className="block text-brand font-medium hover:underline text-sm">
                         Kirim Mobil {rr.replace('-', ' ke ').replace(/\b\w/g, l => l.toUpperCase())}
                       </Link>
                     ))}

@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Hanken_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import "./editorial.css";
+import "./brand.css";
+import "./experience.css";
 import { brand, coverage } from "@/config/data";
 
 const hanken = Hanken_Grotesk({

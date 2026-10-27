@@ -171,7 +171,7 @@ export default function OrderPage() {
               </p>
             )}
 
-            <form onSubmit={onSubmit} className="mt-12 space-y-10">
+            <form onSubmit={onSubmit} className="order-editorial mt-12 space-y-10">
               <fieldset>
                 <legend className="mb-5 font-mono text-label-sm text-brand uppercase">
                   Data Anda

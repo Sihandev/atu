@@ -117,7 +117,7 @@ export function OrderDrawer({
   const quoteMessage = [
     `Halo ${order.customer_name},`,
     "",
-    `Berikut penawaran resmi dari Alyssa Express (${quoteNumber(order)}):`,
+    `Berikut penawaran resmi dari Kirim Mobilku (${quoteNumber(order)}):`,
     `Rute: ${order.origin} → ${order.destination}`,
     `Kendaraan: ${vehicleSummary || order.vehicle_type || "Unit kendaraan"}`,
     `Harga penawaran: ${formatRupiah(numericPrice)}`,

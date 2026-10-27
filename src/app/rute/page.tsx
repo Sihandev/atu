@@ -14,14 +14,14 @@ export const metadata: Metadata = {
 
 export default function RuteIndexPage() {
   return (
-    <main className="min-h-screen pt-[72px]">
+    <main className="min-h-screen pt-[84px]">
       <Navbar />
 
-      <Section className="bg-slate-50 border-b border-slate-200 py-16 md:py-24">
+      <Section className="interior-hero">
         <Container>
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-6">Rute Pengiriman Populer</h1>
-            <p className="text-xl text-slate-600 leading-relaxed">
+            <h1 className="text-4xl md:text-5xl font-bold text-ink mb-6">Rute Pengiriman Populer</h1>
+            <p className="text-xl text-ink-2 leading-relaxed">
               Jelajahi berbagai rute pengiriman kendaraan yang kami layani ke seluruh penjuru Nusantara.
               Temukan informasi estimasi waktu dan metode untuk rute Anda.
             </p>
@@ -43,10 +43,10 @@ export default function RuteIndexPage() {
               />
             ))}
           </div>
-          <div className="mt-16 bg-blue-50 rounded-2xl p-8 border border-blue-100 text-center">
-            <h3 className="text-xl font-bold text-slate-900 mb-2">Tidak Menemukan Rute Anda?</h3>
-            <p className="text-slate-600 mb-6 max-w-2xl mx-auto">Kami melayani pengiriman ke hampir seluruh wilayah di Indonesia. Hubungi kami untuk rute spesifik Anda.</p>
-            <a href="/cek-tarif" className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-all">
+          <div className="mt-16 bg-brand-soft rounded-2xl p-8 border border-line text-center">
+            <h3 className="text-xl font-bold text-ink mb-2">Tidak Menemukan Rute Anda?</h3>
+            <p className="text-ink-2 mb-6 max-w-2xl mx-auto">Kami melayani pengiriman ke hampir seluruh wilayah di Indonesia. Hubungi kami untuk rute spesifik Anda.</p>
+            <a href="/cek-tarif" className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-brand hover:bg-brand-deep transition-all">
               Tanyakan Rute via WhatsApp
             </a>
           </div>

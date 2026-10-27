@@ -1,10 +1,10 @@
-import { Car, Truck, Anchor, Plane, ArrowRightCircle, CheckCircle } from "lucide-react";
+import { Car, Truck, Anchor } from "lucide-react";
 
 /* Sourced from alyssalogistik.co.id. Anything the live site does not publish
    is left empty rather than invented — see `email` below. */
 export const brand = {
   /* Trading name shown across the UI and the legal entity supplied by the owner. */
-  name: "Alyssa Express",
+  name: "Kirim Mobilku",
   legalName: "CV. Alyssa Trans Utama",
   tagline: "Jasa Pengiriman Kendaraan & Alat Berat",
   phone: "+62818631135",
@@ -347,7 +347,7 @@ export const articlesList = [
     id: "cara-kirim-mobil-antar-pulau",
     title: "Cara Kirim Mobil Antar Pulau: Panduan Lengkap",
     date: "12 Oct 2023",
-    image: "/article1.jpg",
+    image: "/img/hero-car-carrier.jpg",
     excerpt: "Memahami proses, syarat, dan estimasi biaya pengiriman mobil antar pulau menggunakan kapal laut.",
     content: "Pengiriman mobil antar pulau merupakan kebutuhan yang semakin tinggi seiring dengan mobilitas masyarakat Indonesia. Baik untuk keperluan pindah tugas, jual-beli kendaraan, maupun liburan, mengirimkan mobil menggunakan jasa ekspedisi terpercaya adalah pilihan tepat.\n\n### Metode Pengiriman Antar Pulau\nMetode yang paling umum digunakan adalah **Kapal RoRo (Roll-on/Roll-off)**. Kapal ini didesain khusus agar kendaraan dapat masuk (roll-on) dan keluar (roll-off) dengan penggeraknya sendiri.\n\n### Persiapan Sebelum Mengirim Mobil\n1. **Kosongkan Barang Berharga**: Pastikan tidak ada barang berharga yang tertinggal di dalam mobil.\n2. **Sisakan Sedikit BBM**: Jangan mengisi tangki bensin penuh, sisakan seperempat saja untuk keamanan pelayaran.\n3. **Cek Kondisi Kendaraan**: Periksa tekanan angin ban, rem, dan aki.\n4. **Siapkan Dokumen**: Fotokopi STNK, KTP Pengirim & Penerima.\n\n### Keuntungan Menggunakan Jasa Kami\nKami menyediakan layanan door-to-door, di mana Anda cukup menunggu di rumah, dan mobil akan kami jemput lalu kami antar sampai ke alamat tujuan dengan aman."
   },
@@ -355,7 +355,7 @@ export const articlesList = [
     id: "perbedaan-towing-dan-car-carrier",
     title: "Perbedaan Towing dan Car Carrier, Pilih Mana?",
     date: "05 Oct 2023",
-    image: "/article2.jpg",
+    image: "/img/self-drive.jpg",
     excerpt: "Ketahui perbedaan layanan towing dan car carrier agar Anda dapat memilih sesuai kebutuhan dan budget.",
     content: "Saat ingin mengirim mobil via darat, Anda sering dihadapkan pada dua pilihan utama: Towing dan Car Carrier. Apa perbedaannya?\n\n### Towing (Derek Gendong)\nTowing adalah layanan di mana satu truk hanya mengangkut satu mobil. Mobil Anda akan dinaikkan ke atas bak truk dan diantar langsung ke tujuan.\n\n**Kelebihan Towing:**\n- Pengiriman lebih cepat karena langsung berangkat.\n- Sangat aman dan eksklusif.\n- Cocok untuk mobil mewah, mobil sport, atau mobil mogok.\n\n### Car Carrier\nCar carrier adalah truk trailer besar yang dapat mengangkut 4 hingga 6 mobil sekaligus dalam satu perjalanan.\n\n**Kelebihan Car Carrier:**\n- Harga jauh lebih ekonomis.\n- Cocok untuk pengiriman jarak jauh dalam pulau yang sama.\n\n**Kesimpulan:** Jika Anda butuh cepat dan eksklusif, pilih Towing. Jika Anda mencari efisiensi biaya dan tidak terburu-buru, Car Carrier adalah jawabannya."
   },
@@ -363,7 +363,7 @@ export const articlesList = [
     id: "dokumen-yang-dibutuhkan-untuk-kirim-mobil",
     title: "Dokumen yang Dibutuhkan untuk Kirim Mobil",
     date: "28 Sep 2023",
-    image: "/article3.jpg",
+    image: "/img/roro.jpg",
     excerpt: "Persiapkan dokumen-dokumen ini sebelum Anda menyerahkan kendaraan kepada pihak ekspedisi.",
     content: "Pengiriman kendaraan memerlukan keabsahan dokumen untuk menghindari masalah hukum di perjalanan, terutama saat ada pemeriksaan oleh pihak berwajib atau saat akan menyeberang menggunakan kapal.\n\n### Dokumen Utama\n1. **STNK Asli / Fotokopi**: Untuk pengiriman darat dalam pulau, fotokopi STNK biasanya cukup. Namun untuk penyeberangan antar pulau, beberapa pelabuhan mewajibkan STNK asli (akan dikembalikan bersama mobil).\n2. **Fotokopi KTP Pengirim dan Penerima**: Digunakan untuk verifikasi identitas.\n3. **Surat Jalan dari Kepolisian**: Terkadang dibutuhkan untuk pengiriman antar pulau tertentu atau jika STNK sedang dalam proses perpanjangan/mutasi.\n\n### Dokumen Tambahan (Opsional)\n- **Surat Pelepasan (Untuk Kendaraan Perusahaan)**.\n- **Faktur Pembelian** (Jika mobil baru dan belum ada STNK).\n\nSelalu konsultasikan dengan admin kami mengenai syarat dokumen spesifik untuk rute pengiriman Anda."
   },
@@ -371,7 +371,7 @@ export const articlesList = [
     id: "apakah-barang-boleh-ditinggal-di-mobil",
     title: "Apakah Barang Boleh Ditinggal di Mobil Saat Dikirim?",
     date: "15 Sep 2023",
-    image: "/article1.jpg",
+    image: "/img/hero-car-carrier.jpg",
     excerpt: "Pertanyaan yang paling sering ditanyakan pelanggan. Temukan jawabannya di sini.",
     content: "Banyak pelanggan yang memanfaatkan pengiriman mobil sekaligus untuk mengirim barang-barang pindahan dengan cara menaruhnya di dalam mobil. Bolehkah hal ini dilakukan?\n\n### Kebijakan Umum\nSecara umum, kami **tidak merekomendasikan** meninggalkan barang di dalam mobil. Namun, kami memaklumi jika ada barang bawaan ringan (misalnya pakaian atau dokumen tidak berharga).\n\n### Syarat Jika Membawa Barang\n1. **Bukan Barang Berharga / Mudah Pecah**: Jangan tinggalkan laptop, perhiasan, atau barang elektronik mahal.\n2. **Bukan Barang Terlarang**: Senjata, narkoba, bahan mudah terbakar (termasuk parfum gas) sangat dilarang.\n3. **Tidak Menutupi Pandangan Driver**: Jika dikirim via car carrier atau kapal RoRo, petugas harus bisa memindahkan mobil. Barang yang terlalu penuh hingga menutupi kaca spion dalam atau jendela sangat membahayakan.\n\n### Disclaimer\nPihak ekspedisi dan asuransi **tidak menanggung kehilangan atau kerusakan barang** yang ditaruh di dalam mobil. Asuransi hanya mencakup fisik kendaraan itu sendiri."
   },
@@ -379,7 +379,7 @@ export const articlesList = [
     id: "penyebab-pengiriman-kendaraan-terlambat",
     title: "Penyebab Pengiriman Kendaraan Terlambat",
     date: "02 Sep 2023",
-    image: "/article2.jpg",
+    image: "/img/self-drive.jpg",
     excerpt: "Memahami faktor-faktor yang bisa menyebabkan estimasi waktu pengiriman bergeser.",
     content: "Meskipun kami selalu berusaha menepati estimasi waktu yang diberikan, ada kalanya pengiriman kendaraan mengalami keterlambatan. Hal ini biasanya disebabkan oleh faktor *Force Majeure* atau hal di luar kendali kami.\n\n### Faktor Alam dan Cuaca\nIni adalah penyebab paling umum, terutama untuk rute laut. Cuaca buruk, ombak tinggi, atau badai dapat membuat syahbandar melarang kapal berlayar hingga kondisi aman.\n\n### Kendala Teknis Kendaraan Pengangkut\nMeskipun armada kami dirawat secara rutin, kerusakan tak terduga pada truk (seperti pecah ban di jalan tol atau masalah mesin) bisa terjadi dan memakan waktu perbaikan.\n\n### Kemacetan Lalu Lintas\nPada musim liburan panjang atau mudik lebaran, jalur darat akan mengalami kemacetan parah yang berdampak pada waktu tempuh towing atau car carrier.\n\n### Antrean Pelabuhan\nKadang kala, kepadatan di pelabuhan membuat truk pengangkut atau kapal harus mengantre berjam-jam bahkan berhari-hari untuk bisa bongkar muat."
   },
@@ -387,7 +387,7 @@ export const articlesList = [
     id: "tips-memilih-jasa-kirim-mobil",
     title: "Tips Memilih Jasa Kirim Mobil yang Aman",
     date: "20 Aug 2023",
-    image: "/article3.jpg",
+    image: "/img/roro.jpg",
     excerpt: "Jangan salah pilih. Ikuti panduan ini untuk mendapatkan layanan logistik kendaraan yang terbaik.",
     content: "Mempercayakan aset bernilai puluhan hingga ratusan juta rupiah kepada pihak lain tentu membutuhkan kehati-hatian. Berikut adalah tips memilih jasa pengiriman mobil yang terpercaya.\n\n### 1. Cek Legalitas Perusahaan\nPastikan perusahaan memiliki izin usaha yang jelas, alamat kantor fisik yang valid, dan nomor kontak yang responsif.\n\n### 2. Transparansi Harga\nHindari jasa yang memberikan harga sangat murah di awal namun banyak biaya tersembunyi (hidden cost) di akhir. Jasa yang baik akan merinci biaya dari awal (termasuk asuransi, biaya pelabuhan, dll).\n\n### 3. Fasilitas Asuransi\nPastikan mereka bekerja sama dengan perusahaan asuransi terpercaya untuk perlindungan *Marine Cargo* atau asuransi perjalanan.\n\n### 4. Sistem Tracking\nJasa ekspedisi profesional biasanya memiliki sistem tracking atau customer service yang siap memberikan update posisi kendaraan Anda setiap saat.\n\n### 5. Dokumentasi Serah Terima\nPerhatikan bagaimana mereka melakukan proses serah terima. Perusahaan yang baik akan melakukan inspeksi fisik kendaraan secara detail dan mencatatnya dalam formulir serah terima."
   },
@@ -395,7 +395,7 @@ export const articlesList = [
     id: "cara-kirim-mobil-hasil-pembelian-dari-luar-kota",
     title: "Cara Kirim Mobil Hasil Pembelian dari Luar Kota",
     date: "10 Aug 2023",
-    image: "/article1.jpg",
+    image: "/img/hero-car-carrier.jpg",
     excerpt: "Membeli mobil impian dari kota lain? Begini cara amannya untuk membawa mobil tersebut pulang.",
     content: "Di era digital, membeli mobil bekas impian tak lagi terbatas pada kota tempat tinggal Anda. Namun, bagaimana cara membawa mobil tersebut pulang jika Anda tidak sempat mengambilnya sendiri?\n\n### Langkah-langkah Pengiriman\n1. **Selesaikan Transaksi Jual Beli**: Pastikan transaksi dengan penjual sudah selesai dan dokumen kendaraan sudah lengkap.\n2. **Hubungi Jasa Pengiriman Terpercaya**: Kami dapat membantu mengambil mobil tersebut langsung dari lokasi penjual (Door to Door).\n3. **Inspeksi oleh Tim Kami**: Saat penjemputan, tim kami akan melakukan inspeksi fisik eksterior dan mencocokkan dokumen. Kami akan mengirimkan foto/video kondisi mobil kepada Anda secara real-time.\n4. **Proses Pengiriman**: Mobil akan dikirim menggunakan Towing (untuk keamanan maksimal) atau Car Carrier menuju kota Anda.\n5. **Penerimaan**: Anda tinggal menunggu di rumah hingga mobil impian tiba.\n\nDengan layanan ini, proses beli mobil antar kota menjadi jauh lebih praktis dan bebas repot."
   }
