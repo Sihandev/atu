@@ -11,7 +11,7 @@ export const brand = {
   /* The live site publishes no email address. Left blank on purpose so the UI
      hides the field instead of showing an address that does not exist. */
   email: "",
-  address: "Jl. Sungai Bambu No. 01, RT 004/RW 006, Kelurahan Sungai Bambu, Kecamatan Tanjung Priok, Kota Administrasi Jakarta Utara, DKI Jakarta 14330.",
+  address: "Jl. Sungai Bambu No. 20, RT 004/RW 006, Kelurahan Sungai Bambu, Kecamatan Tanjung Priok, Kota Administrasi Jakarta Utara, DKI Jakarta 14330.",
   hours: "24 jam, setiap hari",
   domain: "alyssalogistik.co.id",
   whatsappMessage: "Halo, saya ingin bertanya tentang layanan pengiriman kendaraan.",
