@@ -65,7 +65,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
               <ul className="space-y-4">
                 {service.useCases.map((useCase, idx) => (
                   <li key={idx} className="flex items-start">
-                    <CheckCircle className="w-6 h-6 text-green-500 mr-3 flex-shrink-0" />
+                    <CheckCircle className="w-6 h-6 text-ok mr-3 flex-shrink-0" />
                     <span className="text-lg text-ink-2">{useCase}</span>
                   </li>
                 ))}

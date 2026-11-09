@@ -90,16 +90,16 @@ function cabShape() {
 }
 
 /* ---------- materials ---------- */
-const glass = new THREE.MeshPhysicalMaterial({ color: "#0b1622", metalness: .2, roughness: .05, clearcoat: 1, envMapIntensity: 2.2 });
-const chrome = new THREE.MeshStandardMaterial({ color: "#e6edf3", metalness: 1, roughness: .16 });
-const steel = new THREE.MeshStandardMaterial({ color: "#8d9aa8", metalness: .85, roughness: .32 });
-const rubber = new THREE.MeshStandardMaterial({ color: "#1b2027", roughness: .9 });
-const rimDark = new THREE.MeshStandardMaterial({ color: "#2a313a", metalness: .7, roughness: .5 });
-const piano = new THREE.MeshPhysicalMaterial({ color: "#07090d", metalness: .3, roughness: .25, clearcoat: 1 });
-const dark = new THREE.MeshStandardMaterial({ color: "#151d27", metalness: .5, roughness: .45 });
-const headlight = new THREE.MeshStandardMaterial({ color: "#ffffff", emissive: "#cfe8ff", emissiveIntensity: 3, toneMapped: false });
-const taillight = new THREE.MeshStandardMaterial({ color: "#ff2b44", emissive: "#ff2b44", emissiveIntensity: 2.4, toneMapped: false });
-const amber = new THREE.MeshStandardMaterial({ color: "#ffb347", emissive: "#ff9a1f", emissiveIntensity: 2, toneMapped: false });
+const glass = new THREE.MeshPhysicalMaterial({ color: "#12161b", metalness: .2, roughness: .05, clearcoat: 1, envMapIntensity: 2.2 });
+const chrome = new THREE.MeshStandardMaterial({ color: "#eaecef", metalness: 1, roughness: .16 });
+const steel = new THREE.MeshStandardMaterial({ color: "#969a9f", metalness: .85, roughness: .32 });
+const rubber = new THREE.MeshStandardMaterial({ color: "#1f2123", roughness: .9 });
+const rimDark = new THREE.MeshStandardMaterial({ color: "#2f3235", metalness: .7, roughness: .5 });
+const piano = new THREE.MeshPhysicalMaterial({ color: "#090a0b", metalness: .3, roughness: .25, clearcoat: 1 });
+const dark = new THREE.MeshStandardMaterial({ color: "#1b1e21", metalness: .5, roughness: .45 });
+const headlight = new THREE.MeshStandardMaterial({ color: "#ffffff", emissive: "#e0e7ee", emissiveIntensity: 3, toneMapped: false });
+const taillight = new THREE.MeshStandardMaterial({ color: "#ca606e", emissive: "#ca606e", emissiveIntensity: 2.4, toneMapped: false });
+const amber = new THREE.MeshStandardMaterial({ color: "#87a1bf", emissive: "#6d8db1", emissiveIntensity: 2, toneMapped: false });
 
 const tyreCache = new Map<string, THREE.LatheGeometry>();
 function tyreGeometry(size: number, width: number) {
@@ -192,15 +192,15 @@ function Logo({ crop, height, position, side }: { crop: keyof typeof LOGO_CROPS;
   }, [source, x, y, w, h]);
   const width = height * w / h, pad = height * .14;
   return <group position={position} rotation={[0, side === 1 ? 0 : Math.PI, 0]}>
-    <RoundedBox args={[width + pad * 2, height + pad * 2, .012]} radius={Math.min(.05, pad)} smoothness={3}><meshPhysicalMaterial color="#f7f8fa" roughness={.35} clearcoat={.6} /></RoundedBox>
+    <RoundedBox args={[width + pad * 2, height + pad * 2, .012]} radius={Math.min(.05, pad)} smoothness={3}><meshPhysicalMaterial color="#f8f8f9" roughness={.35} clearcoat={.6} /></RoundedBox>
     <mesh position={[0, 0, .0075]}><planeGeometry args={[width, height]} /><meshStandardMaterial map={texture} roughness={.4} /></mesh>
   </group>;
 }
 
 function Carrier() {
   const cab = useMemo(() => extrude(cabShape(), 1.5, .06), []);
-  const red = useMemo(() => new THREE.MeshPhysicalMaterial({ color: "#d9142f", metalness: .45, roughness: .2, clearcoat: 1, clearcoatRoughness: .06 }), []);
-  const deck = useMemo(() => new THREE.MeshStandardMaterial({ color: "#2b3a4b", metalness: .75, roughness: .38 }), []);
+  const red = useMemo(() => new THREE.MeshPhysicalMaterial({ color: "#b23b4b", metalness: .45, roughness: .2, clearcoat: 1, clearcoatRoughness: .06 }), []);
+  const deck = useMemo(() => new THREE.MeshStandardMaterial({ color: "#353b41", metalness: .75, roughness: .38 }), []);
   const shieldAngle = Math.atan2(.64, -.25);
   return <group position={[-.3, -.65, 0]}>
     {/* chassis */}
@@ -249,10 +249,10 @@ function Carrier() {
     {/* wheels */}
     {[-2.45, -1.55, 3.22].flatMap(x => [-.66, .66].map(z => <Wheel key={`${x}${z}`} x={x} z={z} size={.4} width={x < 0 ? .34 : .28} />))}
     {/* cargo */}
-    <Car position={[-1.95, .95, 0]} kind="suv" color="#eef2f6" />
-    <Car position={[.75, .95, 0]} color="#16416a" />
-    <Car position={[-1.95, 2.16, 0]} color="#d11a33" />
-    <Car position={[.8, 2.16, 0]} kind="suv" rotation={-.04} color="#9aa6b2" />
+    <Car position={[-1.95, .95, 0]} kind="suv" color="#f1f2f3" />
+    <Car position={[.75, .95, 0]} color="#313f4f" />
+    <Car position={[-1.95, 2.16, 0]} color="#ac3f4d" />
+    <Car position={[.8, 2.16, 0]} kind="suv" rotation={-.04} color="#a2a6aa" />
   </group>;
 }
 
@@ -288,7 +288,7 @@ void main(){
 function Floor() {
   const material = useRef<THREE.ShaderMaterial>(null);
   const moving = useContext(Motion);
-  const uniforms = useMemo(() => ({ uTime: { value: 0 }, uBase: { value: new THREE.Color("#0f1b2c") }, uAccent: { value: new THREE.Color("#ff3858") }, uCool: { value: new THREE.Color("#4b88c4") } }), []);
+  const uniforms = useMemo(() => ({ uTime: { value: 0 }, uBase: { value: new THREE.Color("#181d23") }, uAccent: { value: new THREE.Color("#cd6a77") }, uCool: { value: new THREE.Color("#72869d") } }), []);
   useFrame((_, delta) => { if (moving && material.current) material.current.uniforms.uTime.value += delta * SPEED; });
   return <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -.652, 0]} renderOrder={-1}>
     <planeGeometry args={[19, 19]} />
@@ -307,20 +307,20 @@ export default function TransportStudio({ active, rotate }: { active: boolean; r
   return <Canvas frameloop={active ? (rotate ? "always" : "demand") : "never"} dpr={[1, 1.5]} camera={{ position: [11.2, 5.6, 12.2], fov: 32 }} gl={{ alpha: true, antialias: true, powerPreference: "high-performance" }} aria-label="Model 3D truk car carrier dengan empat mobil">
     <Motion.Provider value={rotate}>
       <Suspense fallback={null}>
-        <hemisphereLight args={["#cfe3ff", "#1a1020", .9]} />
-        <directionalLight position={[5, 9, 4]} intensity={2.6} color="#f2f7ff" />
-        <directionalLight position={[-7, 3, -5]} intensity={3.2} color="#ff5a78" />
-        <spotLight position={[0, 9, 0]} angle={.55} penumbra={1} intensity={40} color="#8fc0ff" />
+        <hemisphereLight args={["#e0e7ee", "#15181b", .9]} />
+        <directionalLight position={[5, 9, 4]} intensity={2.6} color="#f7f8fa" />
+        <directionalLight position={[-7, 3, -5]} intensity={3.2} color="#d6838e" />
+        <spotLight position={[0, 9, 0]} angle={.55} penumbra={1} intensity={40} color="#b6c6d8" />
         <Environment resolution={256} frames={1}>
           <Lightformer form="rect" position={[0, 7, 0]} rotation={[Math.PI / 2, 0, 0]} scale={[14, 4, 1]} intensity={2.5} />
-          <Lightformer form="rect" position={[0, 2, 8]} scale={[16, 2.2, 1]} intensity={1.6} color="#dfeeff" />
-          <Lightformer form="rect" position={[-8, 2, 0]} rotation={[0, Math.PI / 2, 0]} scale={[10, 3, 1]} color="#ff3d5f" intensity={2.4} />
-          <Lightformer form="ring" position={[7, 3, -6]} scale={3} color="#4d9dde" intensity={3} />
+          <Lightformer form="rect" position={[0, 2, 8]} scale={[16, 2.2, 1]} intensity={1.6} color="#eaeff4" />
+          <Lightformer form="rect" position={[-8, 2, 0]} rotation={[0, Math.PI / 2, 0]} scale={[10, 3, 1]} color="#cf6e7a" intensity={2.4} />
+          <Lightformer form="ring" position={[7, 3, -6]} scale={3} color="#7c94af" intensity={3} />
         </Environment>
         <Float><Carrier /></Float>
         <Floor />
-        <ContactShadows position={[0, -.645, 0]} scale={12} opacity={.75} blur={2.2} far={4} resolution={512} frames={1} color="#02060c" />
-        <Sparkles count={45} scale={[13, 4.5, 9]} position={[0, 1.4, 0]} size={2.2} speed={.25} opacity={.45} color="#ff9aae" />
+        <ContactShadows position={[0, -.645, 0]} scale={12} opacity={.75} blur={2.2} far={4} resolution={512} frames={1} color="#050709" />
+        <Sparkles count={45} scale={[13, 4.5, 9]} position={[0, 1.4, 0]} size={2.2} speed={.25} opacity={.45} color="#e6b3ba" />
         <OrbitControls enableZoom={false} enablePan={false} enableDamping autoRotate={rotate} autoRotateSpeed={.4} minPolarAngle={.75} maxPolarAngle={1.32} target={[.2, .55, 0]} />
       </Suspense>
     </Motion.Provider>

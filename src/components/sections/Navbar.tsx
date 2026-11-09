@@ -11,19 +11,7 @@ import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
-
-  /* The homepage hero is dark in both themes, so the bar starts transparent
-     with light type and swaps to a solid glass bar once it clears the hero. */
-  const overHero = pathname === "/" && !scrolled && !isOpen;
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -47,19 +35,14 @@ export function Navbar() {
     <nav
       className={cn(
         "fixed top-0 z-50 w-full transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-        overHero
-          ? "border-b border-white/10 bg-transparent"
-          : "border-b border-line bg-surface/80 backdrop-blur-2xl"
+        "border-b border-line bg-bg/85 backdrop-blur-2xl"
       )}
     >
       <div className="express-shell express-nav flex items-center justify-between gap-6">
         <Link
           href="/"
           onClick={() => setIsOpen(false)}
-          className={cn(
-            "z-50 shrink-0 leading-none transition-colors duration-500",
-            overHero ? "text-white" : "text-ink"
-          )}
+          className="z-50 shrink-0 leading-none text-ink"
         >
           <BrandLogo />
         </Link>
@@ -73,13 +56,7 @@ export function Navbar() {
                 href={item.href}
                 className={cn(
                   "relative py-1 text-[12px] transition-colors duration-300",
-                  active
-                    ? overHero
-                      ? "font-semibold text-white"
-                      : "font-semibold text-brand"
-                    : overHero
-                      ? "text-white/70 hover:text-white"
-                      : "text-ink-2 hover:text-brand"
+                  active ? "font-semibold text-brand" : "text-ink-2 hover:text-brand"
                 )}
               >
                 {item.label}
@@ -87,7 +64,7 @@ export function Navbar() {
                   <span
                     className={cn(
                       "absolute -bottom-0.5 left-0 h-[2px] w-full rounded-full",
-                      overHero ? "bg-white/70" : "bg-grad-accent"
+                      "bg-brand"
                     )}
                   />
                 )}
@@ -95,12 +72,7 @@ export function Navbar() {
             );
           })}
 
-          <ThemeToggle
-            className={cn(
-              "transition-colors duration-500",
-              overHero ? "border-white/25 text-white hover:border-white/60" : "text-ink"
-            )}
-          />
+          <ThemeToggle className="text-ink" />
 
           <Link href="/pesan" className="u-btn u-btn-primary u-btn-sheen text-xs">
             <span className="sheen" />
@@ -109,18 +81,10 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
-          <ThemeToggle
-            className={cn(
-              "z-50 transition-colors duration-500",
-              overHero ? "border-white/25 text-white" : "text-ink"
-            )}
-          />
+          <ThemeToggle className="z-50 text-ink" />
           <button
             type="button"
-            className={cn(
-              "z-50 -mr-2 p-2 transition-colors duration-500",
-              overHero ? "text-white" : "text-ink"
-            )}
+            className="z-50 -mr-2 p-2 text-ink"
             onClick={() => setIsOpen(!isOpen)}
             aria-expanded={isOpen}
             aria-label={isOpen ? "Tutup menu" : "Buka menu"}

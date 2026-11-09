@@ -2,8 +2,9 @@
 
 /* ============================================================
    KIRIM MOBILKU / CV. ALYSSA TRANS UTAMA — DESIGN TOKENS
-   Official mark palette: cyan → blue → indigo → purple.
-   Every colour is a CSS variable so `.dark` can reassign it.
+   Warm ivory, midnight ink, soft garnet, petrol blue, champagne.
+   Every colour is a variable; `.dark` reassigns the whole set, so
+   components never need their own dark-mode colours.
    ============================================================ */
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -11,55 +12,67 @@
 :root {
   color-scheme: light;
 
-  /* ---- surfaces ---- */
-  --c-bg: #f7f8fa;
-  --c-bg-2: #edf0f4;
-  --c-surface: #ffffff;
-  --c-surface-2: #f3f6ff;
-  --c-surface-3: #e5eaff;
+  /* ---- surfaces: warm ivory, never stark white ---- */
+  --c-bg: #f6f3ee;
+  --c-bg-2: #eeeae2;
+  --c-surface: #fcfbf8;
+  --c-surface-2: #f3efe7;
+  --c-surface-3: #e8e2d6;
 
-  /* ---- ink ---- */
-  --c-ink: #141b28;
-  --c-ink-2: #566170;
-  --c-ink-3: #697483;
+  /* ---- ink: midnight navy rather than black ---- */
+  --c-ink: #1c2230;
+  --c-ink-2: #565d6b;
+  --c-ink-3: #686e7c;
 
-  /* ---- brand: sampled from the Alyssa mark ---- */
-  --c-brand: #1475cb;
-  --c-brand-2: #08a9d6;
-  --c-brand-deep: #2851b8;
-  --c-brand-soft: #dceaff;
-  --c-brand-dim: #77b8ee;
+  /* ---- brand: soft garnet (from the logo's road) + petrol (its water) ---- */
+  --c-brand: #a42d3a;
+  --c-brand-2: #2f5873;
+  --c-brand-deep: #7f2230;
+  --c-brand-soft: #f3e3e1;
+  --c-brand-dim: #d49aa0;
 
-  /* ---- accent: violet end of the mark ---- */
-  --c-accent: #6928b4;
-  --c-accent-2: #8b4dd3;
-  --c-accent-soft: #eee4ff;
+  --c-accent: #2f5873;
+  --c-accent-2: #4f7a95;
+  --c-accent-soft: #e2eaee;
 
-  --c-ok: #00b56a;
-  --c-err: #e5484d;
+  /* ---- champagne: hairlines and small details only ---- */
+  --c-gold: #a98a55;
+
+  /* ---- primary action (button fill, always paired with white text) ---- */
+  --c-cta: #a42d3a;
+  --c-cta-hover: #8a2230;
+
+  --c-ok: #2f8f63;
+  --c-err: #c0453f;
 
   /* ---- lines ---- */
-  --c-line: rgba(24, 31, 92, 0.1);
-  --c-line-2: rgba(24, 31, 92, 0.18);
+  --c-line: rgba(28, 34, 48, 0.09);
+  --c-line-2: rgba(28, 34, 48, 0.17);
+
+  /* ---- deep bands: hero, care section, footer. Dark in both themes. ---- */
+  --c-deep: #1b2230;
+  --c-deep-2: #242c3d;
+  --c-on-deep: #f3efe8;
+  --c-on-deep-2: #b8bcc7;
+  --c-on-deep-3: #868c9b;
+  --c-deep-line: rgba(243, 239, 232, 0.12);
 
   /* ---- glass ---- */
-  --glass-bg: linear-gradient(
-    145deg,
-    rgba(255, 255, 255, 0.92) 0%,
-    rgba(255, 255, 255, 0.68) 50%,
-    rgba(221, 229, 255, 0.68) 100%
-  );
-  --glass-ring: rgba(255, 255, 255, 0.85);
-  --glass-shadow: 0 24px 60px -28px rgba(25, 35, 102, 0.32);
+  --glass-bg: rgba(252, 251, 248, 0.82);
+  --glass-ring: rgba(255, 255, 255, 0.7);
+  --glass-shadow: 0 1px 2px rgba(28, 34, 48, 0.04), 0 18px 40px -22px rgba(28, 34, 48, 0.16);
 
-  /* ---- gradients ---- */
-  --grad-brand: linear-gradient(135deg, #08a9d6 0%, #1475cb 35%, #3c39a8 68%, #6928b4 100%);
-  --grad-brand-rev: linear-gradient(135deg, #6928b4 0%, #2851b8 50%, #08a9d6 100%);
-  --grad-accent: linear-gradient(135deg, #3c39a8 0%, #6928b4 100%);
-  --grad-ink: linear-gradient(160deg, #151a50 0%, #090b2b 52%, #050617 100%);
-  --grad-text: linear-gradient(115deg, #090b2b 0%, #2851b8 42%, #6928b4 76%, #08a9d6 100%);
-  --grad-text-inv: linear-gradient(115deg, #ffffff 0%, #bfeaff 40%, #bba5ff 100%);
-  --grad-sheen: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.6) 48%, transparent 76%);
+  --shadow-soft: 0 1px 2px rgba(28, 34, 48, 0.04), 0 14px 34px -16px rgba(28, 34, 48, 0.14);
+  --shadow-lift: 0 2px 4px rgba(28, 34, 48, 0.05), 0 24px 48px -20px rgba(28, 34, 48, 0.22);
+
+  /* ---- gradients: kept as variables for legacy rules, but near-flat ---- */
+  --grad-brand: linear-gradient(135deg, #b23441 0%, #a42d3a 55%, #8f2733 100%);
+  --grad-brand-rev: linear-gradient(135deg, #8a2230 0%, #7f2230 100%);
+  --grad-accent: linear-gradient(135deg, #3a6481 0%, #2f5873 100%);
+  --grad-ink: linear-gradient(160deg, #232b3b 0%, #1b2230 55%, #141a26 100%);
+  --grad-text: linear-gradient(#1c2230, #1c2230);
+  --grad-text-inv: linear-gradient(#f3efe8, #f3efe8);
+  --grad-sheen: linear-gradient(100deg, transparent 20%, rgba(255, 255, 255, 0.45) 48%, transparent 76%);
 
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -73,43 +86,57 @@
 .dark {
   color-scheme: dark;
 
-  --c-bg: #050617;
-  --c-bg-2: #090b22;
-  --c-surface: #10132e;
-  --c-surface-2: #15183a;
-  --c-surface-3: #1d2250;
+  /* warm charcoal, lifted off black so panels read as layers */
+  --c-bg: #13161c;
+  --c-bg-2: #181c24;
+  --c-surface: #1c212a;
+  --c-surface-2: #232935;
+  --c-surface-3: #2c3341;
 
-  --c-ink: #f0f3ff;
-  --c-ink-2: #abb3dc;
-  --c-ink-3: #737eae;
+  --c-ink: #ece8e0;
+  --c-ink-2: #aeb2bd;
+  --c-ink-3: #878c99;
 
-  --c-brand: #4f8ee6;
-  --c-brand-2: #24c4e7;
-  --c-brand-deep: #2851b8;
-  --c-brand-soft: #182d61;
-  --c-brand-dim: #72aaf0;
+  --c-brand: #dd7e88;
+  --c-brand-2: #8fb2c9;
+  --c-brand-deep: #b8434f;
+  --c-brand-soft: #34222a;
+  --c-brand-dim: #9b5a63;
 
-  --c-accent: #a368e8;
-  --c-accent-2: #c29afa;
-  --c-accent-soft: #2b194d;
+  --c-accent: #8fb2c9;
+  --c-accent-2: #b3cddc;
+  --c-accent-soft: #212e38;
 
-  --c-line: rgba(229, 234, 255, 0.1);
-  --c-line-2: rgba(229, 234, 255, 0.2);
+  --c-gold: #cdb27c;
 
-  --glass-bg: linear-gradient(
-    145deg,
-    rgba(42, 46, 104, 0.58) 0%,
-    rgba(16, 19, 46, 0.76) 52%,
-    rgba(5, 6, 23, 0.88) 100%
-  );
-  --glass-ring: rgba(255, 255, 255, 0.12);
-  --glass-shadow: 0 30px 70px -32px rgba(0, 0, 0, 0.85);
+  --c-cta: #b43d4a;
+  --c-cta-hover: #c94b58;
 
-  --grad-brand: linear-gradient(135deg, #24c4e7 0%, #4f8ee6 36%, #6350d7 68%, #a368e8 100%);
-  --grad-brand-rev: linear-gradient(135deg, #a368e8 0%, #4f8ee6 55%, #24c4e7 100%);
-  --grad-accent: linear-gradient(135deg, #6350d7 0%, #a368e8 100%);
-  --grad-ink: linear-gradient(160deg, #181d4b 0%, #090b22 55%, #030412 100%);
-  --grad-text: linear-gradient(115deg, #ffffff 0%, #8fdaf2 42%, #c29afa 100%);
+  --c-ok: #5fc08f;
+  --c-err: #e5726b;
+
+  --c-line: rgba(236, 232, 224, 0.09);
+  --c-line-2: rgba(236, 232, 224, 0.17);
+
+  --c-deep: #0d1015;
+  --c-deep-2: #151a22;
+  --c-on-deep: #ece8e0;
+  --c-on-deep-2: #aeb2bd;
+  --c-on-deep-3: #7d8392;
+  --c-deep-line: rgba(236, 232, 224, 0.1);
+
+  --glass-bg: rgba(28, 33, 42, 0.78);
+  --glass-ring: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 24px 50px -26px rgba(0, 0, 0, 0.7);
+
+  --shadow-soft: 0 1px 2px rgba(0, 0, 0, 0.3), 0 14px 34px -16px rgba(0, 0, 0, 0.55);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.35), 0 24px 48px -20px rgba(0, 0, 0, 0.7);
+
+  --grad-brand: linear-gradient(135deg, #c04a57 0%, #b43d4a 55%, #a03440 100%);
+  --grad-brand-rev: linear-gradient(135deg, #c94b58 0%, #b8434f 100%);
+  --grad-accent: linear-gradient(135deg, #6f94ab 0%, #5a8099 100%);
+  --grad-ink: linear-gradient(160deg, #151a22 0%, #0d1015 100%);
+  --grad-text: linear-gradient(#ece8e0, #ece8e0);
 }
 
 /* Map the variables into Tailwind. `@theme inline` emits var() references,
@@ -135,6 +162,15 @@
   --color-accent-2: var(--c-accent-2);
   --color-accent-soft: var(--c-accent-soft);
 
+  --color-gold: var(--c-gold);
+  --color-cta: var(--c-cta);
+  --color-cta-hover: var(--c-cta-hover);
+  --color-deep: var(--c-deep);
+  --color-deep-2: var(--c-deep-2);
+  --color-on-deep: var(--c-on-deep);
+  --color-on-deep-2: var(--c-on-deep-2);
+  --color-on-deep-3: var(--c-on-deep-3);
+  --color-err: var(--c-err);
   --color-ok: var(--c-ok);
   --color-line: var(--c-line);
   --color-line-2: var(--c-line-2);

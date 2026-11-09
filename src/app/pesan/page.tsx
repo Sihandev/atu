@@ -396,7 +396,7 @@ export default function OrderPage() {
               </fieldset>
 
               {error && (
-                <p className="rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-sm text-red-500">
+                <p className="rounded-2xl border border-err/30 bg-err/10 px-5 py-4 text-sm text-err">
                   {error}
                 </p>
               )}

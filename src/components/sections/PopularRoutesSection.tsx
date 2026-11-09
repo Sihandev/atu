@@ -10,7 +10,7 @@ import { staggerContainer } from "@/lib/motion";
 
 export function PopularRoutesSection() {
   return (
-    <Section id="rute" className="bg-slate-50">
+    <Section id="rute" className="bg-surface-2">
       <Container>
         <SectionHeading
           title="Rute Populer Kami"

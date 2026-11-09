@@ -30,29 +30,29 @@ function Car({ color, position, scale = 1, phase = 0 }: CarProps) {
       </RoundedBox>
       <mesh position={[-0.12, 0.39, 0.42]}>
         <boxGeometry args={[0.78, 0.22, 0.02]} />
-        <meshPhysicalMaterial color="#0b1220" roughness={0.08} transmission={0.18} />
+        <meshPhysicalMaterial color="#121519" roughness={0.08} transmission={0.18} />
       </mesh>
       {[-0.72, 0.72].map((x) =>
         [-0.5, 0.5].map((z) => (
           <group key={`${x}-${z}`} position={[x, -0.29, z * 0.82]} rotation={[Math.PI / 2, 0, 0]}>
             <mesh castShadow>
               <cylinderGeometry args={[0.24, 0.24, 0.18, 24]} />
-              <meshStandardMaterial color="#101114" metalness={0.4} roughness={0.55} />
+              <meshStandardMaterial color="#111213" metalness={0.4} roughness={0.55} />
             </mesh>
             <mesh position={[0, 0.1, 0]}>
               <cylinderGeometry args={[0.11, 0.11, 0.19, 16]} />
-              <meshStandardMaterial color="#cbd1d8" metalness={0.95} roughness={0.18} />
+              <meshStandardMaterial color="#cfd1d4" metalness={0.95} roughness={0.18} />
             </mesh>
           </group>
         )),
       )}
       <mesh position={[-1.12, 0, 0]}>
         <boxGeometry args={[0.03, 0.12, 0.62]} />
-        <meshStandardMaterial color="#e7efff" emissive="#d9e7ff" emissiveIntensity={0.7} />
+        <meshStandardMaterial color="#eff3f7" emissive="#e6ecf2" emissiveIntensity={0.7} />
       </mesh>
       <mesh position={[1.12, 0, 0]}>
         <boxGeometry args={[0.03, 0.1, 0.58]} />
-        <meshStandardMaterial color="#ef4444" emissive="#ef4444" emissiveIntensity={0.7} />
+        <meshStandardMaterial color="#cc6774" emissive="#cc6774" emissiveIntensity={0.7} />
       </mesh>
     </group>
   );
@@ -66,8 +66,8 @@ function Carrier() {
     rig.current.rotation.y = -0.3 + Math.sin(clock.elapsedTime * 0.28) * 0.025;
   });
 
-  const cobalt = "#2851b8";
-  const steel = "#151a50";
+  const cobalt = "#576e89";
+  const steel = "#28323d";
 
   return (
     <group ref={rig} position={[0.7, -0.7, 0]} rotation={[0.02, -0.3, 0]}>
@@ -76,7 +76,7 @@ function Carrier() {
           <meshPhysicalMaterial color={cobalt} metalness={0.7} roughness={0.24} clearcoat={1} />
         </RoundedBox>
         <RoundedBox args={[0.72, 0.58, 1.42]} radius={0.1} smoothness={3} position={[-0.46, 0.28, 0]}>
-          <meshPhysicalMaterial color="#101827" roughness={0.08} transmission={0.12} />
+          <meshPhysicalMaterial color="#171b20" roughness={0.08} transmission={0.12} />
         </RoundedBox>
       </group>
 
@@ -92,7 +92,7 @@ function Carrier() {
           {[-0.72, 0.72].map((z) => (
             <mesh key={z} position={[x, -0.78, z]} rotation={[Math.PI / 2, 0, 0]} castShadow>
               <cylinderGeometry args={[0.38, 0.38, 0.25, 28]} />
-              <meshStandardMaterial color="#111318" metalness={0.45} roughness={0.5} />
+              <meshStandardMaterial color="#131416" metalness={0.45} roughness={0.5} />
             </mesh>
           ))}
         </group>
@@ -111,9 +111,9 @@ function Carrier() {
         </group>
       ))}
 
-      <Car color="#f4f0e8" position={[-2.5, -0.18, 0]} scale={0.68} phase={0.5} />
-      <Car color="#10141d" position={[-0.85, -0.18, 0]} scale={0.68} phase={1.5} />
-      <Car color="#aeb7c4" position={[-2.3, 0.9, 0]} scale={0.68} phase={2.5} />
+      <Car color="#eceef0" position={[-2.5, -0.18, 0]} scale={0.68} phase={0.5} />
+      <Car color="#141619" position={[-0.85, -0.18, 0]} scale={0.68} phase={1.5} />
+      <Car color="#b5b9bd" position={[-2.3, 0.9, 0]} scale={0.68} phase={2.5} />
     </group>
   );
 }
@@ -151,12 +151,12 @@ function RouteOrbit() {
   return (
     <group>
       <mesh ref={lineRef} geometry={geometry}>
-        <meshBasicMaterial color="#3c39a8" transparent opacity={0.5} />
+        <meshBasicMaterial color="#5d6f84" transparent opacity={0.5} />
       </mesh>
       <mesh ref={particle}>
         <sphereGeometry args={[0.11, 16, 16]} />
-        <meshBasicMaterial color="#8b4dd3" />
-        <pointLight color="#6928b4" intensity={2.4} distance={2.8} />
+        <meshBasicMaterial color="#798ea7" />
+        <pointLight color="#566c87" intensity={2.4} distance={2.8} />
       </mesh>
     </group>
   );
@@ -180,14 +180,14 @@ function CameraRig() {
 function Scene() {
   return (
     <>
-      <fog attach="fog" args={["#eef4ff", 10, 18]} />
+      <fog attach="fog" args={["#f4f6f9", 10, 18]} />
       <ambientLight intensity={1.35} />
-      <directionalLight position={[4, 8, 6]} intensity={3.4} color="#e9faff" castShadow shadow-mapSize={[1024, 1024]} />
-      <directionalLight position={[-5, 2, -4]} intensity={2.2} color="#6555df" />
+      <directionalLight position={[4, 8, 6]} intensity={3.4} color="#f1f4f7" castShadow shadow-mapSize={[1024, 1024]} />
+      <directionalLight position={[-5, 2, -4]} intensity={2.2} color="#8298b2" />
       <pointLight position={[2, 1, 4]} intensity={2.2} color="#ffffff" />
       <RouteOrbit />
       <Carrier />
-      <ContactShadows position={[0, -1.55, 0]} opacity={0.32} scale={12} blur={2.6} far={5} color="#41506b" />
+      <ContactShadows position={[0, -1.55, 0]} opacity={0.32} scale={12} blur={2.6} far={5} color="#4f565d" />
       <CameraRig />
     </>
   );
@@ -207,10 +207,10 @@ export function OrbitalFleet() {
           <Scene />
         </Suspense>
       </Canvas>
-      <div className="pointer-events-none absolute left-[8%] top-[17%] rounded-full border border-blue-600/25 bg-white/55 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-blue-800 backdrop-blur-md">
+      <div className="pointer-events-none absolute left-[8%] top-[17%] rounded-full border border-brand/25 bg-white/55 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-accent backdrop-blur-md">
         Jakarta / JKT
       </div>
-      <div className="pointer-events-none absolute bottom-[19%] right-[5%] rounded-full border border-blue-600/25 bg-white/55 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-blue-800 backdrop-blur-md">
+      <div className="pointer-events-none absolute bottom-[19%] right-[5%] rounded-full border border-brand/25 bg-white/55 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-accent backdrop-blur-md">
         Makassar / MKS
       </div>
     </div>

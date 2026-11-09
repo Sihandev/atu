@@ -1,7 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ExternalLink, FileText, Link2, MessageCircle, Printer, Send, X } from "lucide-react";
+import {
+  ExternalLink,
+  FileText,
+  Link2,
+  MessageCircle,
+  Printer,
+  Send,
+  Truck,
+  Wallet,
+  X,
+} from "lucide-react";
 import {
   ORDER_STATUSES,
   STATUS_META,
@@ -17,6 +27,24 @@ import {
   QuotationSheet,
   quoteNumber,
 } from "@/components/admin/QuotationSheet";
+
+type OrderPatch = Parameters<typeof updateOrder>[1];
+
+const PARTNER_PHONE_KEY = "kirim-mobilku:partner-wa";
+
+/** wa.me wants country code and digits only: 0812… → 62812…. */
+function toWaNumber(raw: string): string {
+  const digits = raw.replace(/\D/g, "");
+  return digits.startsWith("0") ? `62${digits.slice(1)}` : digits;
+}
+
+function readPartnerPhone(): string {
+  try {
+    return localStorage.getItem(PARTNER_PHONE_KEY) ?? "";
+  } catch {
+    return "";
+  }
+}
 
 function Field({ label, value }: { label: string; value?: string | number | null }) {
   if (value === null || value === undefined || value === "") return null;
@@ -49,6 +77,10 @@ export function OrderDrawer({
   const [quoteValidUntil, setQuoteValidUntil] = useState(order?.quote_valid_until ?? "");
   const [quotePaymentTerms, setQuotePaymentTerms] = useState(order?.quote_payment_terms ?? "");
   const [quoteNotes, setQuoteNotes] = useState(order?.quote_notes ?? "");
+  const [partnerPrice, setPartnerPrice] = useState(order?.partner_price?.toString() ?? "");
+  const [customerPaid, setCustomerPaid] = useState(Boolean(order?.customer_paid_at));
+  const [partnerPaid, setPartnerPaid] = useState(Boolean(order?.partner_paid_at));
+  const [partnerPhone, setPartnerPhone] = useState(readPartnerPhone);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,7 +100,24 @@ export function OrderDrawer({
     quotedPrice !== (order.quoted_price?.toString() ?? "") ||
     quoteValidUntil !== (order.quote_valid_until ?? "") ||
     quotePaymentTerms !== (order.quote_payment_terms ?? "") ||
-    quoteNotes !== (order.quote_notes ?? "");
+    quoteNotes !== (order.quote_notes ?? "") ||
+    partnerPrice !== (order.partner_price?.toString() ?? "") ||
+    customerPaid !== Boolean(order.customer_paid_at) ||
+    partnerPaid !== Boolean(order.partner_paid_at);
+
+  /** Move the order forward as a side effect of an action (forwarding to
+   *  Alyssa, sending the quote) without touching the unsaved fields. */
+  const advance = async (to: OrderStatus, extra: OrderPatch = {}) => {
+    try {
+      const updated = await updateOrder(order.id, { status: to, ...extra });
+      setStatus(to);
+      onSaved(updated);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Gagal memperbarui status.");
+    }
+  };
+  const statusIndex = ORDER_STATUSES.indexOf(order.status);
+  const before = (s: OrderStatus) => order.status !== "batal" && statusIndex < ORDER_STATUSES.indexOf(s);
 
   const save = async () => {
     setSaving(true);
@@ -97,6 +146,9 @@ export function OrderDrawer({
           quotedPrice && (!order.quote_created_at || quotedPrice !== order.quoted_price?.toString())
             ? new Date().toISOString()
             : order.quote_created_at,
+        partner_price: partnerPrice ? Number(partnerPrice) : null,
+        customer_paid_at: customerPaid ? (order.customer_paid_at ?? new Date().toISOString()) : null,
+        partner_paid_at: partnerPaid ? (order.partner_paid_at ?? new Date().toISOString()) : null,
       });
       onSaved(updated);
     } catch (e) {
@@ -131,6 +183,35 @@ export function OrderDrawer({
     "Silakan balas pesan ini untuk konfirmasi atau pertanyaan lebih lanjut. Terima kasih.",
   ].filter(Boolean).join("\n");
   const quoteWaLink = `${waLink}?text=${encodeURIComponent(quoteMessage)}`;
+
+  /* Price request to Alyssa. Customer name and phone stay out on purpose:
+     they are not needed to quote, and the partner account only sees them
+     once the order is a deal. */
+  const numericCost = partnerPrice ? Number(partnerPrice) : null;
+  const profit = numericPrice && numericCost ? numericPrice - numericCost : null;
+  const forwardDetails = [
+    `Rute: ${order.origin} → ${order.destination}`,
+    `Kendaraan: ${vehicleSummary || order.vehicle_type || "—"}${order.vehicle_color ? ` (${order.vehicle_color})` : ""}`,
+    order.vehicle_transmission || order.vehicle_fuel
+      ? `Transmisi/BBM: ${[order.vehicle_transmission, order.vehicle_fuel].filter(Boolean).join(" / ")}`
+      : "",
+    order.running_condition ? `Kondisi: ${order.running_condition}` : "",
+    order.preferred_date ? `Tanggal diinginkan: ${order.preferred_date}` : "",
+    order.pickup_address ? `Jemput: ${order.pickup_address}` : "",
+    order.delivery_address ? `Antar: ${order.delivery_address}` : "",
+    order.notes ? `Catatan: ${order.notes}` : "",
+  ].filter(Boolean);
+  const forwardMessage = [
+    `Halo, ada order baru (${order.order_code}), mohon info harga:`,
+    "",
+    ...forwardDetails,
+    "",
+    "Mohon info harga modal dan estimasi waktunya. Terima kasih.",
+  ].join("\n");
+  const forwardWaNumber = toWaNumber(partnerPhone);
+  const forwardWaLink = forwardWaNumber
+    ? `https://wa.me/${forwardWaNumber}?text=${encodeURIComponent(forwardMessage)}`
+    : undefined;
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -214,6 +295,68 @@ export function OrderDrawer({
             </section>
           )}
 
+          <section className="rounded-3xl border border-accent/25 bg-accent/5 p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-mono text-label-sm text-accent uppercase">
+                  Teruskan ke Alyssa
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-2">
+                  Kirim detail order ke WhatsApp Alyssa untuk minta harga. Data pelanggan tidak ikut
+                  terkirim.
+                </p>
+              </div>
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-accent text-white">
+                <Truck className="h-5 w-5" />
+              </div>
+            </div>
+
+            <label className="mt-5 block">
+              <span className="mb-2 block font-mono text-label-sm text-ink-3 uppercase">
+                Nomor WhatsApp Alyssa
+              </span>
+              <input
+                type="tel"
+                value={partnerPhone}
+                onChange={(e) => {
+                  setPartnerPhone(e.target.value);
+                  try {
+                    localStorage.setItem(PARTNER_PHONE_KEY, e.target.value);
+                  } catch {
+                    /* storage blocked — the number just won't be remembered */
+                  }
+                }}
+                placeholder="0812xxxxxxx — tersimpan di browser ini"
+                className="w-full rounded-2xl border border-line-2 bg-surface px-4 py-3 text-ink placeholder:text-ink-3 focus:border-brand focus:ring-4 focus:ring-brand/15 focus:outline-none"
+              />
+            </label>
+
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <a
+                href={forwardWaLink}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-disabled={!forwardWaLink}
+                onClick={() => {
+                  if (before("diteruskan")) {
+                    void advance("diteruskan", { forwarded_at: new Date().toISOString() });
+                  }
+                }}
+                className={cn(
+                  "u-btn u-btn-primary text-sm",
+                  !forwardWaLink && "pointer-events-none opacity-40"
+                )}
+              >
+                <Send className="h-4 w-4" /> Kirim ke Alyssa
+              </a>
+              {order.forwarded_at && (
+                <span className="text-xs text-ink-3">
+                  Diteruskan {formatDateTime(order.forwarded_at)}
+                </span>
+              )}
+            </div>
+          </section>
+
           <section className="rounded-3xl border border-brand/20 bg-brand/5 p-5">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -280,6 +423,9 @@ export function OrderDrawer({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-disabled={!numericPrice}
+                onClick={() => {
+                  if (numericPrice && before("penawaran_dikirim")) void advance("penawaran_dikirim");
+                }}
                 className={cn("u-btn u-btn-primary text-sm", !numericPrice && "pointer-events-none opacity-40")}
               >
                 <Send className="h-4 w-4" /> Kirim ke WhatsApp
@@ -292,6 +438,79 @@ export function OrderDrawer({
               >
                 <Printer className="h-4 w-4" /> Cetak Penawaran
               </button>
+            </div>
+          </section>
+
+          <section className="border-t border-line pt-6">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="font-mono text-label-sm text-brand uppercase">
+                  Harga Modal &amp; Untung
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-ink-2">
+                  Harga dari Alyssa dan status pembayaran. Hanya terlihat oleh admin.
+                </p>
+              </div>
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-brand/10 text-brand">
+                <Wallet className="h-5 w-5" />
+              </div>
+            </div>
+
+            <label className="mt-5 block">
+              <span className="mb-2 block font-mono text-label-sm text-ink-3 uppercase">
+                Harga dari Alyssa (modal)
+              </span>
+              <div className="flex rounded-2xl border border-line-2 bg-bg focus-within:border-brand focus-within:ring-4 focus-within:ring-brand/15">
+                <span className="px-4 py-3 font-semibold text-ink-2">Rp</span>
+                <input
+                  type="number"
+                  min="0"
+                  step="1000"
+                  value={partnerPrice}
+                  onChange={(e) => setPartnerPrice(e.target.value)}
+                  placeholder="0"
+                  className="min-w-0 flex-1 bg-transparent py-3 pr-4 text-ink outline-none"
+                />
+              </div>
+            </label>
+
+            <dl className="mt-4 grid grid-cols-2 gap-4 rounded-2xl border border-line bg-surface-2 p-4 text-sm">
+              <div>
+                <dt className="font-mono text-label-sm text-ink-3 uppercase">Harga jual</dt>
+                <dd className="mt-1 font-mono text-ink">{numericPrice ? formatRupiah(numericPrice) : "—"}</dd>
+              </div>
+              <div>
+                <dt className="font-mono text-label-sm text-ink-3 uppercase">Untung</dt>
+                <dd
+                  className={cn(
+                    "mt-1 font-mono font-semibold",
+                    profit === null ? "text-ink-3" : profit < 0 ? "text-err" : "text-ok"
+                  )}
+                >
+                  {profit === null
+                    ? "—"
+                    : `${profit < 0 ? "-" : ""}${formatRupiah(Math.abs(profit))} (${((profit / numericPrice!) * 100).toFixed(1)}%)`}
+                </dd>
+              </div>
+            </dl>
+
+            <div className="mt-4 space-y-2">
+              {(
+                [
+                  ["Pelanggan sudah bayar", customerPaid, setCustomerPaid],
+                  ["Alyssa sudah dibayar", partnerPaid, setPartnerPaid],
+                ] as const
+              ).map(([label, checked, set]) => (
+                <label key={label} className="flex cursor-pointer items-center gap-3 text-sm text-ink-2">
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(e) => set(e.target.checked)}
+                    className="h-4 w-4 accent-[var(--c-brand)]"
+                  />
+                  {label}
+                </label>
+              ))}
             </div>
           </section>
 
@@ -380,7 +599,7 @@ export function OrderDrawer({
             />
 
             {error && (
-              <p className="mt-3 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+              <p className="mt-3 rounded-xl border border-err/30 bg-err/10 px-4 py-3 text-sm text-err">
                 {error}
               </p>
             )}

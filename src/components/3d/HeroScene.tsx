@@ -6,10 +6,10 @@ import { Suspense, useMemo, useRef } from "react";
 import * as THREE from "three";
 
 /* Palette — mirrors the CSS tokens exactly */
-const INK = "#090b2b";
-const INK_2 = "#151a50";
-const PAPER = "#eef4ff";
-const OXIDE = "#6928b4";
+const INK = "#141a20";
+const INK_2 = "#28323d";
+const PAPER = "#f4f6f9";
+const OXIDE = "#566c87";
 
 const EASE = 0.045; // damping for pointer follow — deliberately heavy
 
@@ -133,12 +133,12 @@ export function HeroScene() {
         <Environment resolution={256}>
           <Lightformer intensity={2.4} position={[0, 4, 2]} scale={[8, 4, 1]} color="#ffffff" />
           <Lightformer intensity={1.1} position={[-4, 2, 2]} scale={[4, 6, 1]} color={PAPER} />
-          <Lightformer intensity={0.9} position={[4, 1, -2]} scale={[4, 4, 1]} color="#d8c8ff" />
+          <Lightformer intensity={0.9} position={[4, 1, -2]} scale={[4, 4, 1]} color="#dbe3ec" />
         </Environment>
 
         <ambientLight intensity={0.5} />
         {/* Key: warm area light from upper right, long soft shadow toward camera */}
-        <directionalLight position={[4.5, 6, 3]} intensity={2.2} color="#dff8ff" castShadow />
+        <directionalLight position={[4.5, 6, 3]} intensity={2.2} color="#eaeff4" castShadow />
         {/* Violet rim follows the logo's express gradient. */}
         <directionalLight position={[-5, 2, -3]} intensity={1.4} color={OXIDE} />
 

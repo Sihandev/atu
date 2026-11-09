@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
-import { Hanken_Grotesk, Inter, JetBrains_Mono } from "next/font/google";
+import { Hanken_Grotesk, Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import "./editorial.css";
-import "./brand.css";
-import "./experience.css";
+import "./site.css";
 import { brand, coverage } from "@/config/data";
 
 const hanken = Hanken_Grotesk({
@@ -17,6 +15,14 @@ const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const instrument = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument",
   display: "swap",
 });
 
@@ -105,7 +111,7 @@ export default function RootLayout({
     <html
       lang="id"
       suppressHydrationWarning
-      className={`scroll-smooth ${hanken.variable} ${inter.variable} ${jetbrains.variable}`}
+      className={`scroll-smooth ${hanken.variable} ${inter.variable} ${instrument.variable} ${jetbrains.variable}`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBoot }} />

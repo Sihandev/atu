@@ -19,7 +19,7 @@ import {
 import { Footer } from "@/components/sections/Footer";
 import { Navbar } from "@/components/sections/Navbar";
 import { getPublicSupabase } from "@/lib/supabase";
-import { STATUS_META, type OrderStatus } from "@/lib/orders";
+import { publicStatusLabel, type OrderStatus } from "@/lib/orders";
 import {
   ALYSSA_TRACKING_API,
   formatTrackingTime,
@@ -266,8 +266,8 @@ export default function TrackingPage() {
         )}
 
         {(state === "not-found" || state === "error") && (
-          <div className="mx-auto max-w-2xl rounded-3xl border border-red-500/20 bg-red-500/5 p-8 text-center md:p-12">
-            <AlertCircle className="mx-auto h-10 w-10 text-red-500" />
+          <div className="mx-auto max-w-2xl rounded-3xl border border-err/20 bg-err/5 p-8 text-center md:p-12">
+            <AlertCircle className="mx-auto h-10 w-10 text-err" />
             <h2 className="mt-5 font-display text-2xl font-bold">
               {state === "not-found" ? "Tracking belum ditemukan" : "Tracking belum bisa dibuka"}
             </h2>
@@ -288,7 +288,7 @@ export default function TrackingPage() {
                   </div>
                   <p className="mt-5 font-mono text-sm tracking-wider text-white/50">{order.order_code}</p>
                   <h2 className="mt-2 font-display text-3xl font-extrabold md:text-4xl">
-                    {STATUS_META[order.status]?.label ?? "Sedang diproses"}
+                    {publicStatusLabel(order.status)}
                   </h2>
                   <p className="mt-3 flex items-center gap-2 text-white/65">
                     <MapPin className="h-4 w-4 text-accent" /> {order.origin} → {order.destination}
@@ -337,7 +337,7 @@ export default function TrackingPage() {
                 })}
               </div>
               {order.status === "batal" && (
-                <p className="mt-6 rounded-2xl border border-red-500/20 bg-red-500/5 px-5 py-4 text-sm text-red-500">
+                <p className="mt-6 rounded-2xl border border-err/20 bg-err/5 px-5 py-4 text-sm text-err">
                   Pesanan ini telah dibatalkan. Hubungi admin jika Anda memerlukan bantuan.
                 </p>
               )}

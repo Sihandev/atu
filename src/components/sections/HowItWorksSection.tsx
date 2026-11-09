@@ -6,7 +6,7 @@ import { processSteps } from "@/config/data";
 
 export function HowItWorksSection() {
   return (
-    <Section id="cara-pengiriman" className="bg-slate-50">
+    <Section id="cara-pengiriman" className="bg-surface-2">
       <Container>
         <div className="flex flex-col lg:flex-row gap-16 items-start">
           <div className="lg:w-1/3 lg:sticky lg:top-32">

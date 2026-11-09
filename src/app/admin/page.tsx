@@ -9,11 +9,16 @@ import {
   ORDER_STATUSES,
   STATUS_META,
   formatDateTime,
+  getMyRole,
   listOrders,
   type Order,
   type OrderStatus,
+  type StaffRole,
 } from "@/lib/orders";
 import { OrderDrawer } from "@/components/admin/OrderDrawer";
+import { HppCalculator } from "@/components/admin/HppCalculator";
+import { PartnerPanel } from "@/components/admin/PartnerPanel";
+import { RecapPanel } from "@/components/admin/RecapPanel";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { brand } from "@/config/data";
 import { cn } from "@/lib/utils";
@@ -98,7 +103,7 @@ function LoginCard({ onSignedIn }: { onSignedIn: (session: Session) => void }) {
         />
 
         {error && (
-          <p className="mt-4 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-500">
+          <p className="mt-4 rounded-xl border border-err/30 bg-err/10 px-4 py-3 text-sm text-err">
             {error}
           </p>
         )}
@@ -130,6 +135,10 @@ export default function AdminPage() {
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<OrderStatus | "semua">("semua");
   const [selected, setSelected] = useState<Order | null>(null);
+  const [tab, setTab] = useState<"pesanan" | "kalkulator" | "rekap">("pesanan");
+  /* undefined = still asking the database; null = signed in but no role. */
+  const [role, setRole] = useState<StaffRole | null | undefined>(undefined);
+  const [roleError, setRoleError] = useState<string | null>(null);
 
   /* Restore an existing session, then follow auth changes. */
   useEffect(() => {
@@ -155,8 +164,34 @@ export default function AdminPage() {
     }
   }, []);
 
+  /* Which side of the business is this account? Drives the whole panel. */
+  const userId = session?.user.id;
   useEffect(() => {
-    if (!session) return;
+    if (!userId) return;
+    let active = true;
+    queueMicrotask(async () => {
+      if (!active) return;
+      setRole(undefined);
+      setRoleError(null);
+      try {
+        const next = await getMyRole();
+        if (active) setRole(next);
+      } catch (e) {
+        if (active) {
+          setRole(null);
+          setRoleError(e instanceof Error ? e.message : "Gagal memeriksa hak akses.");
+        }
+      }
+    });
+    return () => {
+      active = false;
+    };
+  }, [userId]);
+
+  const isAdmin = role === "admin";
+
+  useEffect(() => {
+    if (!session || !isAdmin) return;
     let active = true;
     /* Deferred so the first state update lands after this effect commits
        rather than synchronously inside it. */
@@ -166,10 +201,10 @@ export default function AdminPage() {
     return () => {
       active = false;
     };
-  }, [session, refresh]);
+  }, [session, isAdmin, refresh]);
 
   useEffect(() => {
-    if (!session) return;
+    if (!session || !isAdmin) return;
     const supabase = getSupabase();
     const channel = supabase
       .channel("admin-orders-live")
@@ -184,7 +219,7 @@ export default function AdminPage() {
       window.clearInterval(fallback);
       void supabase.removeChannel(channel);
     };
-  }, [session, refresh]);
+  }, [session, isAdmin, refresh]);
 
   const counts = useMemo(() => {
     const base = { semua: orders.length } as Record<string, number>;
@@ -210,6 +245,38 @@ export default function AdminPage() {
     return <div className="grid min-h-screen place-items-center text-ink-2">Memuat…</div>;
   }
   if (!session) return <LoginCard onSignedIn={setSession} />;
+  if (role === undefined) {
+    return <div className="grid min-h-screen place-items-center text-ink-2">Memuat…</div>;
+  }
+  if (role === null) {
+    return (
+      <div className="grid min-h-screen place-items-center px-6">
+        <div className="glass w-full max-w-md rounded-3xl p-8">
+          <h1 className="font-display text-2xl font-bold">Akun belum punya akses</h1>
+          <p className="mt-4 leading-relaxed text-ink-2">
+            {roleError ??
+              `${session.user.email} belum diberi peran admin atau partner. Minta admin menambahkannya.`}
+          </p>
+          <button
+            type="button"
+            onClick={() => getSupabase().auth.signOut()}
+            className="u-btn u-btn-primary mt-6 text-sm"
+          >
+            Keluar
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const heading =
+    role === "partner"
+      ? "Order dari Kirim Mobilku"
+      : tab === "kalkulator"
+        ? "Kalkulator HPP"
+        : tab === "rekap"
+          ? "Rekap Untung"
+          : "Pesanan";
 
   return (
     <div className="mx-auto max-w-[1440px] px-6 py-8 md:px-10">
@@ -217,20 +284,27 @@ export default function AdminPage() {
         <div>
           <p className="font-mono text-label-sm text-accent uppercase">{brand.name}</p>
           <h1 className="mt-1 font-display text-3xl font-extrabold tracking-[-0.03em]">
-            Pesanan
+            {heading}
           </h1>
+          {isAdmin && tab === "kalkulator" && (
+            <p className="mt-1 text-sm text-ink-3">
+              HPP + margin + proteksi risiko + bunga dana talang
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <span className="hidden text-sm text-ink-2 sm:block">{session.user.email}</span>
-          <button
-            type="button"
-            onClick={refresh}
-            disabled={loading}
-            className="grid h-10 w-10 place-items-center rounded-full border border-line-2 text-ink-2 transition-colors hover:border-brand hover:text-brand"
-            aria-label="Muat ulang"
-          >
-            <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
-          </button>
+          {isAdmin && (
+            <button
+              type="button"
+              onClick={refresh}
+              disabled={loading}
+              className="grid h-10 w-10 place-items-center rounded-full border border-line-2 text-ink-2 transition-colors hover:border-brand hover:text-brand"
+              aria-label="Muat ulang"
+            >
+              <RefreshCw className={cn("h-4 w-4", loading && "animate-spin")} />
+            </button>
+          )}
           <ThemeToggle />
           <button
             type="button"
@@ -243,6 +317,46 @@ export default function AdminPage() {
         </div>
       </header>
 
+      {isAdmin && (
+        <nav className="mt-6 flex flex-wrap gap-2" aria-label="Menu admin">
+          {(
+            [
+              ["pesanan", "Pesanan"],
+              ["kalkulator", "Kalkulator HPP"],
+              ["rekap", "Rekap Untung"],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setTab(id)}
+              aria-current={tab === id ? "page" : undefined}
+              className={cn(
+                "rounded-full border px-5 py-2 text-sm transition-all",
+                tab === id
+                  ? "border-brand bg-brand text-white"
+                  : "border-line-2 text-ink-2 hover:border-brand hover:text-brand"
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </nav>
+      )}
+
+      {role === "partner" ? (
+        <PartnerPanel />
+      ) : tab === "kalkulator" ? (
+        <HppCalculator
+          orders={orders}
+          onOrderUpdated={(updated) =>
+            setOrders((prev) => prev.map((o) => (o.id === updated.id ? updated : o)))
+          }
+        />
+      ) : tab === "rekap" ? (
+        <RecapPanel orders={orders} />
+      ) : (
+        <>
       {/* Filters */}
       <div className="mt-8 flex flex-wrap items-center gap-3">
         <div className="relative flex-1 md:max-w-xs">
@@ -275,7 +389,7 @@ export default function AdminPage() {
       </div>
 
       {loadError && (
-        <p className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/10 px-5 py-4 text-sm text-red-500">
+        <p className="mt-6 rounded-2xl border border-err/30 bg-err/10 px-5 py-4 text-sm text-err">
           {loadError}
         </p>
       )}
@@ -334,6 +448,8 @@ export default function AdminPage() {
           </p>
         )}
       </div>
+        </>
+      )}
 
       <OrderDrawer
         key={selected?.id}

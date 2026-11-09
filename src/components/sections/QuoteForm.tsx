@@ -49,17 +49,17 @@ export function QuoteForm() {
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
-      className="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 md:p-8 relative z-10 w-full max-w-lg mx-auto"
+      className="bg-white rounded-2xl shadow-xl border border-line p-6 md:p-8 relative z-10 w-full max-w-lg mx-auto"
     >
       <div className="mb-6">
-        <h3 className="text-2xl font-bold text-slate-900 mb-2">Cek Tarif Cepat</h3>
-        <p className="text-slate-600 text-sm">Dapatkan estimasi harga akurat langsung via WhatsApp.</p>
+        <h3 className="text-2xl font-bold text-ink mb-2">Cek Tarif Cepat</h3>
+        <p className="text-ink-2 text-sm">Dapatkan estimasi harga akurat langsung via WhatsApp.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label htmlFor="origin" className="text-sm font-medium text-slate-700">Kota Asal</label>
+            <label htmlFor="origin" className="text-sm font-medium text-ink-2">Kota Asal</label>
             <input
               type="text"
               id="origin"
@@ -70,11 +70,11 @@ export function QuoteForm() {
               value={formData.origin}
               onChange={handleChange}
               disabled={isLoading}
-              className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all text-slate-900 disabled:opacity-50"
+              className="w-full px-4 py-2.5 rounded-lg border border-line focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all text-ink disabled:opacity-50"
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="destination" className="text-sm font-medium text-slate-700">Kota Tujuan</label>
+            <label htmlFor="destination" className="text-sm font-medium text-ink-2">Kota Tujuan</label>
             <input
               type="text"
               id="destination"
@@ -85,13 +85,13 @@ export function QuoteForm() {
               value={formData.destination}
               onChange={handleChange}
               disabled={isLoading}
-              className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all text-slate-900 disabled:opacity-50"
+              className="w-full px-4 py-2.5 rounded-lg border border-line focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all text-ink disabled:opacity-50"
             />
           </div>
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="vehicleType" className="text-sm font-medium text-slate-700">Jenis Kendaraan</label>
+          <label htmlFor="vehicleType" className="text-sm font-medium text-ink-2">Jenis Kendaraan</label>
           <select
             id="vehicleType"
             name="vehicleType"
@@ -100,7 +100,7 @@ export function QuoteForm() {
             value={formData.vehicleType}
             onChange={handleChange}
             disabled={isLoading}
-            className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all text-slate-900 bg-white disabled:opacity-50"
+            className="w-full px-4 py-2.5 rounded-lg border border-line focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all text-ink bg-white disabled:opacity-50"
           >
             <option value="" disabled>Pilih Jenis Kendaraan</option>
             <option value="Mobil Kecil / City Car">Mobil Kecil / City Car</option>
@@ -114,7 +114,7 @@ export function QuoteForm() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium text-slate-700">Nama Anda</label>
+            <label htmlFor="name" className="text-sm font-medium text-ink-2">Nama Anda</label>
             <input
               type="text"
               id="name"
@@ -125,11 +125,11 @@ export function QuoteForm() {
               value={formData.name}
               onChange={handleChange}
               disabled={isLoading}
-              className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all text-slate-900 disabled:opacity-50"
+              className="w-full px-4 py-2.5 rounded-lg border border-line focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all text-ink disabled:opacity-50"
             />
           </div>
           <div className="space-y-2">
-            <label htmlFor="whatsapp" className="text-sm font-medium text-slate-700">No. WhatsApp</label>
+            <label htmlFor="whatsapp" className="text-sm font-medium text-ink-2">No. WhatsApp</label>
             <input
               type="tel"
               id="whatsapp"
@@ -140,7 +140,7 @@ export function QuoteForm() {
               value={formData.whatsapp}
               onChange={handleChange}
               disabled={isLoading}
-              className="w-full px-4 py-2.5 rounded-lg border border-slate-200 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none transition-all text-slate-900 disabled:opacity-50"
+              className="w-full px-4 py-2.5 rounded-lg border border-line focus:border-brand focus:ring-1 focus:ring-brand outline-none transition-all text-ink disabled:opacity-50"
             />
           </div>
         </div>

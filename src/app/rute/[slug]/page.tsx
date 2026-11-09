@@ -39,40 +39,40 @@ export default async function RouteDetailPage({ params }: RoutePageProps) {
     <main className="min-h-screen pt-[72px]">
       <Navbar />
 
-      <Section className="bg-slate-900 text-white py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-400 via-slate-900 to-slate-900"></div>
+      <Section className="bg-deep text-white py-16 md:py-24 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-brand via-deep to-deep"></div>
         <Container className="relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center space-x-2 bg-slate-800 rounded-full px-4 py-1.5 mb-8 border border-slate-700">
-              <span className="w-2 h-2 rounded-full bg-green-400"></span>
-              <span className="text-sm font-medium text-slate-300">Rute Populer</span>
+            <div className="inline-flex items-center space-x-2 bg-deep-2 rounded-full px-4 py-1.5 mb-8 border border-line-2">
+              <span className="w-2 h-2 rounded-full bg-ok"></span>
+              <span className="text-sm font-medium text-ink-3">Rute Populer</span>
             </div>
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-8">
               <div className="text-3xl md:text-5xl font-bold">{route.origin}</div>
-              <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-brand/20 text-blue-400">
+              <div className="hidden md:flex items-center justify-center w-12 h-12 rounded-full bg-brand/20 text-accent">
                 <ArrowRight className="w-6 h-6" />
               </div>
-              <div className="md:hidden text-blue-400">
+              <div className="md:hidden text-accent">
                 <ArrowRight className="w-8 h-8 rotate-90" />
               </div>
               <div className="text-3xl md:text-5xl font-bold">{route.destination}</div>
             </div>
 
-            <p className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto">
+            <p className="text-xl text-ink-3 mb-10 max-w-2xl mx-auto">
               Layanan pengiriman kendaraan profesional, aman, dan tepat waktu untuk rute {route.origin} ke {route.destination}.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <div className="flex items-center gap-2 bg-slate-800/50 rounded-xl px-6 py-4 border border-slate-700">
-                <Clock className="w-5 h-5 text-blue-400" />
+              <div className="flex items-center gap-2 bg-deep-2/50 rounded-xl px-6 py-4 border border-line-2">
+                <Clock className="w-5 h-5 text-accent" />
                 <div className="text-left">
                   <div className="text-xs text-ink-3">Estimasi Waktu</div>
                   <div className="font-semibold">{route.duration}</div>
                 </div>
               </div>
-              <div className="flex items-center gap-2 bg-slate-800/50 rounded-xl px-6 py-4 border border-slate-700">
-                <ShieldCheck className="w-5 h-5 text-blue-400" />
+              <div className="flex items-center gap-2 bg-deep-2/50 rounded-xl px-6 py-4 border border-line-2">
+                <ShieldCheck className="w-5 h-5 text-accent" />
                 <div className="text-left">
                   <div className="text-xs text-ink-3">Metode Tersedia</div>
                   <div className="font-semibold">{route.methods.join(", ")}</div>

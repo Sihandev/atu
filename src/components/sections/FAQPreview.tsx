@@ -10,7 +10,7 @@ import { staggerContainer } from "@/lib/motion";
 
 export function FAQPreview() {
   return (
-    <Section className="bg-slate-50 border-t border-slate-200">
+    <Section className="bg-surface-2 border-t border-line">
       <Container>
         <div className="max-w-3xl mx-auto">
           <SectionHeading
@@ -23,7 +23,7 @@ export function FAQPreview() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6 md:p-8"
+            className="bg-white rounded-2xl shadow-sm border border-line p-6 md:p-8"
           >
             {faqs.map((faq, idx) => (
               <FAQAccordion
