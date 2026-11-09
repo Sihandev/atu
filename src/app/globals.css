@@ -10,6 +10,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   color-scheme: light;
 
   /* ---- surfaces: warm ivory, never stark white ---- */
@@ -196,9 +197,9 @@
   --color-outline-variant: var(--c-line-2);
   --color-error: var(--c-err);
 
-  --font-display: var(--font-hanken), ui-sans-serif, system-ui, sans-serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-mono-label), ui-monospace, "SF Mono", monospace;
+  --font-display: var(--font-system);
+  --font-sans: var(--font-system);
+  --font-mono: var(--font-system);
 
   --text-display-lg: clamp(2.5rem, 5vw, 4rem);
   --text-display-lg--line-height: 1.03;
@@ -522,7 +523,7 @@ body {
     overflow: hidden;
     background: #fff;
     color: #101828;
-    font-family: Arial, sans-serif;
+    font-family: var(--font-system);
   }
 
   .quote-accent {

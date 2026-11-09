@@ -5,7 +5,7 @@
    ========================================================================== */
 
 :root {
-  --font-serif: var(--font-instrument), "Iowan Old Style", Georgia, serif;
+  --font-serif: var(--font-system);
   --shell: 1240px;
   --radius-card: 24px;
   --radius-panel: 32px;

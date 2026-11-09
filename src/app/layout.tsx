@@ -1,37 +1,7 @@
 import type { Metadata } from "next";
-import { Hanken_Grotesk, Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import "./site.css";
 import { brand, coverage } from "@/config/data";
-
-const hanken = Hanken_Grotesk({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
-  variable: "--font-hanken",
-  display: "swap",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const instrument = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument",
-  display: "swap",
-});
-
-const jetbrains = JetBrains_Mono({
-  subsets: ["latin"],
-  weight: ["500"],
-  variable: "--font-mono-label",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://alyssalogistik.co.id"),
@@ -111,7 +81,7 @@ export default function RootLayout({
     <html
       lang="id"
       suppressHydrationWarning
-      className={`scroll-smooth ${hanken.variable} ${inter.variable} ${instrument.variable} ${jetbrains.variable}`}
+      className="scroll-smooth"
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeBoot }} />
