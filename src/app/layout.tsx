@@ -4,7 +4,7 @@ import "./site.css";
 import { brand, coverage } from "@/config/data";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://alyssalogistik.co.id"),
+  metadataBase: new URL(`https://${brand.domain}`),
   title: {
     default: `${brand.name} | ${brand.tagline}`,
     template: `%s | ${brand.name}`,
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "id_ID",
-    url: "https://alyssalogistik.co.id",
+    url: `https://${brand.domain}`,
     title: `${brand.name} | ${brand.tagline}`,
     description: `${brand.tagline} — pengiriman kendaraan dan alat berat antar kota dan antar pulau, menjangkau ${coverage.provinces}+ provinsi dan ${coverage.cities}+ kota di Indonesia.`,
     siteName: brand.name,
@@ -53,7 +53,7 @@ export default function RootLayout({
     legalName: brand.legalName,
     description: brand.tagline,
     url: `https://${brand.domain}`,
-    logo: `https://${brand.domain}/logo.png`,
+    logo: `https://${brand.domain}/img/kirim-mobilku-logo.jpeg`,
     address: {
       "@type": "PostalAddress",
       streetAddress: "Jl. Sungai Bambu No. 20, RT 004/RW 006, Kelurahan Sungai Bambu, Kecamatan Tanjung Priok",

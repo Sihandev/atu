@@ -1,10 +1,10 @@
 import { MetadataRoute } from 'next';
-import { services, routes, articles } from '@/config/data';
+import { brand, servicesList, routesList, articlesList } from '@/config/data';
 
 export const dynamic = 'force-static';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://alyssalogistik.co.id';
+  const baseUrl = `https://${brand.domain}`;
 
   // Base routes
   const baseRoutes = [
@@ -18,36 +18,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/faq',
     '/cek-tarif',
     '/pesan',
-    '/tracking',
+    '/kebijakan-klaim',
+    '/kebijakan-pembatalan',
     '/kebijakan-privasi',
     '/syarat-ketentuan',
   ].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: '2026-07-17',
     changeFrequency: 'weekly' as const,
     priority: route === '' ? 1 : 0.8,
   }));
 
   // Dynamic Service routes
-  const serviceRoutes = services.map((service) => ({
+  const serviceRoutes = servicesList.map((service) => ({
     url: `${baseUrl}/layanan/${service.id}`,
-    lastModified: new Date().toISOString(),
     changeFrequency: 'monthly' as const,
     priority: 0.9,
   }));
 
   // Dynamic Rute routes
-  const routePages = routes.map((route) => ({
+  const routePages = routesList.map((route) => ({
     url: `${baseUrl}/rute/${route.id}`,
-    lastModified: new Date().toISOString(),
     changeFrequency: 'monthly' as const,
     priority: 0.9,
   }));
 
   // Dynamic Article routes
-  const articlePages = articles.map((article) => ({
+  const articlePages = articlesList.map((article) => ({
     url: `${baseUrl}/artikel/${article.id}`,
-    lastModified: new Date().toISOString(),
     changeFrequency: 'monthly' as const,
     priority: 0.7,
   }));

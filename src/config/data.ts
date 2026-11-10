@@ -13,7 +13,7 @@ export const brand = {
   email: "",
   address: "Jl. Sungai Bambu No. 20, RT 004/RW 006, Kelurahan Sungai Bambu, Kecamatan Tanjung Priok, Kota Administrasi Jakarta Utara, DKI Jakarta 14330.",
   hours: "24 jam, setiap hari",
-  domain: "alyssalogistik.co.id",
+  domain: "kirimmobilku.com",
   whatsappMessage: "Halo, saya ingin bertanya tentang layanan pengiriman kendaraan.",
 };
 
